@@ -57,7 +57,7 @@ fn main() {
             "c" | "-c" | "--ceras" => match args[2].as_str() {
                 "n" | "nom" | "name" => println!("Do nothing"),
 
-                "h" | "-h" | "--help" => println!("{}", help::RADULA_CERAS_HELP),
+                "h" | "-h" | "--help" => help::radula_open(help::RADULA_CERAS_HELP),
 
                 "v" | "ver" | "version" => println!("Do nothing"),
                 "u" | "url" | "source" => println!("Do nothing"),
@@ -72,7 +72,7 @@ fn main() {
             },
             "g" | "-g" | "--genome" => println!("Do nothing"),
 
-            "h" | "-h" | "--help" => println!("{}", help::RADULA_HELP),
+            "h" | "-h" | "--help" => help::radula_open(help::RADULA_HELP),
 
             "s" | "-s" | "--species" => println!("Do nothing"),
             "v" | "-v" | "--version" => println!("{}", help::RADULA_VERSION),
