@@ -1,10 +1,10 @@
 # radula-rs
 [![Codacy Badge](
-https://api.codacy.com/project/badge/Grade/3e030a3ce39b4691815e56b0bc125f3a)](
-https://app.codacy.com/gh/glaucuslinux/radula-go?utm_source=github.com&utm_medium=referral&utm_content=glaucuslinux/radula-go&utm_campaign=Badge_Grade)
-[![Join the chat at https://gitter.im/glaucuslinux/radula-go](
-https://badges.gitter.im/glaucuslinux/radula-go.svg)](
-https://gitter.im/glaucuslinux/radula-go?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+https://api.codacy.com/project/badge/Grade/ea8589b1287e4c92a5a38cdd9d5ace77)](
+https://app.codacy.com/gh/glaucuslinux/radula-rs?utm_source=github.com&utm_medium=referral&utm_content=glaucuslinux/radula-rs&utm_campaign=Badge_Grade)
+[![Join the chat at https://gitter.im/glaucuslinux/radula-rs](
+https://badges.gitter.im/glaucuslinux/radula-rs.svg)](
+https://gitter.im/glaucuslinux/radula-rs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 glaucus's radula in Rust
 
