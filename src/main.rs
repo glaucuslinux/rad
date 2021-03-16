@@ -1,10 +1,25 @@
-use std::env;
+use std::io::{self, Write};
 use std::process;
+use std::{
+    env::{self, current_dir},
+    path::Path,
+    path::PathBuf,
+};
 
 mod help;
+mod paths;
+mod variables;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
+
+    // Disable unicode (supposedly speeds up running shell scripts)
+    env::set_var("LANG", "C");
+    env::set_var("LC_ALL", "C");
+
+    variables::radula_behave_ccache_variables();
+
+    let radula_glaucus_directory = current_dir().unwrap();
 
     match args.len() {
         1 => {
