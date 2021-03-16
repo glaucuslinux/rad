@@ -23,7 +23,7 @@ Options:
 \th, -h, --help\tDisplay this help message
 
 \ti, image     \tCreate a .img file of the glaucus system
-\tl, list      \tList supported genomes and species
+\tl, list      \tList supported genomes
 \tr, require   \tCheck if host has all required packages
 \ts, release   \tRelease a compressed tarball of the toolchain
 \tt, toolchain \tBootstrap a cross compiler toolchain
@@ -84,14 +84,13 @@ Options:
 
 \th, -h, --help   \tDisplay this help message
 
-\ts, -s, --species\tDisplay current species
 \tv, -v, --version\tDisplay current version number";
 
 pub const RADULA_VERSION: &'static str = "
 Copyright (c) 2018-2021, Firas Khalil Khana
 Distributed under the terms of the ISC License
 
-radula version 3.3.0 (genome species)";
+radula version 3.3.0 (genome)";
 
 // This function will probably be changed in the future to something that makes more sense...
 pub fn radula_open(x: &str) {
