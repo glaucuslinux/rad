@@ -1,5 +1,4 @@
-pub const RADULA_BEHAVE_BINARY_HELP: &'static str = "
-Usage:
+pub const RADULA_BEHAVE_BINARY_HELP: &'static str = "Usage:
 \tradula [ b | -b | --behave ] [ i | binary ] [ Options ] [ Cerata ]
 
 Options:
@@ -12,8 +11,7 @@ Options:
 \ts, search    \tSearch for binary cerata within the remote repositories
 \tu, upgrade   \tUpgrade binary cerata";
 
-pub const RADULA_BEHAVE_BOOTSTRAP_HELP: &'static str = "
-Usage:
+pub const RADULA_BEHAVE_BOOTSTRAP_HELP: &'static str = "Usage:
 \tradula [ b | -b | --behave ] [ b | bootstrap ] [ Options ]
 
 Options:
@@ -29,8 +27,7 @@ Options:
 \tt, toolchain \tBootstrap a cross compiler toolchain
 \tx, cross     \tBootstrap a cross compiled glaucus system";
 
-pub const RADULA_BEHAVE_ENVENOMATE_HELP: &'static str = "
-Usage:
+pub const RADULA_BEHAVE_ENVENOMATE_HELP: &'static str = "Usage:
 \tradula [ b | -b | --behave ] [ e | envenomate ] [ Options ] [ Cerata ]
 
 Options:
@@ -43,8 +40,7 @@ Options:
 \ts, search    \tSearch for cerata within the cerata directory
 \tu, upgrade   \tUpgrade cerata";
 
-pub const RADULA_BEHAVE_HELP: &'static str = "
-Usage:
+pub const RADULA_BEHAVE_HELP: &'static str = "Usage:
 \tradula [ b | -b | --behave ] [ Options ]
 
 Options:
@@ -55,8 +51,7 @@ Options:
 
 \ti, binary    \tPerform binary behavior";
 
-pub const RADULA_CERAS_HELP: &'static str = "
-Usage:
+pub const RADULA_CERAS_HELP: &'static str = "Usage:
 \tradula [ c | -c | --ceras ] [ Options ] [ Cerata ]
 
 Options:
@@ -71,8 +66,7 @@ Options:
 \tv, ver, version                  \tDisplay cerata version(s)
 \ty, cys, cyst, cysts              \tDisplay cerata cyst(s)";
 
-pub const RADULA_HELP: &'static str = "
-Usage:
+pub const RADULA_HELP: &'static str = "Usage:
 \tradula [ Options ]
 
 Options:
@@ -86,13 +80,12 @@ Options:
 
 \tv, -v, --version\tDisplay current version number";
 
-pub const RADULA_VERSION: &'static str = "
-Copyright (c) 2018-2021, Firas Khalil Khana
+pub const RADULA_VERSION: &'static str = "Copyright (c) 2018-2021, Firas Khalil Khana
 Distributed under the terms of the ISC License
 
-radula version 3.3.0 (genome)";
+radula version 3.3.0";
 
 // This function will probably be changed in the future to something that makes more sense...
 pub fn radula_open(x: &str) {
-    println!("{}\n{}", RADULA_VERSION, x);
+    println!("{}\n\n{}", RADULA_VERSION, x);
 }
