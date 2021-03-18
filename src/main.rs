@@ -37,7 +37,5 @@ fn main() {
         variables::radula_behave_ccache_variables();
     }
 
-    let radula_glaucus_directory = env::current_dir().unwrap();
-
     argparse::radula_argparse(radula_genome);
 }

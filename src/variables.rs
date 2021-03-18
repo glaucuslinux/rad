@@ -41,10 +41,16 @@ pub fn radula_behave_teeth_variables(radula_parallel: bool) {
     if radula_parallel {
         env::set_var(
             "MAKEFLAGS",
-            ["-j", &(num_cpus::get_physical() * 3).to_string(), " V=1"].concat(),
+            [
+                "-j",
+                &(num_cpus::get_physical() * 3).to_string(),
+                " ",
+                paths::RADULA_MAKEFLAGS,
+            ]
+            .concat(),
         );
     } else {
-        env::set_var("MAKEFLAGS", "-j1 V=1");
+        env::set_var("MAKEFLAGS", ["-j1", " ", paths::RADULA_MAKEFLAGS].concat());
     }
 
     env::set_var("MKDIR", paths::RADULA_MKDIR);
@@ -57,15 +63,93 @@ pub fn radula_behave_teeth_variables(radula_parallel: bool) {
 pub fn radula_behave_arch_variables(radula_genome: &str) {
     env::set_var("ARCH", radula_genome);
     env::set_var("CARCH", ["--with-gcc-arch=", radula_genome].concat());
+    env::set_var("TGT", [radula_genome, "-glaucus-linux-musl"].concat());
 
     match radula_genome {
         "aarch64" => {
-            // CARCH for aarch64 requires a reset to `armv8-a`
             env::set_var("CARCH", "--with-gcc-arch=armv8-a");
+            env::set_var("FARCH", "-mabi=lp64 -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 -march=armv8-a -mtune=generic");
+            env::set_var("GCARCH", "--with-arch=armv8-a --with-abi=lp64 --enable-fix-cortex-a53-835769 --enable-fix-cortex-a53-843419");
+            env::set_var("LARCH", "arm64");
+            env::set_var("LCARCH", "");
+            env::set_var("LIARCH", "arch/arm64/boot/Image");
+            env::set_var("MARCH", radula_genome);
         }
-        "armv6zk" => {}
-        "i686" => {}
-        "x86-64" => {}
+        "armv6zk" => {
+            env::set_var("FARCH", "-mabi=aapcs-linux -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -mcpu=arm1176jzf-s -mfpu=vfpv2");
+            env::set_var("GCARCH", "--with-arch=armv6zk --with-tune=arm1176jzf-s --with-abi=aapcs-linux --with-fpu=vfpv2 --with-float=hard");
+            env::set_var("LARCH", "arm");
+            env::set_var("LCARCH", "bcm2835_");
+            env::set_var("LIARCH", "arch/arm/boot/zImage");
+            env::set_var("MARCH", "arm");
+            env::set_var("TGT", [radula_genome, "-glaucus-linux-musleabihf"].concat());
+        }
+        "i686" => {
+            env::set_var("FARCH", "-march=i686 -mtune=generic -mabi=sysv");
+            env::set_var("GCARCH", "--with-arch=i686 --with-tune=generic");
+            env::set_var("LARCH", "i386");
+            env::set_var("LCARCH", "i386_");
+            env::set_var("LIARCH", "arch/x86/boot/bzImage");
+            env::set_var("MARCH", "i386");
+        }
+        "x86-64" => {
+            env::set_var("FARCH", "-march=x86-64 -mtune=generic -mabi=sysv");
+            env::set_var("GCARCH", "--with-arch=x86-64 --with-tune=generic");
+            env::set_var("LARCH", "x86_64");
+            env::set_var("LCARCH", "x86_64_");
+            env::set_var("LIARCH", "arch/x86/boot/bzImage");
+            env::set_var("MARCH", "x86_64");
+            env::set_var("TGT", "x86_64-glaucus-linux-musl");
+        }
         _ => {}
     }
+}
+
+pub fn radula_behave_bootstrap_variables() {
+    let radula_glaucus_directory = Path::new(&env::current_dir().unwrap()).join("..");
+    env::set_var("GLAD", &radula_glaucus_directory);
+
+    env::set_var(
+        "BAKD",
+        radula_glaucus_directory.join(paths::RADULA_BACKUP_DIRECTORY),
+    );
+    env::set_var(
+        "CERD",
+        radula_glaucus_directory.join(paths::RADULA_CERATA_DIRECTORY),
+    );
+    env::set_var(
+        "CRSD",
+        radula_glaucus_directory.join(paths::RADULA_CROSS_DIRECTORY),
+    );
+    env::set_var(
+        "LOGD",
+        radula_glaucus_directory.join(paths::RADULA_LOG_DIRECTORY),
+    );
+    env::set_var(
+        "SRCD",
+        radula_glaucus_directory.join(paths::RADULA_SOURCES_DIRECTORY),
+    );
+    env::set_var(
+        "TMPD",
+        radula_glaucus_directory.join(paths::RADULA_TEMPORARY_DIRECTORY),
+    );
+    env::set_var(
+        "TLCD",
+        radula_glaucus_directory.join(paths::RADULA_TOOLCHAIN_DIRECTORY),
+    );
+
+    env::set_var(
+        "PATH",
+        Path::new(
+            &[
+                Path::new(&env::var("TLCD").unwrap())
+                    .join("bin")
+                    .to_str()
+                    .unwrap(),
+                ":",
+            ]
+            .concat(),
+        )
+        .join(env::var("PATH").unwrap().strip_prefix("/").unwrap()),
+    );
 }

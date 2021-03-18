@@ -21,6 +21,7 @@ pub const RADULA_CHMOD: &'static str = "chmod -Rv";
 pub const RADULA_CHOWN: &'static str = "chown -Rv";
 pub const RADULA_LN: &'static str = "ln -fnsv";
 pub const RADULA_MAKE: &'static str = "make";
+pub const RADULA_MAKEFLAGS: &'static str = "V=1";
 pub const RADULA_MKDIR: &'static str = "/usr/bin/install -dv";
 pub const RADULA_MV: &'static str = "mv -v";
 pub const RADULA_RM: &'static str = "rm -frv";
