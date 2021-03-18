@@ -2,8 +2,6 @@
 
 pub const RADULA_CCACHE_PATH: &'static str = "/usr/lib/ccache/bin:/usr/lib64/ccache";
 
-pub const RADULA_CONF: &'static str = "radula.conf";
-
 pub const RADULA_PKG_CONFIG_PATH: &'static str = "/usr/lib/pkgconfig";
 pub const RADULA_PKG_CONFIG_LIBDIR: &'static str = "/usr/lib/pkgconfig";
 pub const RADULA_PKG_CONFIG_SYSROOT_DIR: &'static str = "/";

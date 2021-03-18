@@ -53,3 +53,19 @@ pub fn radula_behave_teeth_variables(radula_parallel: bool) {
     env::set_var("RSYNC", paths::RADULA_RSYNC);
     env::set_var("UMOUNT", paths::RADULA_UMOUNT);
 }
+
+pub fn radula_behave_arch_variables(radula_genome: &str) {
+    env::set_var("ARCH", radula_genome);
+    env::set_var("CARCH", ["--with-gcc-arch=", radula_genome].concat());
+
+    match radula_genome {
+        "aarch64" => {
+            // CARCH for aarch64 requires a reset to `armv8-a`
+            env::set_var("CARCH", "--with-gcc-arch=armv8-a");
+        }
+        "armv6zk" => {}
+        "i686" => {}
+        "x86-64" => {}
+        _ => {}
+    }
+}
