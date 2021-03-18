@@ -14,8 +14,8 @@ pub const RADULA_BACKUP_DIRECTORY: &'static str = "bak";
 pub const RADULA_CERATA_DIRECTORY: &'static str = "cerata";
 pub const RADULA_CROSS_DIRECTORY: &'static str = "cross";
 pub const RADULA_LOG_DIRECTORY: &'static str = "log";
-pub const RADULA_SOURCES_DIRECTORY: &'static str = "sources";
-pub const RADULA_TEMPORARY_DIRECTORY: &'static str = "temporary";
+pub const RADULA_SOURCES_DIRECTORY: &'static str = "src";
+pub const RADULA_TEMPORARY_DIRECTORY: &'static str = "tmp";
 pub const RADULA_TOOLCHAIN_DIRECTORY: &'static str = "toolchain";
 
 pub const RADULA_AUTORECONF: &'static str = "autoreconf -fvis";
@@ -23,10 +23,6 @@ pub const RADULA_CHMOD: &'static str = "chmod -Rv";
 pub const RADULA_CHOWN: &'static str = "chown -Rv";
 pub const RADULA_LN: &'static str = "ln -fnsv";
 pub const RADULA_MAKE: &'static str = "make";
-// Perhaps control parallel make with a `.arg()`?
-// Also, don't add `-j` to MAKE, but to MAKEFLAGS
-pub const RADULA_MAKEFLAGS: &'static str = "-j1 V=1";
-pub const RADULA_MAKEFLAGS_PARALLEL: &'static str = "V=1";
 pub const RADULA_MKDIR: &'static str = "/usr/bin/install -dv";
 pub const RADULA_MV: &'static str = "mv -v";
 pub const RADULA_RM: &'static str = "rm -frv";
