@@ -23,7 +23,7 @@ fn main() {
     let radula_genome = "armv6zk";
 
     #[cfg(target_arch = "x86")]
-    let radula_genome = "x86";
+    let radula_genome = "i686";
 
     #[cfg(target_arch = "x86_64")]
     let radula_genome = "x86-64";
