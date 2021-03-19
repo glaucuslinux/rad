@@ -9,6 +9,7 @@ pub const RADULA_PKG_CONFIG_SYSTEM_INCLUDE_PATH: &'static str = "/usr/include";
 pub const RADULA_PKG_CONFIG_SYSTEM_LIBRARY_PATH: &'static str = "/usr/lib";
 
 pub const RADULA_BACKUP_DIRECTORY: &'static str = "bak";
+pub const RADULA_BUILDS_DIRECTORY: &'static str = "builds";
 pub const RADULA_CERATA_DIRECTORY: &'static str = "cerata";
 pub const RADULA_CROSS_DIRECTORY: &'static str = "cross";
 pub const RADULA_LOG_DIRECTORY: &'static str = "log";

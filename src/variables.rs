@@ -1,9 +1,7 @@
 use super::paths;
+use std::env;
 use std::path::Path;
-use std::{
-    env,
-    process::{self, Command},
-};
+use std::process::Command;
 
 pub fn radula_behave_ccache_variables() {
     env::set_var(
@@ -65,6 +63,18 @@ pub fn radula_behave_teeth_variables(radula_parallel: bool) {
 
 pub fn radula_behave_arch_variables(radula_genome: &str) {
     env::set_var("ARCH", radula_genome);
+
+    env::set_var(
+        "BLD",
+        String::from_utf8_lossy(
+            &Command::new(Path::new(&env::var("CERD").unwrap()).join("binutils/config.guess"))
+                .output()
+                .unwrap()
+                .stdout,
+        )
+        .trim_end(),
+    );
+
     env::set_var("CARCH", ["--with-gcc-arch=", radula_genome].concat());
     env::set_var("TGT", [radula_genome, "-glaucus-linux-musl"].concat());
 
@@ -160,16 +170,41 @@ pub fn radula_behave_bootstrap_variables() {
 pub fn radula_behave_toolchain_variables() {
     env::set_var(
         "TLOG",
-        Path::new(&env::var("LOGD").unwrap()).join("toolchain"),
+        Path::new(&env::var("LOGD").unwrap()).join(paths::RADULA_TOOLCHAIN_DIRECTORY),
     );
 
     env::set_var(
         "TTMP",
-        Path::new(&env::var("TMPD").unwrap()).join("toolchain"),
+        Path::new(&env::var("TMPD").unwrap()).join(paths::RADULA_TOOLCHAIN_DIRECTORY),
     );
 
-    env::set_var("TSRC", Path::new(&env::var("TTMP").unwrap()).join("src"));
-    env::set_var("TBLD", Path::new(&env::var("TTMP").unwrap()).join("builds"));
+    env::set_var(
+        "TBLD",
+        Path::new(&env::var("TTMP").unwrap()).join(paths::RADULA_BUILDS_DIRECTORY),
+    );
+    env::set_var(
+        "TSRC",
+        Path::new(&env::var("TTMP").unwrap()).join(paths::RADULA_SOURCES_DIRECTORY),
+    );
+}
 
-    // Missing BLD variable that needs implementing here
+pub fn radula_behave_cross_variables() {
+    env::set_var(
+        "XLOG",
+        Path::new(&env::var("LOGD").unwrap()).join(paths::RADULA_CROSS_DIRECTORY),
+    );
+
+    env::set_var(
+        "XTMP",
+        Path::new(&env::var("TMPD").unwrap()).join(paths::RADULA_CROSS_DIRECTORY),
+    );
+
+    env::set_var(
+        "XBLD",
+        Path::new(&env::var("XTMP").unwrap()).join(paths::RADULA_BUILDS_DIRECTORY),
+    );
+    env::set_var(
+        "XSRC",
+        Path::new(&env::var("XTMP").unwrap()).join(paths::RADULA_SOURCES_DIRECTORY),
+    );
 }
