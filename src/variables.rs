@@ -1,6 +1,9 @@
 use super::paths;
-use std::env;
 use std::path::Path;
+use std::{
+    env,
+    process::{self, Command},
+};
 
 pub fn radula_behave_ccache_variables() {
     env::set_var(
@@ -152,4 +155,21 @@ pub fn radula_behave_bootstrap_variables() {
         )
         .join(env::var("PATH").unwrap().strip_prefix("/").unwrap()),
     );
+}
+
+pub fn radula_behave_toolchain_variables() {
+    env::set_var(
+        "TLOG",
+        Path::new(&env::var("LOGD").unwrap()).join("toolchain"),
+    );
+
+    env::set_var(
+        "TTMP",
+        Path::new(&env::var("TMPD").unwrap()).join("toolchain"),
+    );
+
+    env::set_var("TSRC", Path::new(&env::var("TTMP").unwrap()).join("src"));
+    env::set_var("TBLD", Path::new(&env::var("TTMP").unwrap()).join("builds"));
+
+    // Missing BLD variable that needs implementing here
 }

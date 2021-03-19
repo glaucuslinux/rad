@@ -37,5 +37,6 @@ fn main() {
         variables::radula_behave_ccache_variables();
     }
 
-    argparse::radula_argparse(radula_genome);
+    //argparse::radula_argparse(radula_genome);
+    variables::radula_behave_toolchain_variables();
 }
