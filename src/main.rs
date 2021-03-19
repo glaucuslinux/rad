@@ -1,6 +1,7 @@
 use std::env;
 
 mod argparse;
+mod functions;
 mod help;
 mod paths;
 mod variables;
@@ -37,5 +38,7 @@ fn main() {
         variables::radula_behave_ccache_variables();
     }
 
-    argparse::radula_argparse(radula_genome);
+    //argparse::radula_argparse(radula_genome);
+    variables::radula_behave_bootstrap_variables();
+    functions::radula_behave_swallow("gcc");
 }

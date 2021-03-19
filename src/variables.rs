@@ -1,7 +1,8 @@
-use super::paths;
 use std::env;
 use std::path::Path;
 use std::process::Command;
+
+use super::paths;
 
 pub fn radula_behave_ccache_variables() {
     env::set_var(

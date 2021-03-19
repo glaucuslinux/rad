@@ -4,17 +4,17 @@ use std::process;
 use super::help;
 
 pub fn radula_argparse(radula_genome: &str) {
-    let mut args = env::args().skip(1);
+    let mut options = env::args().skip(1);
 
-    if args.len() < 1 {
+    if options.len() < 1 {
         help::radula_open(help::RADULA_HELP);
         process::exit(1);
     }
 
-    while let Some(arg) = args.next() {
-        match arg.as_str() {
-            "b" | "-b" | "--behave" => match args.next().as_deref() {
-                Some("b") | Some("bootstrap") => match args.next().as_deref() {
+    while let Some(option) = options.next() {
+        match option.as_str() {
+            "b" | "-b" | "--behave" => match options.next().as_deref() {
+                Some("b") | Some("bootstrap") => match options.next().as_deref() {
                     Some("c") | Some("clean") => println!("Do nothing"),
                     Some("d") | Some("distclean") => println!("Do nothing"),
 
@@ -33,7 +33,7 @@ pub fn radula_argparse(radula_genome: &str) {
                         process::exit(1);
                     }
                 },
-                Some("e") | Some("envenomate") => match args.next().as_deref() {
+                Some("e") | Some("envenomate") => match options.next().as_deref() {
                     Some("h") | Some("-h") | Some("--help") => {
                         help::radula_open(help::RADULA_BEHAVE_ENVENOMATE_HELP);
                     }
@@ -43,7 +43,7 @@ pub fn radula_argparse(radula_genome: &str) {
                         process::exit(1);
                     }
                 },
-                Some("i") | Some("binary") => match args.next().as_deref() {
+                Some("i") | Some("binary") => match options.next().as_deref() {
                     Some("h") | Some("-h") | Some("--help") => {
                         help::radula_open(help::RADULA_BEHAVE_BINARY_HELP);
                     }
@@ -63,7 +63,7 @@ pub fn radula_argparse(radula_genome: &str) {
                     process::exit(1);
                 }
             },
-            "c" | "-c" | "--ceras" => match args.next().as_deref() {
+            "c" | "-c" | "--ceras" => match options.next().as_deref() {
                 Some("n") | Some("nom") | Some("name") => println!("Do nothing"),
 
                 Some("h") | Some("-h") | Some("--help") => {
