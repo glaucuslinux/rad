@@ -40,5 +40,5 @@ fn main() {
 
     //argparse::radula_argparse(radula_genome);
     variables::radula_behave_bootstrap_variables();
-    functions::radula_behave_swallow("gcc");
+    functions::radula_behave_swallow("cerata");
 }
