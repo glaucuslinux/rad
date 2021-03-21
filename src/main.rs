@@ -40,5 +40,9 @@ fn main() {
 
     //argparse::radula_argparse(radula_genome);
     variables::radula_behave_bootstrap_variables();
-    functions::radula_behave_swallow("cerata");
+    functions::radula_behave_source("cerata");
+
+    for i in ["s6", "s6-rc", "grep"].iter() {
+        functions::radula_behave_source(i);
+    }
 }
