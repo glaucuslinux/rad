@@ -35,6 +35,9 @@ pub const RADULA_CHMOD: &'static str = "chmod";
 pub const RADULA_CHOWN: &'static str = "chown";
 pub const RADULA_CHMOD_CHOWN_FLAGS: &'static str = "-Rv";
 
+// Prefer `curl` over `wget`
+pub const RADULA_CURL: &'static str = "curl";
+
 // No default flags were included for `git` because there are many
 pub const RADULA_GIT: &'static str = "git";
 
@@ -62,6 +65,8 @@ pub const RADULA_RSYNC_FLAGS: &'static str = "-vaHAXSx";
 // The main shell used for running shell scripts
 pub const RADULA_SHELL: &'static str = "dash";
 pub const RADULA_SHELL_FLAGS: &'static str = "-c";
+
+pub const RADULA_TAR: &'static str = "tar";
 
 pub const RADULA_UMOUNT: &'static str = "umount";
 pub const RADULA_UMOUNT_FLAGS: &'static str = "-fqRv";

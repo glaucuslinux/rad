@@ -86,6 +86,6 @@ Distributed under the terms of the ISC License
 radula version 3.3.0";
 
 // This function will probably be changed in the future to something that makes more sense...
-pub fn radula_open(x: &str) {
+pub fn radula_open(x: &'static str) {
     println!("{}\n\n{}", RADULA_VERSION, x);
 }

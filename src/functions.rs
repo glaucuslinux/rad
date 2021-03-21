@@ -1,28 +1,31 @@
-use std::env;
 use std::path::Path;
 use std::process::Command;
+use std::string;
+use std::{env, ffi::OsStr};
 
 use super::paths;
 
-pub fn radula_behave_fetch() {}
+pub fn radula_behave_fetch(x: &'static str) {
+    let y: [string::String; 8] = radula_behave_source(x);
+    if radula_behave_source(x)[1] == "git" {
+        Command::new(paths::RADULA_GIT)
+            .arg("clone")
+            .arg(y[3].as_str())
+            .spawn();
+    }
+}
+
 pub fn radula_behave_swallow() {}
 
-pub fn radula_behave_source(x: &str) {
-    let ceras: [&str; 8] = [
-        "Name",
-        "Version",
-        "Commit",
-        "Source",
-        "sha512sum",
-        "Cysts",
-        "Concentrates",
-        "Licenses",
-    ];
+// Sources the `ceras` file and returns an array of strings representing the
+// variables inside of it
+pub fn radula_behave_source(x: &'static str) -> [string::String; 8] {
+    // We can't have a `"".to_string()` copied 8 times, which is why we're using
+    // a constant beforehand
+    const S: String = String::new();
+    let mut y: [string::String; 8] = [S; 8];
 
     // Magic
-    // - Sources `ceras` file and prints its variables
-    // - Enumerates over the output
-    // - Formats the output
     for (i, j) in std::string::String::from_utf8_lossy(
         &Command::new(paths::RADULA_SHELL)
             .args(&[
@@ -40,12 +43,12 @@ pub fn radula_behave_source(x: &str) {
             .unwrap()
             .stdout,
     )
-    .to_string()
     .trim()
     .split("~~")
-    .into_iter()
     .enumerate()
     {
-        println!("{:<12} :: {}", ceras[i], j.replace(" ", ", "));
+        y[i] = j.to_string();
     }
+
+    return y;
 }

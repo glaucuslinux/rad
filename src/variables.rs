@@ -62,7 +62,7 @@ pub fn radula_behave_teeth_variables(radula_parallel: bool) {
     env::set_var("UMOUNT", paths::RADULA_UMOUNT);
 }
 
-pub fn radula_behave_arch_variables(radula_genome: &str) {
+pub fn radula_behave_arch_variables(radula_genome: &'static str) {
     env::set_var("ARCH", radula_genome);
 
     env::set_var(

@@ -3,7 +3,7 @@ use std::process;
 
 use super::help;
 
-pub fn radula_argparse(radula_genome: &str) {
+pub fn radula_argparse(radula_genome: &'static str) {
     let mut options = env::args().skip(1);
 
     if options.len() < 1 {
