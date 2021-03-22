@@ -46,6 +46,7 @@ pub fn radula_behave_teeth_variables(radula_parallel: bool) {
             "MAKEFLAGS",
             [
                 "-j",
+                // We need to trim the output or parse won't work...
                 &(String::from_utf8_lossy(
                     &Command::new(paths::RADULA_NPROC).output().unwrap().stdout,
                 )

@@ -46,4 +46,5 @@ fn main() {
     }
 
     //functions::radula_behave_fetch("s6");
+    //functions::radula_behave_fetch("radula");
 }

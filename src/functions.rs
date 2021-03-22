@@ -1,4 +1,5 @@
 use std::env;
+use std::io::Write;
 use std::path::Path;
 use std::process::{Command, Stdio};
 use std::string::String;
@@ -17,16 +18,7 @@ pub fn radula_behave_fetch(x: &'static str) {
             .unwrap(),
     );
 
-    let w = String::from(
-        Path::new(&z)
-            .join(Path::new(&y[3]).file_name().unwrap())
-            .file_name()
-            .unwrap()
-            .to_str()
-            .unwrap(),
-    );
-
-    if radula_behave_source(x)[1] == paths::RADULA_GIT {
+    if y[1] == paths::RADULA_GIT {
         // Clone the `git` repo
         Command::new(paths::RADULA_GIT)
             .args(&["clone", &y[3], &z])
@@ -36,14 +28,35 @@ pub fn radula_behave_fetch(x: &'static str) {
             .args(&["-C", &z, "checkout", &y[2]])
             .spawn();
     } else {
+        let w = String::from(
+            Path::new(&z)
+                .join(Path::new(&y[3]).file_name().unwrap())
+                .to_str()
+                .unwrap(),
+        );
+
         Command::new(paths::RADULA_MKDIR)
             .args(&[paths::RADULA_MKDIR_FLAGS, &z])
             .stdout(Stdio::null())
             .spawn();
 
         Command::new(paths::RADULA_CURL)
-            .args(&["-Lo", &w, &y[3]])
+            .args(&[paths::RADULA_CURL_FLAGS, &w, &y[3]])
             .spawn();
+
+        // verify
+        write!(
+            Command::new(paths::RADULA_CHECKSUM)
+                .arg(paths::RADULA_CHECKSUM_FLAGS)
+                .stdin(Stdio::piped())
+                .spawn()
+                .unwrap()
+                .stdin
+                .unwrap(),
+            "{}",
+            [&y[4], " ", &w].concat()
+        )
+        .unwrap();
 
         Command::new(paths::RADULA_TAR)
             .args(&["xvf", &w, "-C", &z])
@@ -51,8 +64,6 @@ pub fn radula_behave_fetch(x: &'static str) {
             .spawn();
     }
 }
-
-pub fn radula_behave_swallow() {}
 
 // Sources the `ceras` file and returns an array of strings representing the
 // variables inside of it
@@ -90,4 +101,4 @@ pub fn radula_behave_source(x: &'static str) -> [String; 8] {
     return y;
 }
 
-pub fn radula_behave_verify() {}
+pub fn radula_behave_swallow() {}
