@@ -56,11 +56,17 @@ pub const RADULA_MKDIR_FLAGS: &'static str = "-dv";
 pub const RADULA_MV: &'static str = "mv";
 pub const RADULA_MV_FLAGS: &'static str = "-v";
 
+// We're not going to use the `num_cpus` crate
+pub const RADULA_NPROC: &'static str = "nproc";
+
 pub const RADULA_RM: &'static str = "rm";
 pub const RADULA_RM_FLAGS: &'static str = "-frv";
 
 pub const RADULA_RSYNC: &'static str = "rsync";
 pub const RADULA_RSYNC_FLAGS: &'static str = "-vaHAXSx";
+
+// We're not going to use any hashing crate/library
+pub const RADULA_SHA512SUM: &'static str = "sha512sum";
 
 // The main shell used for running shell scripts
 pub const RADULA_SHELL: &'static str = "dash";

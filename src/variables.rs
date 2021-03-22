@@ -1,6 +1,7 @@
 use std::env;
 use std::path::Path;
 use std::process::Command;
+use std::string::String;
 
 use super::paths;
 
@@ -45,7 +46,14 @@ pub fn radula_behave_teeth_variables(radula_parallel: bool) {
             "MAKEFLAGS",
             [
                 "-j",
-                &(num_cpus::get_physical() * 3).to_string(),
+                &(String::from_utf8_lossy(
+                    &Command::new(paths::RADULA_NPROC).output().unwrap().stdout,
+                )
+                .trim()
+                .parse::<f32>()
+                .unwrap()
+                    * 1.5)
+                    .to_string(),
                 " ",
                 paths::RADULA_MAKEFLAGS,
             ]
@@ -73,7 +81,7 @@ pub fn radula_behave_arch_variables(radula_genome: &'static str) {
                 .unwrap()
                 .stdout,
         )
-        .trim_end(),
+        .trim(),
     );
 
     env::set_var("CARCH", ["--with-gcc-arch=", radula_genome].concat());

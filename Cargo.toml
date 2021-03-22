@@ -3,6 +3,3 @@ name = "radula-rs"
 version = "0.1.0"
 authors = ["Firas Khalil Khana <firasuke@glaucuslinux.org>"]
 edition = "2018"
-
-[dependencies]
-num_cpus = "1.13.0"

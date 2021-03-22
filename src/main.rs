@@ -45,5 +45,5 @@ fn main() {
         println!("{:?}\n", functions::radula_behave_source(i));
     }
 
-    functions::radula_behave_fetch("radula");
+    //functions::radula_behave_fetch("s6");
 }
