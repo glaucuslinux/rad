@@ -45,6 +45,10 @@ fn main() {
         println!("{:?}\n", functions::radula_behave_source(i));
     }
 
-    //functions::radula_behave_fetch("s6");
-    //functions::radula_behave_fetch("radula");
+    functions::radula_behave_swallow("s6");
+    functions::radula_behave_swallow("radula");
+    functions::radula_behave_swallow("s6-rc");
+    functions::radula_behave_swallow("dash");
+    functions::radula_behave_swallow("vim");
+    functions::radula_behave_swallow("gcc");
 }

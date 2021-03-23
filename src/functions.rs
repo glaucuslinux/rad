@@ -108,7 +108,7 @@ pub fn radula_behave_swallow(x: &'static str) {
                 .stdout(Stdio::null())
                 .spawn();
         }
-    } else {
+    } else if y[1] != paths::RADULA_GIT {
         radula_behave_verify();
     }
 }
