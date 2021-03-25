@@ -20,7 +20,7 @@ pub fn radula_options() {
                     Some("d") | Some("distclean") => println!("Do nothing"),
 
                     Some("h") | Some("-h") | Some("--help") => {
-                        functions::radula_open(constants::RADULA_BEHAVE_BOOTSTRAP_HELP)
+                        functions::radula_open(constants::RADULA_HELP_BEHAVE_BOOTSTRAP)
                     }
 
                     Some("i") | Some("image") => println!("Do nothing"),
@@ -30,37 +30,37 @@ pub fn radula_options() {
                     Some("t") | Some("toolchain") => println!("Do nothing"),
                     Some("x") | Some("cross") => println!("Do nothing"),
                     _ => {
-                        functions::radula_open(constants::RADULA_BEHAVE_BOOTSTRAP_HELP);
+                        functions::radula_open(constants::RADULA_HELP_BEHAVE_BOOTSTRAP);
                         process::exit(1);
                     }
                 },
                 Some("e") | Some("envenomate") => match x.next().as_deref() {
                     Some("h") | Some("-h") | Some("--help") => {
-                        functions::radula_open(constants::RADULA_BEHAVE_ENVENOMATE_HELP);
+                        functions::radula_open(constants::RADULA_HELP_BEHAVE_ENVENOMATE);
                     }
 
                     _ => {
-                        functions::radula_open(constants::RADULA_BEHAVE_ENVENOMATE_HELP);
+                        functions::radula_open(constants::RADULA_HELP_BEHAVE_ENVENOMATE);
                         process::exit(1);
                     }
                 },
                 Some("i") | Some("binary") => match x.next().as_deref() {
                     Some("h") | Some("-h") | Some("--help") => {
-                        functions::radula_open(constants::RADULA_BEHAVE_BINARY_HELP);
+                        functions::radula_open(constants::RADULA_HELP_BEHAVE_BINARY);
                     }
 
                     _ => {
-                        functions::radula_open(constants::RADULA_BEHAVE_BINARY_HELP);
+                        functions::radula_open(constants::RADULA_HELP_BEHAVE_BINARY);
                         process::exit(1);
                     }
                 },
 
                 Some("h") | Some("-h") | Some("--help") => {
-                    functions::radula_open(constants::RADULA_BEHAVE_HELP)
+                    functions::radula_open(constants::RADULA_HELP_BEHAVE)
                 }
 
                 _ => {
-                    functions::radula_open(constants::RADULA_BEHAVE_HELP);
+                    functions::radula_open(constants::RADULA_HELP_BEHAVE);
                     process::exit(1);
                 }
             },
@@ -68,7 +68,7 @@ pub fn radula_options() {
                 Some("n") | Some("nom") | Some("name") => println!("Do nothing"),
 
                 Some("h") | Some("-h") | Some("--help") => {
-                    functions::radula_open(constants::RADULA_CERAS_HELP)
+                    functions::radula_open(constants::RADULA_HELP_CERAS)
                 }
 
                 Some("v") | Some("ver") | Some("version") => println!("Do nothing"),
@@ -81,13 +81,13 @@ pub fn radula_options() {
                     println!("Do nothing")
                 }
                 _ => {
-                    functions::radula_open(constants::RADULA_CERAS_HELP);
+                    functions::radula_open(constants::RADULA_HELP_CERAS);
                     process::exit(1);
                 }
             },
             "h" | "-h" | "--help" => functions::radula_open(constants::RADULA_HELP),
 
-            "v" | "-v" | "--version" => println!("{}", constants::RADULA_VERSION),
+            "v" | "-v" | "--version" => println!("{}", constants::RADULA_HELP_VERSION),
             _ => {
                 functions::radula_open(constants::RADULA_HELP);
                 process::exit(1);
