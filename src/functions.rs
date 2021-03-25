@@ -1,12 +1,79 @@
 use std::env;
+use std::fs;
 use std::io::Write;
 use std::path::Path;
 use std::process::{Command, Stdio};
 use std::string::String;
 
-use super::paths;
+use super::constants;
 
-pub fn radula_behave_construct() {}
+pub fn radula_behave_bootstrap_clean() {
+    fs::remove_dir_all(env::var("CRSD").unwrap());
+    fs::remove_dir_all(env::var("LOGD").unwrap());
+    fs::remove_dir_all(env::var("TBLD").unwrap());
+    fs::remove_dir_all(env::var("TLCD").unwrap());
+    fs::remove_dir_all(env::var("XBLD").unwrap());
+}
+
+pub fn radula_behave_bootstrap_distclean() {
+    fs::remove_dir_all(env::var("BAKD").unwrap());
+
+    fs::remove_file(Path::new(&env::var("GLAD").unwrap()).join("glaucus.img"));
+
+    fs::remove_dir_all(env::var("SRCD").unwrap());
+
+    radula_behave_bootstrap_clean();
+
+    // Only remove `$TMPD` completely after `$TBLD` and `$XBLD` are removed
+    fs::remove_dir_all(env::var("TMPD").unwrap());
+}
+
+pub fn radula_behave_boostrap_toolchain() {
+    radula_behave_boostrap_toolchain_environment();
+    radula_behave_boostrap_toolchain_swallow();
+    radula_behave_boostrap_toolchain_prepare();
+
+    radula_behave_boostrap_toolchain_construct();
+}
+
+pub fn radula_behave_construct(x: &'static str, y: &'static str) {
+    // We only require `nom` and `ver` from the `ceras` file
+    let z: [String; 8] = radula_behave_source(x);
+
+    let radula_behave_construct_stage_function = |w: &'static str| {
+        Command::new(constants::RADULA_SHELL)
+            .args(&[
+                constants::RADULA_SHELL_FLAGS,
+                &format!(
+                    // `ceras` and `*.ceras` files are only using `nom` and `ver`
+                    "nom={} ver={} . {} && {}",
+                    z[0],
+                    z[1],
+                    Path::new(&env::var("CERD").unwrap())
+                        .join(x)
+                        .join([y, ".ceras"].concat())
+                        .to_str()
+                        .unwrap(),
+                    w
+                ),
+            ])
+            .spawn()
+            .unwrap();
+    };
+
+    // prepare
+    radula_behave_construct_stage_function("prepare");
+    // configure
+    radula_behave_construct_stage_function("configure");
+    // build
+    radula_behave_construct_stage_function("build");
+
+    // check (disabled for now)
+    //radula_behave_construct_stage_function("check");
+
+    // install
+    radula_behave_construct_stage_function("install");
+}
 
 // Sources the `ceras` file and returns an array of strings representing the
 // variables inside of it
@@ -18,11 +85,11 @@ pub fn radula_behave_source(x: &'static str) -> [String; 8] {
 
     // Magic
     for (i, j) in String::from_utf8_lossy(
-        &Command::new(paths::RADULA_SHELL)
+        &Command::new(constants::RADULA_SHELL)
             .args(&[
-                paths::RADULA_SHELL_FLAGS,
+                constants::RADULA_SHELL_FLAGS,
                 &format!(
-                    ". {} && echo $nom~~$ver~~$cmt~~$url~~$sum~~$cys~~$cnt~~$lic",
+                    ". {} && echo $nom~~$ver~~$cmt~~$url~~$sum~~$cys~~$cnt",
                     Path::new(&env::var("CERD").unwrap())
                         .join(x)
                         .join("ceras")
@@ -67,8 +134,8 @@ pub fn radula_behave_swallow(x: &'static str) {
     // verify
     let radula_behave_verify = || {
         write!(
-            Command::new(paths::RADULA_CHECKSUM)
-                .arg(paths::RADULA_CHECKSUM_FLAGS)
+            Command::new(constants::RADULA_CHECKSUM)
+                .arg(constants::RADULA_CHECKSUM_FLAGS)
                 .stdin(Stdio::piped())
                 .spawn()
                 .unwrap()
@@ -81,34 +148,241 @@ pub fn radula_behave_swallow(x: &'static str) {
     };
 
     if !Path::is_dir(Path::new(&z)) {
-        if y[1] == paths::RADULA_GIT {
+        if y[1] == constants::RADULA_GIT {
             // Clone the `git` repo
-            Command::new(paths::RADULA_GIT)
+            Command::new(constants::RADULA_GIT)
                 .args(&["clone", &y[3], &z])
                 .spawn();
             // Checkout the freshly cloned `git` repo at the specified commit number
-            Command::new(paths::RADULA_GIT)
+            Command::new(constants::RADULA_GIT)
                 .args(&["-C", &z, "checkout", &y[2]])
                 .spawn();
         } else {
-            Command::new(paths::RADULA_MKDIR)
-                .args(&[paths::RADULA_MKDIR_FLAGS, &z])
-                .stdout(Stdio::null())
-                .spawn();
+            fs::create_dir(&z);
 
-            Command::new(paths::RADULA_CURL)
-                .args(&[paths::RADULA_CURL_FLAGS, &w, &y[3]])
+            Command::new(constants::RADULA_CURL)
+                .args(&[constants::RADULA_CURL_FLAGS, &w, &y[3]])
                 .spawn();
 
             // verify
             radula_behave_verify();
 
-            Command::new(paths::RADULA_TAR)
+            Command::new(constants::RADULA_TAR)
                 .args(&["xvf", &w, "-C", &z])
                 .stdout(Stdio::null())
                 .spawn();
         }
-    } else if y[1] != paths::RADULA_GIT {
+    } else if y[1] != constants::RADULA_GIT {
         radula_behave_verify();
     }
+}
+
+pub fn radula_open(x: &'static str) {
+    println!("{}\n\n{}", constants::RADULA_VERSION, x);
+}
+
+pub fn radula_behave_bootstrap_arch_environment(x: &'static str) {
+    env::set_var("ARCH", x);
+
+    env::set_var(
+        "BLD",
+        String::from_utf8_lossy(
+            &Command::new(Path::new(&env::var("CERD").unwrap()).join("binutils/config.guess"))
+                .output()
+                .unwrap()
+                .stdout,
+        )
+        .trim(),
+    );
+
+    env::set_var("CARCH", ["--with-gcc-arch=", x].concat());
+    env::set_var("TGT", [x, "-glaucus-linux-musl"].concat());
+
+    match x {
+        "aarch64" => {
+            env::set_var("CARCH", "--with-gcc-arch=armv8-a");
+            env::set_var("FARCH", "-mabi=lp64 -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 -march=armv8-a -mtune=generic");
+            env::set_var("GCARCH", "--with-arch=armv8-a --with-abi=lp64 --enable-fix-cortex-a53-835769 --enable-fix-cortex-a53-843419");
+            env::set_var("LARCH", "arm64");
+            env::set_var("LCARCH", "");
+            env::set_var("LIARCH", "arch/arm64/boot/Image");
+            env::set_var("MARCH", x);
+        }
+        "armv6zk" => {
+            env::set_var("FARCH", "-mabi=aapcs-linux -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -mcpu=arm1176jzf-s -mfpu=vfpv2");
+            env::set_var("GCARCH", "--with-arch=armv6zk --with-tune=arm1176jzf-s --with-abi=aapcs-linux --with-fpu=vfpv2 --with-float=hard");
+            env::set_var("LARCH", "arm");
+            env::set_var("LCARCH", "bcm2835_");
+            env::set_var("LIARCH", "arch/arm/boot/zImage");
+            env::set_var("MARCH", "arm");
+            env::set_var("TGT", [x, "-glaucus-linux-musleabihf"].concat());
+        }
+        "i686" => {
+            env::set_var("FARCH", "-march=i686 -mtune=generic -mabi=sysv");
+            env::set_var("GCARCH", "--with-arch=i686 --with-tune=generic");
+            env::set_var("LARCH", "i386");
+            env::set_var("LCARCH", "i386_");
+            env::set_var("LIARCH", "arch/x86/boot/bzImage");
+            env::set_var("MARCH", "i386");
+        }
+        "x86-64" => {
+            env::set_var("FARCH", "-march=x86-64 -mtune=generic -mabi=sysv");
+            env::set_var("GCARCH", "--with-arch=x86-64 --with-tune=generic");
+            env::set_var("LARCH", "x86_64");
+            env::set_var("LCARCH", "x86_64_");
+            env::set_var("LIARCH", "arch/x86/boot/bzImage");
+            env::set_var("MARCH", "x86_64");
+            env::set_var("TGT", "x86_64-glaucus-linux-musl");
+        }
+        _ => {}
+    }
+}
+
+pub fn radula_behave_bootstrap_environment() {
+    let x = fs::canonicalize("..").unwrap();
+
+    env::set_var("GLAD", &x);
+
+    env::set_var("BAKD", x.join(constants::RADULA_BACKUP_DIRECTORY));
+    env::set_var("CERD", x.join(constants::RADULA_CERATA_DIRECTORY));
+    env::set_var("CRSD", x.join(constants::RADULA_CROSS_DIRECTORY));
+    env::set_var("LOGD", x.join(constants::RADULA_LOG_DIRECTORY));
+    env::set_var("SRCD", x.join(constants::RADULA_SOURCES_DIRECTORY));
+    env::set_var("TMPD", x.join(constants::RADULA_TEMPORARY_DIRECTORY));
+    env::set_var("TLCD", x.join(constants::RADULA_TOOLCHAIN_DIRECTORY));
+
+    env::set_var(
+        "PATH",
+        Path::new(
+            &[
+                Path::new(&env::var("TLCD").unwrap())
+                    .join("bin")
+                    .to_str()
+                    .unwrap(),
+                ":",
+            ]
+            .concat(),
+        )
+        .join(env::var("PATH").unwrap().strip_prefix("/").unwrap()),
+    );
+}
+
+pub fn radula_behave_ccache_environment() {
+    env::set_var(
+        "PATH",
+        Path::new(&[constants::RADULA_CCACHE_PATH, ":"].concat())
+            .join(env::var("PATH").unwrap().strip_prefix("/").unwrap()),
+    );
+}
+
+pub fn radula_behave_cross_environment() {
+    env::set_var(
+        "XLOG",
+        Path::new(&env::var("LOGD").unwrap()).join(constants::RADULA_CROSS_DIRECTORY),
+    );
+
+    env::set_var(
+        "XTMP",
+        Path::new(&env::var("TMPD").unwrap()).join(constants::RADULA_CROSS_DIRECTORY),
+    );
+
+    env::set_var(
+        "XBLD",
+        Path::new(&env::var("XTMP").unwrap()).join(constants::RADULA_BUILDS_DIRECTORY),
+    );
+    env::set_var(
+        "XSRC",
+        Path::new(&env::var("XTMP").unwrap()).join(constants::RADULA_SOURCES_DIRECTORY),
+    );
+}
+
+pub fn radula_behave_pkg_config_environment() {
+    env::set_var("PKG_CONFIG_PATH", constants::RADULA_PKG_CONFIG_PATH);
+    env::set_var("PKG_CONFIG_LIBDIR", constants::RADULA_PKG_CONFIG_LIBDIR);
+    env::set_var(
+        "PKG_CONFIG_SYSROOT_DIR",
+        constants::RADULA_PKG_CONFIG_SYSROOT_DIR,
+    );
+
+    // These environment variables are only `pkgconf` specific, but setting them
+    // won't do us any harm...
+    env::set_var(
+        "PKG_CONFIG_SYSTEM_INCLUDE_PATH",
+        constants::RADULA_PKG_CONFIG_SYSTEM_INCLUDE_PATH,
+    );
+    env::set_var(
+        "PKG_CONFIG_SYSTEM_LIBRARY_PATH",
+        constants::RADULA_PKG_CONFIG_SYSTEM_LIBRARY_PATH,
+    );
+}
+
+pub fn radula_behave_teeth_environment(radula_parallel: bool) {
+    env::set_var("AUTORECONF", constants::RADULA_AUTORECONF);
+    env::set_var("CHMOD", constants::RADULA_CHMOD);
+    env::set_var("CHOWN", constants::RADULA_CHOWN);
+    env::set_var("LN", constants::RADULA_LN);
+
+    // `make` and its flags
+    env::set_var("MAKE", constants::RADULA_MAKE);
+    if radula_parallel {
+        env::set_var(
+            "MAKEFLAGS",
+            [
+                "-j",
+                // We need to trim the output or parse won't work...
+                &(String::from_utf8_lossy(
+                    &Command::new(constants::RADULA_NPROC)
+                        .output()
+                        .unwrap()
+                        .stdout,
+                )
+                .trim()
+                .parse::<f32>()
+                .unwrap()
+                    * 1.5)
+                    .to_string(),
+                " ",
+                constants::RADULA_MAKEFLAGS,
+            ]
+            .concat(),
+        );
+    } else {
+        env::set_var(
+            "MAKEFLAGS",
+            ["-j1", " ", constants::RADULA_MAKEFLAGS].concat(),
+        );
+    }
+
+    env::set_var("MKDIR", constants::RADULA_MKDIR);
+    env::set_var("MV", constants::RADULA_MV);
+    env::set_var("RM", constants::RADULA_RM);
+    env::set_var("RSYNC", constants::RADULA_RSYNC);
+    env::set_var("UMOUNT", constants::RADULA_UMOUNT);
+}
+
+pub fn radula_behave_toolchain_environment() {
+    env::set_var(
+        "TLOG",
+        Path::new(&env::var("LOGD").unwrap()).join(constants::RADULA_TOOLCHAIN_DIRECTORY),
+    );
+
+    env::set_var(
+        "TTMP",
+        Path::new(&env::var("TMPD").unwrap()).join(constants::RADULA_TOOLCHAIN_DIRECTORY),
+    );
+
+    env::set_var(
+        "TBLD",
+        Path::new(&env::var("TTMP").unwrap()).join(constants::RADULA_BUILDS_DIRECTORY),
+    );
+    env::set_var(
+        "TSRC",
+        Path::new(&env::var("TTMP").unwrap()).join(constants::RADULA_SOURCES_DIRECTORY),
+    );
+}
+
+// Disables unicode (supposedly speeds up running shell scripts)
+pub fn radula_behave_unicode_environment() {
+    env::set_var("LANG", "C");
+    env::set_var("LC_ALL", "C");
 }
