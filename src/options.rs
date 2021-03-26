@@ -12,22 +12,41 @@ pub fn radula_options() {
         process::exit(1);
     }
 
-    while let Some(option) = x.next() {
-        match option.as_str() {
+    while let Some(y) = x.next() {
+        match y.as_str() {
             "b" | "-b" | "--behave" => match x.next().as_deref() {
                 Some("b") | Some("bootstrap") => match x.next().as_deref() {
-                    Some("c") | Some("clean") => println!("Do nothing"),
-                    Some("d") | Some("distclean") => println!("Do nothing"),
+                    Some("c") | Some("clean") => {
+                        functions::radula_behave_bootstrap_environment();
+                        functions::radula_behave_bootstrap_toolchain_environment();
+                        functions::radula_behave_bootstrap_cross_environment();
+                        functions::radula_behave_bootstrap_clean();
+                    }
+                    Some("d") | Some("distclean") => {
+                        functions::radula_behave_bootstrap_environment();
+                        functions::radula_behave_bootstrap_toolchain_environment();
+                        functions::radula_behave_bootstrap_cross_environment();
+                        functions::radula_behave_bootstrap_distclean();
+                    }
 
                     Some("h") | Some("-h") | Some("--help") => {
                         functions::radula_open(constants::RADULA_HELP_BEHAVE_BOOTSTRAP)
                     }
 
                     Some("i") | Some("image") => println!("Do nothing"),
-                    Some("l") | Some("list") => println!("Do nothing"),
+                    Some("l") | Some("list") => {
+                        functions::radula_open(constants::RADULA_HELP_BEHAVE_BOOTSTRAP_LIST)
+                    }
                     Some("r") | Some("require") => println!("Do nothing"),
                     Some("s") | Some("release") => println!("Do nothing"),
-                    Some("t") | Some("toolchain") => println!("Do nothing"),
+                    Some("t") | Some("toolchain") => {
+                        functions::radula_behave_bootstrap_environment();
+                        functions::radula_behave_ccache_environment();
+                        functions::radula_behave_bootstrap_initialize();
+                        functions::radula_behave_bootstrap_clean();
+                        functions::radula_behave_bootstrap_arch_environment("x86-64");
+                        functions::radula_behave_bootstrap_toolchain();
+                    }
                     Some("x") | Some("cross") => println!("Do nothing"),
                     _ => {
                         functions::radula_open(constants::RADULA_HELP_BEHAVE_BOOTSTRAP);

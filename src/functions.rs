@@ -86,17 +86,17 @@ pub fn radula_behave_bootstrap_distclean() {
 }
 
 pub fn radula_behave_bootstrap_environment() {
-    let x = fs::canonicalize("..").unwrap();
+    let y = fs::canonicalize("..").unwrap();
 
-    env::set_var("GLAD", &x);
+    env::set_var("GLAD", &y);
 
-    env::set_var("BAKD", x.join(constants::RADULA_DIRECTORY_BACKUP));
-    env::set_var("CERD", x.join(constants::RADULA_DIRECTORY_CERATA));
-    env::set_var("CRSD", x.join(constants::RADULA_DIRECTORY_CROSS));
-    env::set_var("LOGD", x.join(constants::RADULA_DIRECTORY_LOG));
-    env::set_var("SRCD", x.join(constants::RADULA_DIRECTORY_SOURCES));
-    env::set_var("TMPD", x.join(constants::RADULA_DIRECTORY_TEMPORARY));
-    env::set_var("TLCD", x.join(constants::RADULA_DIRECTORY_TOOLCHAIN));
+    env::set_var("BAKD", y.join(constants::RADULA_DIRECTORY_BACKUP));
+    env::set_var("CERD", y.join(constants::RADULA_DIRECTORY_CERATA));
+    env::set_var("CRSD", y.join(constants::RADULA_DIRECTORY_CROSS));
+    env::set_var("LOGD", y.join(constants::RADULA_DIRECTORY_LOG));
+    env::set_var("SRCD", y.join(constants::RADULA_DIRECTORY_SOURCES));
+    env::set_var("TMPD", y.join(constants::RADULA_DIRECTORY_TEMPORARY));
+    env::set_var("TLCD", y.join(constants::RADULA_DIRECTORY_TOOLCHAIN));
 
     env::set_var(
         "PATH",
@@ -112,15 +112,90 @@ pub fn radula_behave_bootstrap_environment() {
         )
         .join(env::var("PATH").unwrap().strip_prefix("/").unwrap()),
     );
+
+    radula_behave_teeth_environment();
 }
 
-//pub fn radula_behave_bootstrap_toolchain() {
-//radula_behave_boostrap_toolchain_environment();
-//radula_behave_boostrap_toolchain_swallow();
-//radula_behave_boostrap_toolchain_prepare();
+pub fn radula_behave_bootstrap_initialize() {
+    fs::create_dir_all(env::var("BAKD").unwrap());
+    fs::create_dir_all(env::var("SRCD").unwrap());
+}
 
-//radula_behave_boostrap_toolchain_construct();
-//}
+pub fn radula_behave_bootstrap_toolchain() {
+    radula_behave_bootstrap_toolchain_environment();
+    radula_behave_bootstrap_toolchain_swallow();
+    radula_behave_bootstrap_toolchain_prepare();
+
+    radula_behave_bootstrap_toolchain_construct();
+}
+
+pub fn radula_behave_bootstrap_toolchain_backup() {
+    let radula_behave_bootstrap_backup = |x: &'static str| {
+        Command::new(constants::RADULA_TOOTH_RSYNC)
+            .args(&[
+                constants::RADULA_TOOTH_RSYNC_FLAGS,
+                &env::var(x).unwrap(),
+                &env::var("BAKD").unwrap(),
+                "--delete",
+            ])
+            .stdout(Stdio::null())
+            .spawn();
+    };
+
+    radula_behave_bootstrap_backup("CRSD");
+    radula_behave_bootstrap_backup("TLCD");
+}
+
+pub fn radula_behave_bootstrap_toolchain_construct() {
+    let x = "toolchain";
+
+    radula_behave_construct("musl-headers", x);
+    radula_behave_construct("binutils", x);
+    radula_behave_construct("gcc", x);
+    radula_behave_construct("musl", x);
+    radula_behave_construct("libgcc", x);
+    radula_behave_construct("libstdc++-v3", x);
+    radula_behave_construct("libgomp", x);
+}
+
+pub fn radula_behave_bootstrap_toolchain_environment() {
+    env::set_var(
+        "TLOG",
+        Path::new(&env::var("LOGD").unwrap()).join(constants::RADULA_DIRECTORY_TOOLCHAIN),
+    );
+
+    env::set_var(
+        "TTMP",
+        Path::new(&env::var("TMPD").unwrap()).join(constants::RADULA_DIRECTORY_TOOLCHAIN),
+    );
+
+    env::set_var(
+        "TBLD",
+        Path::new(&env::var("TTMP").unwrap()).join(constants::RADULA_DIRECTORY_BUILDS),
+    );
+    env::set_var(
+        "TSRC",
+        Path::new(&env::var("TTMP").unwrap()).join(constants::RADULA_DIRECTORY_SOURCES),
+    );
+}
+
+pub fn radula_behave_bootstrap_toolchain_prepare() {
+    fs::create_dir_all(env::var("CRSD").unwrap());
+    fs::create_dir_all(env::var("TLOG").unwrap());
+    fs::create_dir_all(env::var("TBLD").unwrap());
+    fs::create_dir_all(env::var("TSRC").unwrap());
+    fs::create_dir_all(env::var("TLCD").unwrap());
+}
+
+pub fn radula_behave_bootstrap_toolchain_swallow() {
+    radula_behave_swallow("musl");
+    radula_behave_swallow("binutils");
+    radula_behave_swallow("gmp");
+    radula_behave_swallow("mpfr");
+    radula_behave_swallow("mpc");
+    radula_behave_swallow("isl");
+    radula_behave_swallow("gcc");
+}
 
 pub fn radula_behave_ccache_environment() {
     env::set_var(
@@ -169,7 +244,7 @@ pub fn radula_behave_construct(x: &'static str, y: &'static str) {
     radula_behave_construct_stage_function("install");
 }
 
-pub fn radula_behave_cross_environment() {
+pub fn radula_behave_bootstrap_cross_environment() {
     env::set_var(
         "XLOG",
         Path::new(&env::var("LOGD").unwrap()).join(constants::RADULA_DIRECTORY_CROSS),
@@ -296,7 +371,7 @@ pub fn radula_behave_swallow(x: &'static str) {
                 .args(&["-C", &z, "checkout", &y[2]])
                 .spawn();
         } else {
-            fs::create_dir(&z);
+            fs::create_dir_all(&z);
 
             Command::new(constants::RADULA_TOOTH_CURL)
                 .args(&[constants::RADULA_TOOTH_CURL_FLAGS, &w, &y[3]])
@@ -315,7 +390,7 @@ pub fn radula_behave_swallow(x: &'static str) {
     }
 }
 
-pub fn radula_behave_teeth_environment(x: bool) {
+pub fn radula_behave_teeth_environment() {
     env::set_var(
         "AUTORECONF",
         [
@@ -355,34 +430,27 @@ pub fn radula_behave_teeth_environment(x: bool) {
 
     // `make` and its flags
     env::set_var("MAKE", constants::RADULA_TOOTH_MAKE);
-    if x {
-        env::set_var(
-            "MAKEFLAGS",
-            [
-                "-j",
-                // We need to trim the output or parse won't work...
-                &(String::from_utf8_lossy(
-                    &Command::new(constants::RADULA_TOOTH_NPROC)
-                        .output()
-                        .unwrap()
-                        .stdout,
-                )
-                .trim()
-                .parse::<f32>()
-                .unwrap()
-                    * 1.5)
-                    .to_string(),
-                " ",
-                constants::RADULA_TOOTH_MAKE_FLAGS,
-            ]
-            .concat(),
-        );
-    } else {
-        env::set_var(
-            "MAKEFLAGS",
-            ["-j1", " ", constants::RADULA_TOOTH_MAKE_FLAGS].concat(),
-        );
-    }
+    env::set_var(
+        "MAKEFLAGS",
+        [
+            "-j",
+            // We need to trim the output or parse won't work...
+            &(String::from_utf8_lossy(
+                &Command::new(constants::RADULA_TOOTH_NPROC)
+                    .output()
+                    .unwrap()
+                    .stdout,
+            )
+            .trim()
+            .parse::<f32>()
+            .unwrap()
+                * 1.5)
+                .to_string(),
+            " ",
+            constants::RADULA_TOOTH_MAKE_FLAGS,
+        ]
+        .concat(),
+    );
 
     env::set_var(
         "MKDIR",
@@ -428,27 +496,6 @@ pub fn radula_behave_teeth_environment(x: bool) {
             constants::RADULA_TOOTH_UMOUNT_FLAGS,
         ]
         .concat(),
-    );
-}
-
-pub fn radula_behave_toolchain_environment() {
-    env::set_var(
-        "TLOG",
-        Path::new(&env::var("LOGD").unwrap()).join(constants::RADULA_DIRECTORY_TOOLCHAIN),
-    );
-
-    env::set_var(
-        "TTMP",
-        Path::new(&env::var("TMPD").unwrap()).join(constants::RADULA_DIRECTORY_TOOLCHAIN),
-    );
-
-    env::set_var(
-        "TBLD",
-        Path::new(&env::var("TTMP").unwrap()).join(constants::RADULA_DIRECTORY_BUILDS),
-    );
-    env::set_var(
-        "TSRC",
-        Path::new(&env::var("TTMP").unwrap()).join(constants::RADULA_DIRECTORY_SOURCES),
     );
 }
 

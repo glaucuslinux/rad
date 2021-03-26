@@ -67,6 +67,12 @@ OPTIONS:
 \tt, toolchain \tBootstrap a cross compiler toolchain
 \tx, cross     \tBootstrap a cross compiled glaucus system";
 
+pub const RADULA_HELP_BEHAVE_BOOTSTRAP_LIST: &'static str = "GENOMES (ARCHITECTURES):
+\taarch64,       arm64,        armv8-a
+\tarm,           armv6zk,      bcm2835
+\ti386,          i686,         x86
+\tx86-64,        x86_64";
+
 pub const RADULA_HELP_BEHAVE_ENVENOMATE: &'static str = "USAGE:
 \tradula [ b | -b | --behave ] [ e | envenomate ] [ OPTIONS ] [ cerata ]
 
