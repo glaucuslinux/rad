@@ -1,18 +1,94 @@
 // All constants are prefixed with `RADULA_` and ordered alphabetically
 // The `'static` is not necessary?
 
+//
+// Architectures
+//
+
+pub const RADULA_ARCHITECTURE_CERATA: &'static str = "--with-gcc-arch=";
+pub const RADULA_ARCHITECTURE_TUPLE_TARGET: &'static str = "-glaucus-linux-musl";
+
+// aarch64
+pub const RADULA_ARCHITECTURE_AARCH64: &'static str = "aarch64";
+pub const RADULA_ARCHITECTURE_AARCH64_CERATA: &'static str = "armv8-a";
+pub const RADULA_ARCHITECTURE_AARCH64_FLAGS: &'static str =
+    "-mabi=lp64 -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 -march=armv8-a -mtune=generic";
+pub const RADULA_ARCHITECTURE_AARCH64_GCC_CONFIGURATION: &'static str = "--with-arch=armv8-a --with-abi=lp64 --enable-fix-cortex-a53-835769 --enable-fix-cortex-a53-843419";
+pub const RADULA_ARCHITECTURE_AARCH64_LINUX: &'static str = "arm64";
+pub const RADULA_ARCHITECTURE_AARCH64_LINUX_IMAGE: &'static str = "arch/arm64/boot/Image";
+
+// armv6zk
+pub const RADULA_ARCHITECTURE_ARMV6ZK: &'static str = "armv6zk";
+pub const RADULA_ARCHITECTURE_ARMV6ZK_FLAGS: &'static str = "-mabi=aapcs-linux -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -mcpu=arm1176jzf-s -mfpu=vfpv2";
+pub const RADULA_ARCHITECTURE_ARMV6ZK_GCC_CONFIGURATION: &'static str = "--with-arch=armv6zk --with-tune=arm1176jzf-s --with-abi=aapcs-linux --with-fpu=vfpv2 --with-float=hard";
+pub const RADULA_ARCHITECTURE_ARMV6ZK_LINUX: &'static str = "arm";
+pub const RADULA_ARCHITECTURE_ARMV6ZK_LINUX_CONFIGURATION: &'static str = "bcm2835_";
+pub const RADULA_ARCHITECTURE_ARMV6ZK_LINUX_IMAGE: &'static str = "arch/arm/boot/zImage";
+
+// i686
+pub const RADULA_ARCHITECTURE_I686: &'static str = "i686";
+pub const RADULA_ARCHITECTURE_I686_FLAGS: &'static str = "-march=i686 -mtune=generic -mabi=sysv";
+pub const RADULA_ARCHITECTURE_I686_GCC_CONFIGURATION: &'static str =
+    "--with-arch=i686 --with-tune=generic";
+pub const RADULA_ARCHITECTURE_I686_LINUX: &'static str = "i386";
+pub const RADULA_ARCHITECTURE_I686_LINUX_CONFIGURATION: &'static str = "i386_";
+pub const RADULA_ARCHITECTURE_I686_LINUX_IMAGE: &'static str = "arch/x86/boot/bzImage";
+
+// x86-64
+pub const RADULA_ARCHITECTURE_X86_64: &'static str = "x86-64";
+pub const RADULA_ARCHITECTURE_X86_64_FLAGS: &'static str =
+    "-march=x86-64 -mtune=generic -mabi=sysv";
+pub const RADULA_ARCHITECTURE_X86_64_GCC_CONFIGURATION: &'static str =
+    "--with-arch=x86-64 --with-tune=generic";
+pub const RADULA_ARCHITECTURE_X86_64_LINUX: &'static str = "x86_64";
+pub const RADULA_ARCHITECTURE_X86_64_LINUX_CONFIGURATION: &'static str = "x86_64_";
+
+//
+// Directories
+//
+
 pub const RADULA_DIRECTORY_BACKUP: &'static str = "bak";
 pub const RADULA_DIRECTORY_BUILDS: &'static str = "bld";
 pub const RADULA_DIRECTORY_CERATA: &'static str = "cerata";
-
-// Default `ccache` directories on both Arch and Fedora
-pub const RADULA_DIRECTORY_CCACHE: &'static str = "/usr/lib/ccache/bin:/usr/lib64/ccache";
-
 pub const RADULA_DIRECTORY_CROSS: &'static str = "cross";
 pub const RADULA_DIRECTORY_LOG: &'static str = "log";
 pub const RADULA_DIRECTORY_SOURCES: &'static str = "src";
 pub const RADULA_DIRECTORY_TEMPORARY: &'static str = "tmp";
 pub const RADULA_DIRECTORY_TOOLCHAIN: &'static str = "toolchain";
+
+//
+// Environment Variables
+//
+
+// Architecture
+pub const RADULA_ENVIRONMENT_ARCHITECTURE: &'static str = "ARCH";
+pub const RADULA_ENVIRONMENT_ARCHITECTURE_CERATA: &'static str = "CARCH";
+pub const RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS: &'static str = "FARCH";
+pub const RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION: &'static str = "GCARCH";
+pub const RADULA_ENVIRONMENT_ARCHITECTURE_LINUX: &'static str = "LARCH";
+pub const RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION: &'static str = "LCARCH";
+pub const RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE: &'static str = "LIARCH";
+pub const RADULA_ENVIRONMENT_ARCHITECTURE_MUSL: &'static str = "MARCH";
+
+// Directories
+pub const RADULA_ENVIRONMENT_DIRECTORY_BACKUP: &'static str = "BAKD";
+pub const RADULA_ENVIRONMENT_DIRECTORY_CERATA: &'static str = "CERD";
+pub const RADULA_ENVIRONMENT_DIRECTORY_CROSS: &'static str = "CRSD";
+pub const RADULA_ENVIRONMENT_DIRECTORY_CROSS_BUILDS: &'static str = "XBLD";
+pub const RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS: &'static str = "GLAD";
+pub const RADULA_ENVIRONMENT_DIRECTORY_LOG: &'static str = "LOGD";
+pub const RADULA_ENVIRONMENT_DIRECTORY_SOURCES: &'static str = "SRCD";
+pub const RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY: &'static str = "TMPD";
+pub const RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN: &'static str = "TLCD";
+pub const RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_BUILDS: &'static str = "LOGD";
+
+// Tuples
+pub const RADULA_ENVIRONMENT_TUPLE_BUILD: &'static str = "BLD";
+pub const RADULA_ENVIRONMENT_TUPLE_TARGET: &'static str = "TGT";
+
+//
+// Help Messages
+//
 
 pub const RADULA_HELP: &'static str = "USAGE:
 \tradula [ OPTIONS ]
@@ -104,6 +180,13 @@ pub const RADULA_HELP_VERSION: &'static str = "radula version 3.4.1
 
 Copyright (c) 2018-2021, Firas Khalil Khana
 Distributed under the terms of the ISC License";
+
+//
+// Tools
+//
+
+// Default `ccache` directories on both Arch and Fedora
+pub const RADULA_PATH_CCACHE: &'static str = "/usr/lib/ccache/bin:/usr/lib64/ccache";
 
 // `pkgconf` and `pkg-config` don't respect the provided sysroot (it doesn't get
 // automatically prefixed to PATH and LIBDIR)

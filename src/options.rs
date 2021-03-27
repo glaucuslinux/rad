@@ -18,14 +18,20 @@ pub fn radula_options() {
                 Some("b") | Some("bootstrap") => match x.next().as_deref() {
                     Some("c") | Some("clean") => {
                         functions::radula_behave_bootstrap_environment();
+
                         functions::radula_behave_bootstrap_toolchain_environment();
+
                         functions::radula_behave_bootstrap_cross_environment();
+
                         functions::radula_behave_bootstrap_clean();
                     }
                     Some("d") | Some("distclean") => {
                         functions::radula_behave_bootstrap_environment();
+
                         functions::radula_behave_bootstrap_toolchain_environment();
+
                         functions::radula_behave_bootstrap_cross_environment();
+
                         functions::radula_behave_bootstrap_distclean();
                     }
 
@@ -41,11 +47,18 @@ pub fn radula_options() {
                     Some("s") | Some("release") => println!("Do nothing"),
                     Some("t") | Some("toolchain") => {
                         functions::radula_behave_bootstrap_environment();
+
                         functions::radula_behave_ccache_environment();
+
                         functions::radula_behave_bootstrap_initialize();
+
                         functions::radula_behave_bootstrap_clean();
+
                         functions::radula_behave_bootstrap_arch_environment("x86-64");
+
                         functions::radula_behave_bootstrap_toolchain();
+
+                        functions::radula_behave_bootstrap_toolchain_backup();
                     }
                     Some("x") | Some("cross") => println!("Do nothing"),
                     _ => {
@@ -55,7 +68,7 @@ pub fn radula_options() {
                 },
                 Some("e") | Some("envenomate") => match x.next().as_deref() {
                     Some("h") | Some("-h") | Some("--help") => {
-                        functions::radula_open(constants::RADULA_HELP_BEHAVE_ENVENOMATE);
+                        functions::radula_open(constants::RADULA_HELP_BEHAVE_ENVENOMATE)
                     }
 
                     _ => {
@@ -65,7 +78,7 @@ pub fn radula_options() {
                 },
                 Some("i") | Some("binary") => match x.next().as_deref() {
                     Some("h") | Some("-h") | Some("--help") => {
-                        functions::radula_open(constants::RADULA_HELP_BEHAVE_BINARY);
+                        functions::radula_open(constants::RADULA_HELP_BEHAVE_BINARY)
                     }
 
                     _ => {
@@ -104,6 +117,7 @@ pub fn radula_options() {
                     process::exit(1);
                 }
             },
+
             "h" | "-h" | "--help" => functions::radula_open(constants::RADULA_HELP),
 
             "v" | "-v" | "--version" => println!("{}", constants::RADULA_HELP_VERSION),

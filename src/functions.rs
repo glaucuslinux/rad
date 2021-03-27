@@ -5,60 +5,160 @@ use std::path::Path;
 use std::process::{Command, Stdio};
 use std::string::String;
 
+use crate::constants::{
+    RADULA_ARCHITECTURE_X86_64_FLAGS, RADULA_ARCHITECTURE_X86_64_LINUX,
+    RADULA_ENVIRONMENT_ARCHITECTURE_MUSL,
+};
+
 use super::constants;
 
 pub fn radula_behave_bootstrap_arch_environment(x: &'static str) {
-    env::set_var("ARCH", x);
+    env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE, x);
 
     env::set_var(
-        "BLD",
+        constants::RADULA_ENVIRONMENT_TUPLE_BUILD,
         String::from_utf8_lossy(
-            &Command::new(Path::new(&env::var("CERD").unwrap()).join("binutils/config.guess"))
-                .output()
-                .unwrap()
-                .stdout,
+            &Command::new(
+                Path::new(&env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_CERATA).unwrap())
+                    .join("binutils/config.guess"),
+            )
+            .output()
+            .unwrap()
+            .stdout,
         )
         .trim(),
     );
 
-    env::set_var("CARCH", ["--with-gcc-arch=", x].concat());
-    env::set_var("TGT", [x, "-glaucus-linux-musl"].concat());
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_ARCHITECTURE_CERATA,
+        [constants::RADULA_ARCHITECTURE_CERATA, x].concat(),
+    );
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_TUPLE_TARGET,
+        [x, constants::RADULA_ARCHITECTURE_TUPLE_TARGET].concat(),
+    );
 
     match x {
-        "aarch64" => {
-            env::set_var("CARCH", "--with-gcc-arch=armv8-a");
-            env::set_var("FARCH", "-mabi=lp64 -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 -march=armv8-a -mtune=generic");
-            env::set_var("GCARCH", "--with-arch=armv8-a --with-abi=lp64 --enable-fix-cortex-a53-835769 --enable-fix-cortex-a53-843419");
-            env::set_var("LARCH", "arm64");
-            env::set_var("LCARCH", "");
-            env::set_var("LIARCH", "arch/arm64/boot/Image");
-            env::set_var("MARCH", x);
+        constants::RADULA_ARCHITECTURE_AARCH64 => {
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_CERATA,
+                [
+                    constants::RADULA_ARCHITECTURE_CERATA,
+                    constants::RADULA_ARCHITECTURE_AARCH64_CERATA,
+                ]
+                .concat(),
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS,
+                constants::RADULA_ARCHITECTURE_AARCH64_FLAGS,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION,
+                constants::RADULA_ARCHITECTURE_AARCH64_GCC_CONFIGURATION,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX,
+                constants::RADULA_ARCHITECTURE_AARCH64_LINUX,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION,
+                "",
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE,
+                constants::RADULA_ARCHITECTURE_AARCH64_LINUX_IMAGE,
+            );
+            env::set_var(RADULA_ENVIRONMENT_ARCHITECTURE_MUSL, x);
         }
-        "armv6zk" => {
-            env::set_var("FARCH", "-mabi=aapcs-linux -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -mcpu=arm1176jzf-s -mfpu=vfpv2");
-            env::set_var("GCARCH", "--with-arch=armv6zk --with-tune=arm1176jzf-s --with-abi=aapcs-linux --with-fpu=vfpv2 --with-float=hard");
-            env::set_var("LARCH", "arm");
-            env::set_var("LCARCH", "bcm2835_");
-            env::set_var("LIARCH", "arch/arm/boot/zImage");
-            env::set_var("MARCH", "arm");
-            env::set_var("TGT", [x, "-glaucus-linux-musleabihf"].concat());
+        constants::RADULA_ARCHITECTURE_ARMV6ZK => {
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS,
+                constants::RADULA_ARCHITECTURE_ARMV6ZK_FLAGS,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION,
+                constants::RADULA_ARCHITECTURE_ARMV6ZK_GCC_CONFIGURATION,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX,
+                constants::RADULA_ARCHITECTURE_ARMV6ZK_LINUX,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION,
+                constants::RADULA_ARCHITECTURE_ARMV6ZK_LINUX_CONFIGURATION,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE,
+                constants::RADULA_ARCHITECTURE_ARMV6ZK_LINUX_IMAGE,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL,
+                constants::RADULA_ARCHITECTURE_ARMV6ZK_LINUX,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_TUPLE_TARGET,
+                [x, constants::RADULA_ARCHITECTURE_CERATA, "eabihf"].concat(),
+            );
         }
-        "i686" => {
-            env::set_var("FARCH", "-march=i686 -mtune=generic -mabi=sysv");
-            env::set_var("GCARCH", "--with-arch=i686 --with-tune=generic");
-            env::set_var("LARCH", "i386");
-            env::set_var("LCARCH", "i386_");
-            env::set_var("LIARCH", "arch/x86/boot/bzImage");
-            env::set_var("MARCH", "i386");
+        constants::RADULA_ARCHITECTURE_I686 => {
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS,
+                constants::RADULA_ARCHITECTURE_I686_FLAGS,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION,
+                constants::RADULA_ARCHITECTURE_I686_GCC_CONFIGURATION,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX,
+                constants::RADULA_ARCHITECTURE_I686_LINUX,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION,
+                constants::RADULA_ARCHITECTURE_I686_LINUX_CONFIGURATION,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE,
+                constants::RADULA_ARCHITECTURE_I686_LINUX_IMAGE,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL,
+                constants::RADULA_ARCHITECTURE_I686_LINUX,
+            );
         }
-        "x86-64" => {
-            env::set_var("FARCH", "-march=x86-64 -mtune=generic -mabi=sysv");
-            env::set_var("GCARCH", "--with-arch=x86-64 --with-tune=generic");
-            env::set_var("LARCH", "x86_64");
-            env::set_var("LCARCH", "x86_64_");
-            env::set_var("LIARCH", "arch/x86/boot/bzImage");
-            env::set_var("MARCH", "x86_64");
-            env::set_var("TGT", "x86_64-glaucus-linux-musl");
+        constants::RADULA_ARCHITECTURE_X86_64 => {
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS,
+                constants::RADULA_ARCHITECTURE_X86_64_FLAGS,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION,
+                constants::RADULA_ARCHITECTURE_X86_64_GCC_CONFIGURATION,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX,
+                constants::RADULA_ARCHITECTURE_X86_64_LINUX,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION,
+                constants::RADULA_ARCHITECTURE_X86_64_LINUX_CONFIGURATION,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE,
+                constants::RADULA_ARCHITECTURE_I686_LINUX_IMAGE,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL,
+                constants::RADULA_ARCHITECTURE_X86_64_LINUX,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_TUPLE_TARGET,
+                [
+                    constants::RADULA_ARCHITECTURE_X86_64_LINUX,
+                    constants::RADULA_ARCHITECTURE_TUPLE_TARGET,
+                ]
+                .concat(),
+            );
         }
         _ => {}
     }
@@ -86,17 +186,17 @@ pub fn radula_behave_bootstrap_distclean() {
 }
 
 pub fn radula_behave_bootstrap_environment() {
-    let y = fs::canonicalize("..").unwrap();
+    let x = fs::canonicalize("..").unwrap();
 
-    env::set_var("GLAD", &y);
+    env::set_var("GLAD", &x);
 
-    env::set_var("BAKD", y.join(constants::RADULA_DIRECTORY_BACKUP));
-    env::set_var("CERD", y.join(constants::RADULA_DIRECTORY_CERATA));
-    env::set_var("CRSD", y.join(constants::RADULA_DIRECTORY_CROSS));
-    env::set_var("LOGD", y.join(constants::RADULA_DIRECTORY_LOG));
-    env::set_var("SRCD", y.join(constants::RADULA_DIRECTORY_SOURCES));
-    env::set_var("TMPD", y.join(constants::RADULA_DIRECTORY_TEMPORARY));
-    env::set_var("TLCD", y.join(constants::RADULA_DIRECTORY_TOOLCHAIN));
+    env::set_var("BAKD", x.join(constants::RADULA_DIRECTORY_BACKUP));
+    env::set_var("CERD", x.join(constants::RADULA_DIRECTORY_CERATA));
+    env::set_var("CRSD", x.join(constants::RADULA_DIRECTORY_CROSS));
+    env::set_var("LOGD", x.join(constants::RADULA_DIRECTORY_LOG));
+    env::set_var("SRCD", x.join(constants::RADULA_DIRECTORY_SOURCES));
+    env::set_var("TMPD", x.join(constants::RADULA_DIRECTORY_TEMPORARY));
+    env::set_var("TLCD", x.join(constants::RADULA_DIRECTORY_TOOLCHAIN));
 
     env::set_var(
         "PATH",
