@@ -163,29 +163,45 @@ pub fn radula_behave_bootstrap_arch_environment(x: &'static str) {
 }
 
 pub fn radula_behave_bootstrap_clean() {
-    fs::remove_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap());
-    fs::remove_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS).unwrap());
-    fs::remove_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_BUILDS).unwrap());
-    fs::remove_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN).unwrap());
-    fs::remove_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_BUILDS).unwrap());
+    radula_behave_remove_dir_all_force(
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap(),
+    );
+    radula_behave_remove_dir_all_force(
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS).unwrap(),
+    );
+    radula_behave_remove_dir_all_force(
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_BUILDS).unwrap(),
+    );
+    radula_behave_remove_dir_all_force(
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN).unwrap(),
+    );
+    radula_behave_remove_dir_all_force(
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_BUILDS).unwrap(),
+    );
 }
 
 pub fn radula_behave_bootstrap_distclean() {
-    fs::remove_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap());
+    radula_behave_remove_dir_all_force(
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap(),
+    );
 
     fs::remove_file(
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS).unwrap())
             .join(constants::RADULA_PATH_GLAUCUS_IMAGE),
     );
 
-    fs::remove_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES).unwrap());
+    radula_behave_remove_dir_all_force(
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES).unwrap(),
+    );
 
     radula_behave_bootstrap_clean();
 
     // Only remove `RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY` completely after
     // `RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_BUILDS` and
     // `RADULA_ENVIRONMENT_DIRECTORY_CROSS_BUILDS` are removed
-    fs::remove_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY).unwrap());
+    radula_behave_remove_dir_all_force(
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY).unwrap(),
+    );
 }
 
 pub fn radula_behave_bootstrap_environment() {
@@ -432,6 +448,13 @@ pub fn radula_behave_pkg_config_environment() {
         constants::RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_LIBRARY_PATH,
         constants::RADULA_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH,
     );
+}
+
+// Use our custom version of `remove_dir_all`
+pub fn radula_behave_remove_dir_all_force(x: &str) {
+    if Path::new(x).exists() {
+        fs::remove_dir_all(x);
+    }
 }
 
 // Sources the `ceras` file and returns an array of strings representing the
