@@ -1,3 +1,6 @@
+// Copyright (c) 2018-2021, Firas Khalil Khana
+// Distributed under the terms of the ISC License
+
 use std::env;
 use std::process;
 
@@ -24,6 +27,8 @@ pub fn radula_options() {
                         functions::radula_behave_bootstrap_cross_environment();
 
                         functions::radula_behave_bootstrap_clean();
+
+                        println!("clean complete");
                     }
                     Some("d") | Some("distclean") => {
                         functions::radula_behave_bootstrap_environment();
@@ -33,6 +38,8 @@ pub fn radula_options() {
                         functions::radula_behave_bootstrap_cross_environment();
 
                         functions::radula_behave_bootstrap_distclean();
+
+                        println!("distclean complete");
                     }
 
                     Some("h") | Some("-h") | Some("--help") => {
@@ -43,8 +50,10 @@ pub fn radula_options() {
                     Some("l") | Some("list") => {
                         functions::radula_open(constants::RADULA_HELP_BEHAVE_BOOTSTRAP_LIST)
                     }
-                    Some("r") | Some("require") => println!("Do nothing"),
-                    Some("s") | Some("release") => println!("Do nothing"),
+                    Some("r") | Some("require") => {
+                        println!("Checking if host has all required packages...")
+                    }
+                    Some("s") | Some("release") => println!("release complete"),
                     Some("t") | Some("toolchain") => {
                         functions::radula_behave_bootstrap_environment();
 
@@ -52,9 +61,11 @@ pub fn radula_options() {
 
                         functions::radula_behave_bootstrap_initialize();
 
-                        functions::radula_behave_bootstrap_clean();
+                        //functions::radula_behave_bootstrap_clean();
 
-                        functions::radula_behave_bootstrap_arch_environment("x86-64");
+                        functions::radula_behave_bootstrap_arch_environment(
+                            constants::RADULA_ARCHITECTURE_X86_64,
+                        );
 
                         functions::radula_behave_bootstrap_toolchain();
 

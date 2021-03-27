@@ -1,5 +1,9 @@
-// All constants are prefixed with `RADULA_` and ordered alphabetically
-// The `'static` is not necessary?
+// Copyright (c) 2018-2021, Firas Khalil Khana
+// Distributed under the terms of the ISC License
+
+// * All constants are prefixed with `RADULA_`
+// * All constants are ordered alphabetically
+// * The `'static` is needed: https://doc.rust-lang.org/std/primitive.str.html
 
 //
 // Architectures
@@ -47,11 +51,11 @@ pub const RADULA_ARCHITECTURE_X86_64_LINUX_CONFIGURATION: &'static str = "x86_64
 // Directories
 //
 
-pub const RADULA_DIRECTORY_BACKUP: &'static str = "bak";
+pub const RADULA_DIRECTORY_BACKUPS: &'static str = "bak";
 pub const RADULA_DIRECTORY_BUILDS: &'static str = "bld";
 pub const RADULA_DIRECTORY_CERATA: &'static str = "cerata";
 pub const RADULA_DIRECTORY_CROSS: &'static str = "cross";
-pub const RADULA_DIRECTORY_LOG: &'static str = "log";
+pub const RADULA_DIRECTORY_LOGS: &'static str = "log";
 pub const RADULA_DIRECTORY_SOURCES: &'static str = "src";
 pub const RADULA_DIRECTORY_TEMPORARY: &'static str = "tmp";
 pub const RADULA_DIRECTORY_TOOLCHAIN: &'static str = "toolchain";
@@ -71,16 +75,37 @@ pub const RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE: &'static str = "LIARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_MUSL: &'static str = "MARCH";
 
 // Directories
-pub const RADULA_ENVIRONMENT_DIRECTORY_BACKUP: &'static str = "BAKD";
+pub const RADULA_ENVIRONMENT_DIRECTORY_BACKUPS: &'static str = "BAKD";
 pub const RADULA_ENVIRONMENT_DIRECTORY_CERATA: &'static str = "CERD";
+
 pub const RADULA_ENVIRONMENT_DIRECTORY_CROSS: &'static str = "CRSD";
 pub const RADULA_ENVIRONMENT_DIRECTORY_CROSS_BUILDS: &'static str = "XBLD";
+pub const RADULA_ENVIRONMENT_DIRECTORY_CROSS_LOGS: &'static str = "XLOG";
+pub const RADULA_ENVIRONMENT_DIRECTORY_CROSS_SOURCES: &'static str = "XSRC";
+pub const RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY: &'static str = "XTMP";
+
 pub const RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS: &'static str = "GLAD";
-pub const RADULA_ENVIRONMENT_DIRECTORY_LOG: &'static str = "LOGD";
+pub const RADULA_ENVIRONMENT_DIRECTORY_LOGS: &'static str = "LOGD";
 pub const RADULA_ENVIRONMENT_DIRECTORY_SOURCES: &'static str = "SRCD";
 pub const RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY: &'static str = "TMPD";
+
 pub const RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN: &'static str = "TLCD";
-pub const RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_BUILDS: &'static str = "LOGD";
+pub const RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_BUILDS: &'static str = "TBLD";
+pub const RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_LOGS: &'static str = "TLOG";
+pub const RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_SOURCES: &'static str = "TSRC";
+pub const RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY: &'static str = "TTMP";
+
+// Paths
+pub const RADULA_ENVIRONMENT_PATH: &'static str = "PATH";
+
+// pkg-config
+pub const RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR: &'static str = "PKG_CONFIG_LIBDIR";
+pub const RADULA_ENVIRONMENT_PKG_CONFIG_PATH: &'static str = "PKG_CONFIG_PATH";
+pub const RADULA_ENVIRONMENT_PKG_CONFIG_SYSROOT_DIR: &'static str = "PKG_CONFIG_SYSROOT_DIR";
+pub const RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_INCLUDE_PATH: &'static str =
+    "PKG_CONFIG_SYSTEM_INCLUDE_PATH";
+pub const RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_LIBRARY_PATH: &'static str =
+    "PKG_CONFIG_SYSTEM_LIBRARY_PATH";
 
 // Tuples
 pub const RADULA_ENVIRONMENT_TUPLE_BUILD: &'static str = "BLD";
@@ -182,18 +207,25 @@ Copyright (c) 2018-2021, Firas Khalil Khana
 Distributed under the terms of the ISC License";
 
 //
-// Tools
+// Paths
 //
 
 // Default `ccache` directories on both Arch and Fedora
 pub const RADULA_PATH_CCACHE: &'static str = "/usr/lib/ccache/bin:/usr/lib64/ccache";
 
+pub const RADULA_PATH_CONFIG_GUESS: &'static str = "binutils/config.guess";
+pub const RADULA_PATH_GLAUCUS_IMAGE: &'static str = "glaucus.img";
+
 // `pkgconf` and `pkg-config` don't respect the provided sysroot (it doesn't get
 // automatically prefixed to PATH and LIBDIR)
-pub const RADULA_PKG_CONFIG_LIBDIR_PATH: &'static str = "/usr/lib/pkgconfig";
-pub const RADULA_PKG_CONFIG_SYSROOT_DIR: &'static str = "/";
-pub const RADULA_PKG_CONFIG_SYSTEM_INCLUDE_PATH: &'static str = "/usr/include";
-pub const RADULA_PKG_CONFIG_SYSTEM_LIBRARY_PATH: &'static str = "/usr/lib";
+pub const RADULA_PATH_PKG_CONFIG_LIBDIR_PATH: &'static str = "/usr/lib/pkgconfig";
+pub const RADULA_PATH_PKG_CONFIG_SYSROOT_DIR: &'static str = "/";
+pub const RADULA_PATH_PKG_CONFIG_SYSTEM_INCLUDE_PATH: &'static str = "/usr/include";
+pub const RADULA_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH: &'static str = "/usr/lib";
+
+//
+// Tools
+//
 
 // A tooth is a tool available on the host system
 pub const RADULA_TOOTH_AUTORECONF: &'static str = "autoreconf";
