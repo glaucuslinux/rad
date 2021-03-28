@@ -28,6 +28,7 @@ pub const RADULA_ARCHITECTURE_ARMV6ZK_GCC_CONFIGURATION: &'static str = "--with-
 pub const RADULA_ARCHITECTURE_ARMV6ZK_LINUX: &'static str = "arm";
 pub const RADULA_ARCHITECTURE_ARMV6ZK_LINUX_CONFIGURATION: &'static str = "bcm2835_";
 pub const RADULA_ARCHITECTURE_ARMV6ZK_LINUX_IMAGE: &'static str = "arch/arm/boot/zImage";
+pub const RADULA_ARCHITECTURE_ARMV6ZK_TUPLE_TARGET: &'static str = "eabihf";
 
 // i686
 pub const RADULA_ARCHITECTURE_I686: &'static str = "i686";
@@ -106,6 +107,20 @@ pub const RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_INCLUDE_PATH: &'static str =
     "PKG_CONFIG_SYSTEM_INCLUDE_PATH";
 pub const RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_LIBRARY_PATH: &'static str =
     "PKG_CONFIG_SYSTEM_LIBRARY_PATH";
+
+// Teeth
+pub const RADULA_ENVIRONMENT_TOOTH_AUTORECONF: &'static str = "AUTORECONF";
+pub const RADULA_ENVIRONMENT_TOOTH_CHMOD: &'static str = "CHMOD";
+pub const RADULA_ENVIRONMENT_TOOTH_CHOWN: &'static str = "CHOWN";
+pub const RADULA_ENVIRONMENT_TOOTH_LN: &'static str = "LN";
+pub const RADULA_ENVIRONMENT_TOOTH_MAKE: &'static str = "MAKE";
+pub const RADULA_ENVIRONMENT_TOOTH_MAKE_FLAGS: &'static str = "MAKEFLAGS";
+pub const RADULA_ENVIRONMENT_TOOTH_MKDIR: &'static str = "MKDIR";
+pub const RADULA_ENVIRONMENT_TOOTH_MV: &'static str = "MV";
+pub const RADULA_ENVIRONMENT_TOOTH_PATCH: &'static str = "PATCH";
+pub const RADULA_ENVIRONMENT_TOOTH_RM: &'static str = "RM";
+pub const RADULA_ENVIRONMENT_TOOTH_RSYNC: &'static str = "RSYNC";
+pub const RADULA_ENVIRONMENT_TOOTH_UMOUNT: &'static str = "UMOUNT";
 
 // Tuples
 pub const RADULA_ENVIRONMENT_TUPLE_BUILD: &'static str = "BLD";

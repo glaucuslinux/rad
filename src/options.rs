@@ -61,7 +61,7 @@ pub fn radula_options() {
 
                         functions::radula_behave_bootstrap_initialize();
 
-                        //functions::radula_behave_bootstrap_clean();
+                        functions::radula_behave_bootstrap_clean();
 
                         functions::radula_behave_bootstrap_arch_environment(
                             constants::RADULA_ARCHITECTURE_X86_64,

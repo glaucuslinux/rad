@@ -17,7 +17,7 @@ pub fn radula_behave_bootstrap_arch_environment(x: &'static str) {
         constants::RADULA_ENVIRONMENT_TUPLE_BUILD,
         String::from_utf8_lossy(
             &Command::new(
-                Path::new(&env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_CERATA).unwrap())
+                Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA).unwrap())
                     .join(constants::RADULA_PATH_CONFIG_GUESS),
             )
             .output()
@@ -95,7 +95,12 @@ pub fn radula_behave_bootstrap_arch_environment(x: &'static str) {
             );
             env::set_var(
                 constants::RADULA_ENVIRONMENT_TUPLE_TARGET,
-                [x, constants::RADULA_ARCHITECTURE_CERATA, "eabihf"].concat(),
+                [
+                    x,
+                    constants::RADULA_ARCHITECTURE_TUPLE_TARGET,
+                    constants::RADULA_ARCHITECTURE_ARMV6ZK_TUPLE_TARGET,
+                ]
+                .concat(),
             );
         }
         constants::RADULA_ARCHITECTURE_I686 => {
@@ -561,7 +566,7 @@ pub fn radula_behave_swallow(x: &'static str) {
 
 pub fn radula_behave_teeth_environment() {
     env::set_var(
-        "AUTORECONF",
+        constants::RADULA_ENVIRONMENT_TOOTH_AUTORECONF,
         [
             constants::RADULA_TOOTH_AUTORECONF,
             " ",
@@ -570,7 +575,7 @@ pub fn radula_behave_teeth_environment() {
         .concat(),
     );
     env::set_var(
-        "CHMOD",
+        constants::RADULA_ENVIRONMENT_TOOTH_CHMOD,
         [
             constants::RADULA_TOOTH_CHMOD,
             " ",
@@ -579,7 +584,7 @@ pub fn radula_behave_teeth_environment() {
         .concat(),
     );
     env::set_var(
-        "CHOWN",
+        constants::RADULA_ENVIRONMENT_TOOTH_CHOWN,
         [
             constants::RADULA_TOOTH_CHOWN,
             " ",
@@ -588,7 +593,7 @@ pub fn radula_behave_teeth_environment() {
         .concat(),
     );
     env::set_var(
-        "LN",
+        constants::RADULA_ENVIRONMENT_TOOTH_LN,
         [
             constants::RADULA_TOOTH_LN,
             " ",
@@ -598,9 +603,12 @@ pub fn radula_behave_teeth_environment() {
     );
 
     // `make` and its flags
-    env::set_var(constants::RADULA_TOOTH_MAKE, constants::RADULA_TOOTH_MAKE);
     env::set_var(
-        "MAKEFLAGS",
+        constants::RADULA_ENVIRONMENT_TOOTH_MAKE,
+        constants::RADULA_TOOTH_MAKE,
+    );
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_TOOTH_MAKE_FLAGS,
         [
             "-j",
             // We need to trim the output or parse won't work...
@@ -622,7 +630,7 @@ pub fn radula_behave_teeth_environment() {
     );
 
     env::set_var(
-        "MKDIR",
+        constants::RADULA_ENVIRONMENT_TOOTH_MKDIR,
         [
             constants::RADULA_TOOTH_MKDIR,
             " ",
@@ -631,7 +639,7 @@ pub fn radula_behave_teeth_environment() {
         .concat(),
     );
     env::set_var(
-        "MV",
+        constants::RADULA_ENVIRONMENT_TOOTH_MV,
         [
             constants::RADULA_TOOTH_MV,
             " ",
@@ -640,7 +648,16 @@ pub fn radula_behave_teeth_environment() {
         .concat(),
     );
     env::set_var(
-        "RM",
+        constants::RADULA_ENVIRONMENT_TOOTH_PATCH,
+        [
+            constants::RADULA_TOOTH_PATCH,
+            " ",
+            constants::RADULA_TOOTH_PATCH_FLAGS,
+        ]
+        .concat(),
+    );
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_TOOTH_RM,
         [
             constants::RADULA_TOOTH_RM,
             " ",
@@ -649,7 +666,7 @@ pub fn radula_behave_teeth_environment() {
         .concat(),
     );
     env::set_var(
-        "RSYNC",
+        constants::RADULA_ENVIRONMENT_TOOTH_RSYNC,
         [
             constants::RADULA_TOOTH_RSYNC,
             " ",
@@ -658,7 +675,7 @@ pub fn radula_behave_teeth_environment() {
         .concat(),
     );
     env::set_var(
-        "UMOUNT",
+        constants::RADULA_ENVIRONMENT_TOOTH_UMOUNT,
         [
             constants::RADULA_TOOTH_UMOUNT,
             " ",
