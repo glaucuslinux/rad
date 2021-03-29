@@ -11,8 +11,6 @@ use std::string::String;
 use super::constants;
 
 pub fn radula_behave_bootstrap_arch_environment(x: &'static str) {
-    env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE, x);
-
     env::set_var(
         constants::RADULA_ENVIRONMENT_TUPLE_BUILD,
         String::from_utf8_lossy(
@@ -27,6 +25,7 @@ pub fn radula_behave_bootstrap_arch_environment(x: &'static str) {
         .trim(),
     );
 
+    env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE, x);
     env::set_var(
         constants::RADULA_ENVIRONMENT_ARCHITECTURE_CERATA,
         [constants::RADULA_ARCHITECTURE_CERATA, x].concat(),
@@ -172,16 +171,16 @@ pub fn radula_behave_bootstrap_clean() {
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap(),
     );
     radula_behave_remove_dir_all_force(
-        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS).unwrap(),
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_BUILDS).unwrap(),
     );
     radula_behave_remove_dir_all_force(
-        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_BUILDS).unwrap(),
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS).unwrap(),
     );
     radula_behave_remove_dir_all_force(
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN).unwrap(),
     );
     radula_behave_remove_dir_all_force(
-        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_BUILDS).unwrap(),
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_BUILDS).unwrap(),
     );
 }
 
@@ -297,15 +296,13 @@ pub fn radula_behave_bootstrap_toolchain_backup() {
 }
 
 pub fn radula_behave_bootstrap_toolchain_construct() {
-    let x = "toolchain";
-
-    radula_behave_construct("musl-headers", x);
-    radula_behave_construct("binutils", x);
-    radula_behave_construct("gcc", x);
-    radula_behave_construct("musl", x);
-    radula_behave_construct("libgcc", x);
-    radula_behave_construct("libstdc++-v3", x);
-    radula_behave_construct("libgomp", x);
+    radula_behave_construct("musl-headers", constants::RADULA_DIRECTORY_TOOLCHAIN);
+    radula_behave_construct("binutils", constants::RADULA_DIRECTORY_TOOLCHAIN);
+    radula_behave_construct("gcc", constants::RADULA_DIRECTORY_TOOLCHAIN);
+    radula_behave_construct("musl", constants::RADULA_DIRECTORY_TOOLCHAIN);
+    radula_behave_construct("libgcc", constants::RADULA_DIRECTORY_TOOLCHAIN);
+    radula_behave_construct("libstdc++-v3", constants::RADULA_DIRECTORY_TOOLCHAIN);
+    radula_behave_construct("libgomp", constants::RADULA_DIRECTORY_TOOLCHAIN);
 }
 
 pub fn radula_behave_bootstrap_toolchain_environment() {
@@ -336,8 +333,8 @@ pub fn radula_behave_bootstrap_toolchain_environment() {
 pub fn radula_behave_bootstrap_toolchain_prepare() {
     fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap());
     fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN).unwrap());
-    fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_LOGS).unwrap());
     fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_BUILDS).unwrap());
+    fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_LOGS).unwrap());
     fs::create_dir_all(
         env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_SOURCES).unwrap(),
     );
@@ -355,7 +352,7 @@ pub fn radula_behave_bootstrap_toolchain_swallow() {
 
 pub fn radula_behave_ccache_environment() {
     env::set_var(
-        "PATH",
+        constants::RADULA_ENVIRONMENT_PATH,
         Path::new(&[constants::RADULA_PATH_CCACHE, ":"].concat()).join(
             env::var(constants::RADULA_ENVIRONMENT_PATH)
                 .unwrap()

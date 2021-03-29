@@ -6,5 +6,7 @@ mod functions;
 mod options;
 
 fn main() {
-    options::radula_options();
+    //options::radula_options();
+    functions::radula_behave_teeth_environment();
+    println!("{:?}", std::env::vars());
 }
