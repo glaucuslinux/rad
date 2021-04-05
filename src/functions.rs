@@ -270,14 +270,6 @@ pub fn radula_behave_bootstrap_initialize() {
     fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES).unwrap());
 }
 
-pub fn radula_behave_bootstrap_toolchain() {
-    radula_behave_bootstrap_toolchain_environment();
-    radula_behave_bootstrap_toolchain_swallow();
-    radula_behave_bootstrap_toolchain_prepare();
-
-    radula_behave_bootstrap_toolchain_construct();
-}
-
 pub fn radula_behave_bootstrap_toolchain_backup() {
     let radula_behave_bootstrap_backup = |x: &'static str| {
         Command::new(constants::RADULA_TOOTH_RSYNC)
@@ -366,39 +358,31 @@ pub fn radula_behave_construct(x: &'static str, y: &'static str) {
     // We only require `nom` and `ver` from the `ceras` file
     let z: [String; 8] = radula_behave_source(x);
 
-    let radula_behave_construct_stage_function = |w: &'static str| {
-        Command::new(constants::RADULA_TOOTH_SHELL)
-            .args(&[
-                constants::RADULA_TOOTH_SHELL_FLAGS,
-                &format!(
-                    // `ceras` and `*.ceras` files are only using `nom` and `ver`
-                    "nom={} ver={} . {} && {}",
-                    z[0],
-                    z[1],
-                    Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA).unwrap())
-                        .join(x)
-                        .join([y, ".ceras"].concat())
-                        .to_str()
-                        .unwrap(),
-                    w
-                ),
-            ])
-            .spawn()
-            .unwrap();
-    };
-
-    // prepare
-    radula_behave_construct_stage_function("prepare");
-    // configure
-    radula_behave_construct_stage_function("configure");
-    // build
-    radula_behave_construct_stage_function("build");
-
-    // check (disabled for now)
-    //radula_behave_construct_stage_function("check");
-
-    // install
-    radula_behave_construct_stage_function("install");
+    Command::new(constants::RADULA_TOOTH_SHELL)
+        .args(&[
+            constants::RADULA_TOOTH_SHELL_FLAGS,
+            &format!(
+                // `ceras` and `*.ceras` files are only using `nom` and `ver`.
+                //
+                // All basic functions need to be called together to prevent the loss of the
+                // current working directory, otherwise we'd have to store it and pass it or `cd`
+                // into it whenever any basic function is called.
+                //
+                // The basic function `check` won't be used for now...
+                "nom={} ver={} . {} && prepare && configure && build && install",
+                z[0],
+                z[1],
+                Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA).unwrap())
+                    .join(x)
+                    .join([y, ".ceras"].concat())
+                    .to_str()
+                    .unwrap()
+            ),
+        ])
+        .spawn()
+        .unwrap()
+        .wait()
+        .unwrap();
 }
 
 pub fn radula_behave_bootstrap_cross_environment() {

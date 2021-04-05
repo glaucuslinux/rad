@@ -61,14 +61,19 @@ pub fn radula_options() {
 
                         functions::radula_behave_bootstrap_initialize();
 
+                        functions::radula_behave_bootstrap_toolchain_environment();
+
+                        functions::radula_behave_bootstrap_cross_environment();
+
                         functions::radula_behave_bootstrap_clean();
 
                         functions::radula_behave_bootstrap_arch_environment(
                             constants::RADULA_ARCHITECTURE_X86_64,
                         );
 
-                        functions::radula_behave_bootstrap_toolchain();
-
+                        functions::radula_behave_bootstrap_toolchain_swallow();
+                        functions::radula_behave_bootstrap_toolchain_prepare();
+                        functions::radula_behave_bootstrap_toolchain_construct();
                         functions::radula_behave_bootstrap_toolchain_backup();
                     }
                     Some("x") | Some("cross") => println!("Do nothing"),
