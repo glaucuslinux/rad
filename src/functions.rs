@@ -408,6 +408,44 @@ pub fn radula_behave_bootstrap_cross_environment() {
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY).unwrap())
             .join(constants::RADULA_DIRECTORY_SOURCES),
     );
+
+    let x = env::var("TGT").unwrap();
+
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_CROSS_ARCHIVER,
+        [&x, "-", constants::RADULA_CROSS_ARCHIVER].concat(),
+    );
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_CROSS_ASSEMBLER,
+        [&x, "-", constants::RADULA_CROSS_ASSEMBLER].concat(),
+    );
+
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_CROSS_BUILD_C_COMPILER,
+        constants::RADULA_ENVIRONMENT_CROSS_C_COMPILER,
+    );
+
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_CROSS_C_COMPILER,
+        [&x, "-", constants::RADULA_CROSS_C_COMPILER].concat(),
+    );
+
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_CROSS_C_COMPILER_LINKER,
+        constants::RADULA_CROSS_C_CXX_COMPILER_LINKER,
+    );
+
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_CROSS_C_PREPROCESSOR,
+        [
+            &x,
+            "-",
+            constants::RADULA_CROSS_C_COMPILER,
+            " ",
+            constants::RADULA_CROSS_C_PREPROCESSOR,
+        ]
+        .concat(),
+    );
 }
 
 pub fn radula_behave_pkg_config_environment() {

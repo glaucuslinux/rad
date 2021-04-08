@@ -61,9 +61,10 @@ pub fn radula_options() {
 
                         functions::radula_behave_bootstrap_initialize();
 
-                        functions::radula_behave_bootstrap_toolchain_environment();
-
+                        // Only including cross environment for clean to work
                         functions::radula_behave_bootstrap_cross_environment();
+
+                        functions::radula_behave_bootstrap_toolchain_environment();
 
                         functions::radula_behave_bootstrap_clean();
 

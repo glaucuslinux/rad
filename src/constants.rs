@@ -49,6 +49,26 @@ pub const RADULA_ARCHITECTURE_X86_64_LINUX: &'static str = "x86_64";
 pub const RADULA_ARCHITECTURE_X86_64_LINUX_CONFIGURATION: &'static str = "x86_64_";
 
 //
+// Cross
+//
+
+pub const RADULA_CROSS_ARCHIVER: &'static str = "gcc-ar";
+pub const RADULA_CROSS_ASSEMBLER: &'static str = "as";
+pub const RADULA_CROSS_C_COMPILER: &'static str = "gcc";
+pub const RADULA_CROSS_C_CXX_COMPILER_LINKER: &'static str = "bfd";
+pub const RADULA_CROSS_C_PREPROCESSOR: &'static str = "-E";
+pub const RADULA_CROSS_CXX_COMPILER: &'static str = "g++";
+pub const RADULA_CROSS_LINKER: &'static str = "ld.bfd";
+pub const RADULA_CROSS_NAMES: &'static str = "gcc-nm";
+pub const RADULA_CROSS_OBJECT_COPY: &'static str = "objcopy";
+pub const RADULA_CROSS_OBJECT_DUMP: &'static str = "objdump";
+pub const RADULA_CROSS_RANDOM_ACCESS_LIBRARY: &'static str = "gcc-ranlib";
+pub const RADULA_CROSS_READ_ELF: &'static str = "readelf";
+pub const RADULA_CROSS_SIZE: &'static str = "size";
+pub const RADULA_CROSS_STRINGS: &'static str = "strings";
+pub const RADULA_CROSS_STRIP: &'static str = "strip";
+
+//
 // Directories
 //
 
@@ -74,6 +94,28 @@ pub const RADULA_ENVIRONMENT_ARCHITECTURE_LINUX: &'static str = "LARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION: &'static str = "LCARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE: &'static str = "LIARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_MUSL: &'static str = "MARCH";
+
+// Cross
+pub const RADULA_ENVIRONMENT_CROSS_ARCHIVER: &'static str = "AR";
+pub const RADULA_ENVIRONMENT_CROSS_ASSEMBLER: &'static str = "AS";
+pub const RADULA_ENVIRONMENT_CROSS_BUILD_C_COMPILER: &'static str = "BUILD_CC";
+pub const RADULA_ENVIRONMENT_CROSS_COMPILE: &'static str = "CROSS_COMPILE";
+pub const RADULA_ENVIRONMENT_CROSS_C_COMPILER: &'static str = "CC";
+pub const RADULA_ENVIRONMENT_CROSS_C_COMPILER_LINKER: &'static str = "CC_LD";
+pub const RADULA_ENVIRONMENT_CROSS_C_PREPROCESSOR: &'static str = "CPP";
+pub const RADULA_ENVIRONMENT_CROSS_CXX_COMPILER: &'static str = "CXX";
+pub const RADULA_ENVIRONMENT_CROSS_CXX_LINKER: &'static str = "CXX_LD";
+pub const RADULA_ENVIRONMENT_CROSS_HOST_C_COMPILER: &'static str = "HOSTCC";
+pub const RADULA_ENVIRONMENT_CROSS_HOST_CXX_COMPILER: &'static str = "HOSTCXX";
+pub const RADULA_ENVIRONMENT_CROSS_LINKER: &'static str = "LD";
+pub const RADULA_ENVIRONMENT_CROSS_NAMES: &'static str = "NM";
+pub const RADULA_ENVIRONMENT_CROSS_OBJECT_COPY: &'static str = "OBJCOPY";
+pub const RADULA_ENVIRONMENT_CROSS_OBJECT_DUMP: &'static str = "OBJDUMP";
+pub const RADULA_ENVIRONMENT_CROSS_RANDOM_ACCESS_LIBRARY: &'static str = "RANLIB";
+pub const RADULA_ENVIRONMENT_CROSS_READ_ELF: &'static str = "READELF";
+pub const RADULA_ENVIRONMENT_CROSS_SIZE: &'static str = "SIZE";
+pub const RADULA_ENVIRONMENT_CROSS_STRINGS: &'static str = "STRINGS";
+pub const RADULA_ENVIRONMENT_CROSS_STRIP: &'static str = "STRIP";
 
 // Directories
 pub const RADULA_ENVIRONMENT_DIRECTORY_BACKUPS: &'static str = "BAKD";
