@@ -446,6 +446,66 @@ pub fn radula_behave_bootstrap_cross_environment() {
         ]
         .concat(),
     );
+
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_CROSS_COMPILE,
+        [&x, "-"].concat(),
+    );
+
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_CROSS_CXX_COMPILER,
+        [&x, "-", constants::RADULA_CROSS_CXX_COMPILER].concat(),
+    );
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_CROSS_CXX_COMPILER_LINKER,
+        constants::RADULA_CROSS_C_CXX_COMPILER_LINKER,
+    );
+
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_CROSS_HOST_C_COMPILER,
+        constants::RADULA_CROSS_C_COMPILER,
+    );
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_CROSS_HOST_CXX_COMPILER,
+        constants::RADULA_CROSS_CXX_COMPILER,
+    );
+
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_CROSS_LINKER,
+        [&x, "-", constants::RADULA_CROSS_LINKER].concat(),
+    );
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_CROSS_NAMES,
+        [&x, "-", constants::RADULA_CROSS_NAMES].concat(),
+    );
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_CROSS_OBJECT_COPY,
+        [&x, "-", constants::RADULA_CROSS_OBJECT_COPY].concat(),
+    );
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_CROSS_OBJECT_DUMP,
+        [&x, "-", constants::RADULA_CROSS_OBJECT_DUMP].concat(),
+    );
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_CROSS_RANDOM_ACCESS_LIBRARY,
+        [&x, "-", constants::RADULA_CROSS_RANDOM_ACCESS_LIBRARY].concat(),
+    );
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_CROSS_READ_ELF,
+        [&x, "-", constants::RADULA_CROSS_READ_ELF].concat(),
+    );
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_CROSS_SIZE,
+        [&x, "-", constants::RADULA_CROSS_SIZE].concat(),
+    );
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_CROSS_STRINGS,
+        [&x, "-", constants::RADULA_CROSS_STRINGS].concat(),
+    );
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_CROSS_STRIP,
+        [&x, "-", constants::RADULA_CROSS_STRIP].concat(),
+    );
 }
 
 pub fn radula_behave_pkg_config_environment() {
