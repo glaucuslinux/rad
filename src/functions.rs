@@ -32,7 +32,7 @@ pub fn radula_behave_bootstrap_arch_environment(x: &'static str) {
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_TUPLE_TARGET,
-        [x, constants::RADULA_ARCHITECTURE_TUPLE_TARGET].concat(),
+        [x, "-", constants::RADULA_ARCHITECTURE_TUPLE_TARGET].concat(),
     );
 
     match x {
@@ -96,6 +96,7 @@ pub fn radula_behave_bootstrap_arch_environment(x: &'static str) {
                 constants::RADULA_ENVIRONMENT_TUPLE_TARGET,
                 [
                     x,
+                    "-",
                     constants::RADULA_ARCHITECTURE_TUPLE_TARGET,
                     constants::RADULA_ARCHITECTURE_ARMV6ZK_TUPLE_TARGET,
                 ]
@@ -157,6 +158,7 @@ pub fn radula_behave_bootstrap_arch_environment(x: &'static str) {
                 constants::RADULA_ENVIRONMENT_TUPLE_TARGET,
                 [
                     constants::RADULA_ARCHITECTURE_X86_64_LINUX,
+                    "-",
                     constants::RADULA_ARCHITECTURE_TUPLE_TARGET,
                 ]
                 .concat(),
@@ -310,15 +312,15 @@ pub fn radula_behave_bootstrap_toolchain_environment() {
             .join(constants::RADULA_DIRECTORY_TOOLCHAIN),
     );
 
+    let x = env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY).unwrap();
+
     env::set_var(
         constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_BUILDS,
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY).unwrap())
-            .join(constants::RADULA_DIRECTORY_BUILDS),
+        Path::new(&x).join(constants::RADULA_DIRECTORY_BUILDS),
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_SOURCES,
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY).unwrap())
-            .join(constants::RADULA_DIRECTORY_SOURCES),
+        Path::new(&x).join(constants::RADULA_DIRECTORY_SOURCES),
     );
 }
 
@@ -398,36 +400,36 @@ pub fn radula_behave_bootstrap_cross_environment() {
             .join(constants::RADULA_DIRECTORY_CROSS),
     );
 
+    let x = env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY).unwrap();
+
     env::set_var(
         constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_BUILDS,
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY).unwrap())
-            .join(constants::RADULA_DIRECTORY_BUILDS),
+        Path::new(&x).join(constants::RADULA_DIRECTORY_BUILDS),
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_SOURCES,
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY).unwrap())
-            .join(constants::RADULA_DIRECTORY_SOURCES),
+        Path::new(&x).join(constants::RADULA_DIRECTORY_SOURCES),
     );
 
-    let x = env::var("TGT").unwrap();
+    let y = env::var("TGT").unwrap();
 
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_ARCHIVER,
-        [&x, "-", constants::RADULA_CROSS_ARCHIVER].concat(),
+        [&y, "-", constants::RADULA_CROSS_ARCHIVER].concat(),
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_ASSEMBLER,
-        [&x, "-", constants::RADULA_CROSS_ASSEMBLER].concat(),
+        [&y, "-", constants::RADULA_CROSS_ASSEMBLER].concat(),
     );
 
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_BUILD_C_COMPILER,
-        constants::RADULA_ENVIRONMENT_CROSS_C_COMPILER,
+        constants::RADULA_CROSS_C_COMPILER,
     );
 
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_C_COMPILER,
-        [&x, "-", constants::RADULA_CROSS_C_COMPILER].concat(),
+        [&y, "-", constants::RADULA_CROSS_C_COMPILER].concat(),
     );
 
     env::set_var(
@@ -438,7 +440,7 @@ pub fn radula_behave_bootstrap_cross_environment() {
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_C_PREPROCESSOR,
         [
-            &x,
+            &y,
             "-",
             constants::RADULA_CROSS_C_COMPILER,
             " ",
@@ -449,12 +451,12 @@ pub fn radula_behave_bootstrap_cross_environment() {
 
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_COMPILE,
-        [&x, "-"].concat(),
+        [&y, "-"].concat(),
     );
 
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_CXX_COMPILER,
-        [&x, "-", constants::RADULA_CROSS_CXX_COMPILER].concat(),
+        [&y, "-", constants::RADULA_CROSS_CXX_COMPILER].concat(),
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_CXX_COMPILER_LINKER,
@@ -472,39 +474,39 @@ pub fn radula_behave_bootstrap_cross_environment() {
 
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_LINKER,
-        [&x, "-", constants::RADULA_CROSS_LINKER].concat(),
+        [&y, "-", constants::RADULA_CROSS_LINKER].concat(),
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_NAMES,
-        [&x, "-", constants::RADULA_CROSS_NAMES].concat(),
+        [&y, "-", constants::RADULA_CROSS_NAMES].concat(),
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_OBJECT_COPY,
-        [&x, "-", constants::RADULA_CROSS_OBJECT_COPY].concat(),
+        [&y, "-", constants::RADULA_CROSS_OBJECT_COPY].concat(),
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_OBJECT_DUMP,
-        [&x, "-", constants::RADULA_CROSS_OBJECT_DUMP].concat(),
+        [&y, "-", constants::RADULA_CROSS_OBJECT_DUMP].concat(),
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_RANDOM_ACCESS_LIBRARY,
-        [&x, "-", constants::RADULA_CROSS_RANDOM_ACCESS_LIBRARY].concat(),
+        [&y, "-", constants::RADULA_CROSS_RANDOM_ACCESS_LIBRARY].concat(),
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_READ_ELF,
-        [&x, "-", constants::RADULA_CROSS_READ_ELF].concat(),
+        [&y, "-", constants::RADULA_CROSS_READ_ELF].concat(),
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_SIZE,
-        [&x, "-", constants::RADULA_CROSS_SIZE].concat(),
+        [&y, "-", constants::RADULA_CROSS_SIZE].concat(),
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_STRINGS,
-        [&x, "-", constants::RADULA_CROSS_STRINGS].concat(),
+        [&y, "-", constants::RADULA_CROSS_STRINGS].concat(),
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_STRIP,
-        [&x, "-", constants::RADULA_CROSS_STRIP].concat(),
+        [&y, "-", constants::RADULA_CROSS_STRIP].concat(),
     );
 }
 
