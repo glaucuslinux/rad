@@ -258,7 +258,7 @@ OPTIONS:
 \tv, ver, version                  \tDisplay cerata version(s)
 \ty, cys, cyst, cysts              \tDisplay cerata cyst(s)";
 
-pub const RADULA_HELP_VERSION: &'static str = "radula version 3.5.0
+pub const RADULA_HELP_VERSION: &'static str = "radula version 3.5.1
 
 Copyright (c) 2018-2021, Firas Khalil Khana
 Distributed under the terms of the ISC License";
@@ -270,8 +270,15 @@ Distributed under the terms of the ISC License";
 // Default `ccache` directories on both Arch and Fedora
 pub const RADULA_PATH_CCACHE: &'static str = "/usr/lib/ccache/bin:/usr/lib64/ccache";
 
+pub const RADULA_PATH_CHARSET_ALIAS: &'static str = "charset.alias";
+
 pub const RADULA_PATH_CONFIG_GUESS: &'static str = "binutils/config.guess";
+
+pub const RADULA_PATH_ETC: &'static str = "etc";
+
 pub const RADULA_PATH_GLAUCUS_IMAGE: &'static str = "glaucus.img";
+
+pub const RADULA_PATH_LIB: &'static str = "lib";
 
 // `pkgconf` and `pkg-config` don't respect the provided sysroot (it doesn't get
 // automatically prefixed to PATH and LIBDIR)
@@ -279,6 +286,8 @@ pub const RADULA_PATH_PKG_CONFIG_LIBDIR_PATH: &'static str = "/usr/lib/pkgconfig
 pub const RADULA_PATH_PKG_CONFIG_SYSROOT_DIR: &'static str = "/";
 pub const RADULA_PATH_PKG_CONFIG_SYSTEM_INCLUDE_PATH: &'static str = "/usr/include";
 pub const RADULA_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH: &'static str = "/usr/lib";
+
+pub const RADULA_PATH_USR: &'static str = "usr";
 
 //
 // Tools
@@ -304,6 +313,8 @@ pub const RADULA_TOOTH_CHOWN: &'static str = "chown";
 // Prefer `curl` over `wget`
 pub const RADULA_TOOTH_CURL: &'static str = "curl";
 pub const RADULA_TOOTH_CURL_FLAGS: &'static str = "-Lo";
+
+pub const RADULA_TOOTH_FIND: &'static str = "find";
 
 // No default flags were included for `git` because there are many
 pub const RADULA_TOOTH_GIT: &'static str = "git";

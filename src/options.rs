@@ -68,7 +68,7 @@ pub fn radula_options() {
 
                         functions::radula_behave_bootstrap_clean();
 
-                        functions::radula_behave_bootstrap_arch_environment(
+                        functions::radula_behave_bootstrap_architecture_environment(
                             constants::RADULA_ARCHITECTURE_X86_64,
                         );
 
@@ -77,7 +77,25 @@ pub fn radula_options() {
                         functions::radula_behave_bootstrap_toolchain_construct();
                         functions::radula_behave_bootstrap_toolchain_backup();
                     }
-                    Some("x") | Some("cross") => println!("Do nothing"),
+                    Some("x") | Some("cross") => {
+                        functions::radula_behave_bootstrap_environment();
+
+                        functions::radula_behave_pkg_config_environment();
+
+                        functions::radula_behave_bootstrap_architecture_environment(
+                            constants::RADULA_ARCHITECTURE_X86_64,
+                        );
+
+                        functions::radula_behave_flags_environment();
+
+                        functions::radula_behave_bootstrap_cross_environment();
+                        functions::radula_behave_bootstrap_cross_swallow();
+                        functions::radula_behave_bootstrap_cross_prepare();
+
+                        functions::radula_behave_bootstrap_cross_construct();
+
+                        functions::radula_behave_bootstrap_cross_strip();
+                    }
                     _ => {
                         functions::radula_open(constants::RADULA_HELP_BEHAVE_BOOTSTRAP);
                         process::exit(1);

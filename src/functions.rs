@@ -11,10 +11,10 @@ use std::string::String;
 use super::constants;
 
 //
-//
+// Bootstrap Functions
 //
 
-pub fn radula_behave_bootstrap_arch_environment(x: &'static str) {
+pub fn radula_behave_bootstrap_architecture_environment(x: &'static str) {
     env::set_var(
         constants::RADULA_ENVIRONMENT_TUPLE_BUILD,
         String::from_utf8_lossy(
@@ -191,91 +191,95 @@ pub fn radula_behave_bootstrap_clean() {
 }
 
 pub fn radula_behave_bootstrap_cross_construct() {
+    let radula_behave_construct_cross = |x: &'static str| {
+        radula_behave_construct(x, constants::RADULA_DIRECTORY_CROSS);
+    };
+
     // Filesystem & Package Management
-    radula_behave_construct("iana-etc", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("hydroskeleton", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("cerata", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("radula", constants::RADULA_DIRECTORY_CROSS);
+    radula_behave_construct_cross("iana-etc");
+    radula_behave_construct_cross("hydroskeleton");
+    radula_behave_construct_cross("cerata");
+    radula_behave_construct_cross("radula");
 
     // Headers
-    radula_behave_construct("musl-utils", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("linux-headers", constants::RADULA_DIRECTORY_CROSS);
+    radula_behave_construct_cross("musl-utils");
+    radula_behave_construct_cross("linux-headers");
 
     // Init
-    radula_behave_construct("skalibs", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("execline", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("s6", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("utmps", constants::RADULA_DIRECTORY_CROSS);
+    radula_behave_construct_cross("skalibs");
+    radula_behave_construct_cross("execline");
+    radula_behave_construct_cross("s6");
+    radula_behave_construct_cross("utmps");
 
     // Permissions
-    radula_behave_construct("attr", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("acl", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("shadow", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("libressl", constants::RADULA_DIRECTORY_CROSS);
+    radula_behave_construct_cross("attr");
+    radula_behave_construct_cross("acl");
+    radula_behave_construct_cross("shadow");
+    radula_behave_construct_cross("libressl");
 
     // Userland
-    radula_behave_construct("toybox", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("bc", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("diffutils", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("file", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("findutils", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("grep", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("hostname", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("mlocate", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("sed", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("which", constants::RADULA_DIRECTORY_CROSS);
+    radula_behave_construct_cross("toybox");
+    radula_behave_construct_cross("bc");
+    radula_behave_construct_cross("diffutils");
+    radula_behave_construct_cross("file");
+    radula_behave_construct_cross("findutils");
+    radula_behave_construct_cross("grep");
+    radula_behave_construct_cross("hostname");
+    radula_behave_construct_cross("mlocate");
+    radula_behave_construct_cross("sed");
+    radula_behave_construct_cross("which");
 
     // Compression
-    radula_behave_construct("bzip2", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("lbzip2", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("lbzip2-utils", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("lz4", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("lzlib", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("plzip", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("xz", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("zlib-ng", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("pigz", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("zstd", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("libarchive", constants::RADULA_DIRECTORY_CROSS);
+    radula_behave_construct_cross("bzip2");
+    radula_behave_construct_cross("lbzip2");
+    radula_behave_construct_cross("lbzip2-utils");
+    radula_behave_construct_cross("lz4");
+    radula_behave_construct_cross("lzlib");
+    radula_behave_construct_cross("plzip");
+    radula_behave_construct_cross("xz");
+    radula_behave_construct_cross("zlib-ng");
+    radula_behave_construct_cross("pigz");
+    radula_behave_construct_cross("zstd");
+    radula_behave_construct_cross("libarchive");
 
     // Synchronization
-    radula_behave_construct("rsync", constants::RADULA_DIRECTORY_CROSS);
+    radula_behave_construct_cross("rsync");
 
     // Shell
-    radula_behave_construct("netbsd-curses", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("oksh", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("dash", constants::RADULA_DIRECTORY_CROSS);
+    radula_behave_construct_cross("netbsd-curses");
+    radula_behave_construct_cross("oksh");
+    radula_behave_construct_cross("dash");
 
     // Editors & Pagers
-    radula_behave_construct("libedit", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("pcre2", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("less", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("vim", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("mandoc", constants::RADULA_DIRECTORY_CROSS);
+    radula_behave_construct_cross("libedit");
+    radula_behave_construct_cross("pcre2");
+    radula_behave_construct_cross("less");
+    radula_behave_construct_cross("vim");
+    radula_behave_construct_cross("mandoc");
 
     // Networking
-    radula_behave_construct("libcap", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("iproute2", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("iputils", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("dhcp", constants::RADULA_DIRECTORY_CROSS);
+    radula_behave_construct_cross("libcap");
+    radula_behave_construct_cross("iproute2");
+    radula_behave_construct_cross("iputils");
+    radula_behave_construct_cross("dhcp");
 
     // Utilities
-    radula_behave_construct("psmisc", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("procps-ng", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("util-linux", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("e2fsprogs", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("kmod", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("pciutils", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("hwids", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("eudev", constants::RADULA_DIRECTORY_CROSS);
+    radula_behave_construct_cross("psmisc");
+    radula_behave_construct_cross("procps-ng");
+    radula_behave_construct_cross("util-linux");
+    radula_behave_construct_cross("e2fsprogs");
+    radula_behave_construct_cross("kmod");
+    radula_behave_construct_cross("pciutils");
+    radula_behave_construct_cross("hwids");
+    radula_behave_construct_cross("eudev");
 
     // Services
-    radula_behave_construct("s6-linux-init", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("s6-rc", constants::RADULA_DIRECTORY_CROSS);
-    radula_behave_construct("s6-boot-scripts", constants::RADULA_DIRECTORY_CROSS);
+    radula_behave_construct_cross("s6-linux-init");
+    radula_behave_construct_cross("s6-rc");
+    radula_behave_construct_cross("s6-boot-scripts");
 
     // Kernel
-    radula_behave_construct("linux", constants::RADULA_DIRECTORY_CROSS);
+    radula_behave_construct_cross("linux");
 }
 
 pub fn radula_behave_bootstrap_cross_environment() {
@@ -402,12 +406,88 @@ pub fn radula_behave_bootstrap_cross_environment() {
 }
 
 pub fn radula_behave_bootstrap_cross_prepare() {
-    fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap());
-    fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN).unwrap());
-    fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_BUILDS).unwrap());
-    fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_LOGS).unwrap());
-    fs::create_dir_all(
-        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_SOURCES).unwrap(),
+    let radula_behave_bootstrap_restore = |x: &'static str| {
+        Command::new(constants::RADULA_TOOTH_RSYNC)
+            .args(&[
+                constants::RADULA_TOOTH_RSYNC_FLAGS,
+                Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap())
+                    .join(x)
+                    .to_str()
+                    .unwrap(),
+                &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS).unwrap(),
+                "--delete",
+            ])
+            .stdout(Stdio::null())
+            .spawn();
+    };
+
+    radula_behave_bootstrap_restore(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS);
+    radula_behave_bootstrap_restore(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN);
+
+    radula_behave_remove_dir_all_force(
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_BUILDS).unwrap(),
+    );
+    fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_BUILDS).unwrap());
+
+    radula_behave_remove_dir_all_force(
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_LOGS).unwrap(),
+    );
+    fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_LOGS).unwrap());
+
+    fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_SOURCES).unwrap());
+}
+
+pub fn radula_behave_bootstrap_cross_strip() {
+    Command::new(constants::RADULA_TOOTH_FIND)
+        .args(&[
+            Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap())
+                .join(constants::RADULA_PATH_ETC)
+                .to_str()
+                .unwrap(),
+            "-type d -empty -delete",
+        ])
+        .spawn();
+
+    let x = String::from(
+        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap())
+            .join(constants::RADULA_PATH_USR)
+            .to_str()
+            .unwrap(),
+    );
+
+    Command::new(constants::RADULA_TOOTH_FIND)
+        .args(&[
+            &x,
+            "-name *.a -type f -exec",
+            constants::RADULA_CROSS_STRIP,
+            "-gv {} \\;",
+        ])
+        .spawn();
+    Command::new(constants::RADULA_TOOTH_FIND)
+        .args(&[
+            &x,
+            "\\( -name *.so* -a ! -name *dbg \\) -type f -exec",
+            constants::RADULA_CROSS_STRIP,
+            "--strip-unneeded -v {} \\;",
+        ])
+        .spawn();
+    Command::new(constants::RADULA_TOOTH_FIND)
+        .args(&[
+            &x,
+            "-type f -exec",
+            constants::RADULA_CROSS_STRIP,
+            "-sv {} \\;",
+        ])
+        .spawn();
+    Command::new(constants::RADULA_TOOTH_FIND)
+        .args(&[&x, "-name *.la -delete"])
+        .spawn();
+
+    // This could be removed in the future if nothing generates `charset.alias`
+    fs::remove_file(
+        Path::new(&x)
+            .join(constants::RADULA_PATH_LIB)
+            .join(constants::RADULA_PATH_CHARSET_ALIAS),
     );
 }
 
@@ -598,13 +678,17 @@ pub fn radula_behave_bootstrap_toolchain_backup() {
 }
 
 pub fn radula_behave_bootstrap_toolchain_construct() {
-    radula_behave_construct("musl-headers", constants::RADULA_DIRECTORY_TOOLCHAIN);
-    radula_behave_construct("binutils", constants::RADULA_DIRECTORY_TOOLCHAIN);
-    radula_behave_construct("gcc", constants::RADULA_DIRECTORY_TOOLCHAIN);
-    radula_behave_construct("musl", constants::RADULA_DIRECTORY_TOOLCHAIN);
-    radula_behave_construct("libgcc", constants::RADULA_DIRECTORY_TOOLCHAIN);
-    radula_behave_construct("libstdc++-v3", constants::RADULA_DIRECTORY_TOOLCHAIN);
-    radula_behave_construct("libgomp", constants::RADULA_DIRECTORY_TOOLCHAIN);
+    let radula_behave_construct_toolchain = |x: &'static str| {
+        radula_behave_construct(x, constants::RADULA_DIRECTORY_TOOLCHAIN);
+    };
+
+    radula_behave_construct_toolchain("musl-headers");
+    radula_behave_construct_toolchain("binutils");
+    radula_behave_construct_toolchain("gcc");
+    radula_behave_construct_toolchain("musl");
+    radula_behave_construct_toolchain("libgcc");
+    radula_behave_construct_toolchain("libstdc++-v3");
+    radula_behave_construct_toolchain("libgomp");
 }
 
 pub fn radula_behave_bootstrap_toolchain_environment() {
@@ -652,6 +736,10 @@ pub fn radula_behave_bootstrap_toolchain_swallow() {
     radula_behave_swallow("gcc");
 }
 
+//
+// General Functions
+//
+
 pub fn radula_behave_ccache_environment() {
     env::set_var(
         constants::RADULA_ENVIRONMENT_PATH,
@@ -694,6 +782,9 @@ pub fn radula_behave_construct(x: &'static str, y: &'static str) {
         .wait()
         .unwrap();
 }
+
+// This will be used whether we're bootstrapping or not so don't add _bootstrap_ to its name
+pub fn radula_behave_flags_environment() {}
 
 pub fn radula_behave_pkg_config_environment() {
     env::set_var(
@@ -950,6 +1041,10 @@ pub fn radula_behave_teeth_environment() {
         .concat(),
     );
 }
+
+//
+// Help Functions
+//
 
 pub fn radula_open(x: &'static str) {
     println!("{}\n\n{}", constants::RADULA_HELP_VERSION, x);
