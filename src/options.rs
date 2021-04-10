@@ -15,11 +15,14 @@ pub fn radula_options() {
         process::exit(1);
     }
 
-    while let Some(y) = x.next() {
-        match y.as_str() {
-            "b" | "-b" | "--behave" => match x.next().as_deref() {
-                Some("b") | Some("bootstrap") => match x.next().as_deref() {
-                    Some("c") | Some("clean") => {
+    while let Some(y) = x.next().as_deref() {
+        match y {
+            // `.unwrap_or_default()` actually returns an empty string literal which gets matched
+            // to `_` in the below switch (if we had `.unwrap_or("h")` then that'll return the help
+            // message without exiting with an error status of `1`).
+            "b" | "-b" | "--behave" => match x.next().as_deref().unwrap_or_default() {
+                "b" | "bootstrap" => match x.next().as_deref().unwrap_or_default() {
+                    "c" | "clean" => {
                         functions::radula_behave_bootstrap_environment();
 
                         functions::radula_behave_bootstrap_toolchain_environment();
@@ -30,7 +33,7 @@ pub fn radula_options() {
 
                         println!("clean complete");
                     }
-                    Some("d") | Some("distclean") => {
+                    "d" | "distclean" => {
                         functions::radula_behave_bootstrap_environment();
 
                         functions::radula_behave_bootstrap_toolchain_environment();
@@ -42,19 +45,19 @@ pub fn radula_options() {
                         println!("distclean complete");
                     }
 
-                    Some("h") | Some("-h") | Some("--help") => {
+                    "h" | "-h" | "--help" => {
                         functions::radula_open(constants::RADULA_HELP_BEHAVE_BOOTSTRAP)
                     }
 
-                    Some("i") | Some("image") => println!("Do nothing"),
-                    Some("l") | Some("list") => {
+                    "i" | "image" => println!("Do nothing"),
+                    "l" | "list" => {
                         functions::radula_open(constants::RADULA_HELP_BEHAVE_BOOTSTRAP_LIST)
                     }
-                    Some("r") | Some("require") => {
+                    "r" | "require" => {
                         println!("Checking if host has all required packages...")
                     }
-                    Some("s") | Some("release") => println!("release complete"),
-                    Some("t") | Some("toolchain") => {
+                    "s" | "release" => println!("release complete"),
+                    "t" | "toolchain" => {
                         functions::radula_behave_bootstrap_environment();
 
                         functions::radula_behave_ccache_environment();
@@ -77,7 +80,7 @@ pub fn radula_options() {
                         functions::radula_behave_bootstrap_toolchain_construct();
                         functions::radula_behave_bootstrap_toolchain_backup();
                     }
-                    Some("x") | Some("cross") => {
+                    "x" | "cross" => {
                         functions::radula_behave_bootstrap_environment();
 
                         functions::radula_behave_pkg_config_environment();
@@ -101,8 +104,8 @@ pub fn radula_options() {
                         process::exit(1);
                     }
                 },
-                Some("e") | Some("envenomate") => match x.next().as_deref() {
-                    Some("h") | Some("-h") | Some("--help") => {
+                "e" | "envenomate" => match x.next().as_deref().unwrap_or_default() {
+                    "h" | "-h" | "--help" => {
                         functions::radula_open(constants::RADULA_HELP_BEHAVE_ENVENOMATE)
                     }
 
@@ -111,8 +114,8 @@ pub fn radula_options() {
                         process::exit(1);
                     }
                 },
-                Some("i") | Some("binary") => match x.next().as_deref() {
-                    Some("h") | Some("-h") | Some("--help") => {
+                "i" | "binary" => match x.next().as_deref().unwrap_or_default() {
+                    "h" | "-h" | "--help" => {
                         functions::radula_open(constants::RADULA_HELP_BEHAVE_BINARY)
                     }
 
@@ -122,29 +125,25 @@ pub fn radula_options() {
                     }
                 },
 
-                Some("h") | Some("-h") | Some("--help") => {
-                    functions::radula_open(constants::RADULA_HELP_BEHAVE)
-                }
+                "h" | "-h" | "--help" => functions::radula_open(constants::RADULA_HELP_BEHAVE),
 
                 _ => {
                     functions::radula_open(constants::RADULA_HELP_BEHAVE);
                     process::exit(1);
                 }
             },
-            "c" | "-c" | "--ceras" => match x.next().as_deref() {
-                Some("n") | Some("nom") | Some("name") => println!("Do nothing"),
+            "c" | "-c" | "--ceras" => match x.next().as_deref().unwrap_or_default() {
+                "n" | "nom" | "name" => println!("Do nothing"),
 
-                Some("h") | Some("-h") | Some("--help") => {
-                    functions::radula_open(constants::RADULA_HELP_CERAS)
-                }
+                "h" | "-h" | "--help" => functions::radula_open(constants::RADULA_HELP_CERAS),
 
-                Some("v") | Some("ver") | Some("version") => println!("Do nothing"),
-                Some("u") | Some("url") | Some("source") => println!("Do nothing"),
-                Some("s") | Some("sum") | Some("checksum") | Some("sha512sum") => {
+                "v" | "ver" | "version" => println!("Do nothing"),
+                "u" | "url" | "source" => println!("Do nothing"),
+                "s" | "sum" | "checksum" | "sha512sum" => {
                     println!("Do nothing")
                 }
-                Some("y") | Some("cys") | Some("cyst") | Some("cysts") => println!("Do nothing"),
-                Some("c") | Some("cnt") | Some("concentrate") | Some("concentrates") => {
+                "y" | "cys" | "cyst" | "cysts" => println!("Do nothing"),
+                "c" | "cnt" | "concentrate" | "concentrates" => {
                     println!("Do nothing")
                 }
                 _ => {

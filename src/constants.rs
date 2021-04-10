@@ -85,7 +85,7 @@ pub const RADULA_DIRECTORY_TOOLCHAIN: &'static str = "toolchain";
 // Environment Variables
 //
 
-// Architecture
+// Architectures
 pub const RADULA_ENVIRONMENT_ARCHITECTURE: &'static str = "ARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_CERATA: &'static str = "CARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS: &'static str = "FARCH";
@@ -258,7 +258,7 @@ OPTIONS:
 \tv, ver, version                  \tDisplay cerata version(s)
 \ty, cys, cyst, cysts              \tDisplay cerata cyst(s)";
 
-pub const RADULA_HELP_VERSION: &'static str = "radula version 3.5.1
+pub const RADULA_HELP_VERSION: &'static str = "radula version 3.5.2
 
 Copyright (c) 2018-2021, Firas Khalil Khana
 Distributed under the terms of the ISC License";
@@ -290,7 +290,7 @@ pub const RADULA_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH: &'static str = "/usr/lib";
 pub const RADULA_PATH_USR: &'static str = "usr";
 
 //
-// Tools
+// Teeth
 //
 
 // A tooth is a tool available on the host system

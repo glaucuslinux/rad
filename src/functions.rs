@@ -764,7 +764,7 @@ pub fn radula_behave_construct(x: &'static str, y: &'static str) {
                 //
                 // All basic functions need to be called together to prevent the loss of the
                 // current working directory, otherwise we'd have to store it and pass it or `cd`
-                // into it whenever any basic function is called.
+                // into it whenever a basic function is called.
                 //
                 // The basic function `check` won't be used for now...
                 "nom={} ver={} . {} && prepare && configure && build && install",
