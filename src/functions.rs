@@ -306,7 +306,7 @@ pub fn radula_behave_bootstrap_cross_environment() {
         Path::new(&x).join(constants::RADULA_DIRECTORY_SOURCES),
     );
 
-    let y = env::var("TGT").unwrap();
+    let y = env::var(constants::RADULA_ENVIRONMENT_TUPLE_TARGET).unwrap();
 
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_ARCHIVER,
