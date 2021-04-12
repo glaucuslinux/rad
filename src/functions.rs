@@ -5,7 +5,7 @@ use std::env;
 use std::fs;
 use std::io::Write;
 use std::path::Path;
-use std::process::{Command, Stdio};
+use std::process::{exit, Command, Stdio};
 use std::string::String;
 
 use super::constants;
@@ -1046,6 +1046,179 @@ pub fn radula_behave_teeth_environment() {
 // Help Functions
 //
 
-pub fn radula_open(x: &'static str) {
+pub fn radula_help(x: &'static str) {
     println!("{}\n\n{}", constants::RADULA_HELP_VERSION, x);
+}
+
+//
+// Options Functions
+//
+
+pub fn radula_options() {
+    let mut x = env::args().skip(1);
+
+    if x.len() < 1 {
+        radula_help(constants::RADULA_HELP);
+        exit(1);
+    }
+
+    while let Some(y) = x.next().as_deref() {
+        match y {
+            // `.unwrap_or_default()` actually returns an empty string literal which gets matched
+            // to `_` in the below switch (if we had `.unwrap_or("h")` then that'll return the help
+            // message without exiting with an error status of `1`).
+            "-b" | "--behave" => match x.next().as_deref().unwrap_or_default() {
+                "b" | "bootstrap" => {
+                    match x.next().as_deref().unwrap_or_default() {
+                        "c" | "clean" => {
+                            radula_behave_bootstrap_environment();
+
+                            radula_behave_bootstrap_toolchain_environment();
+
+                            // Only included to work for cross which in turn is only included to make
+                            // clean work...
+                            radula_behave_bootstrap_architecture_environment(
+                                constants::RADULA_ARCHITECTURE_X86_64,
+                            );
+
+                            radula_behave_bootstrap_cross_environment();
+
+                            radula_behave_bootstrap_clean();
+
+                            println!("clean complete");
+                        }
+                        "d" | "distclean" => {
+                            radula_behave_bootstrap_environment();
+
+                            radula_behave_bootstrap_toolchain_environment();
+
+                            // Only included to work for cross which in turn is only included to make
+                            // clean work...
+                            radula_behave_bootstrap_architecture_environment(
+                                constants::RADULA_ARCHITECTURE_X86_64,
+                            );
+
+                            radula_behave_bootstrap_cross_environment();
+
+                            radula_behave_bootstrap_distclean();
+
+                            println!("distclean complete");
+                        }
+                        "h" | "help" => radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP),
+                        "i" | "image" => println!("Do nothing"),
+                        "l" | "list" => radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP_LIST),
+                        "r" | "require" => {
+                            println!("Checking if host has all required packages...")
+                        }
+                        "s" | "release" => println!("release complete"),
+                        "t" | "toolchain" => {
+                            radula_behave_bootstrap_environment();
+
+                            radula_behave_ccache_environment();
+
+                            radula_behave_bootstrap_initialize();
+
+                            // Only including cross environment for clean to work
+                            radula_behave_bootstrap_cross_environment();
+
+                            radula_behave_bootstrap_toolchain_environment();
+
+                            radula_behave_bootstrap_clean();
+
+                            radula_behave_bootstrap_architecture_environment(
+                                constants::RADULA_ARCHITECTURE_X86_64,
+                            );
+
+                            radula_behave_bootstrap_toolchain_swallow();
+                            radula_behave_bootstrap_toolchain_prepare();
+                            radula_behave_bootstrap_toolchain_construct();
+                            radula_behave_bootstrap_toolchain_backup();
+                        }
+                        "x" | "cross" => {
+                            radula_behave_bootstrap_environment();
+
+                            radula_behave_pkg_config_environment();
+
+                            radula_behave_bootstrap_architecture_environment(
+                                constants::RADULA_ARCHITECTURE_X86_64,
+                            );
+
+                            radula_behave_flags_environment();
+
+                            radula_behave_bootstrap_cross_environment();
+                            radula_behave_bootstrap_cross_swallow();
+                            radula_behave_bootstrap_cross_prepare();
+
+                            radula_behave_bootstrap_cross_construct();
+
+                            radula_behave_bootstrap_cross_strip();
+                        }
+                        _ => {
+                            radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP);
+                            exit(1);
+                        }
+                    }
+                    return;
+                }
+                // `return` should be removed to allow dealing with multiple cerata simultaneously
+                "e" | "envenomate" => {
+                    match x.next().as_deref().unwrap_or_default() {
+                        "h" | "help" => radula_help(constants::RADULA_HELP_BEHAVE_ENVENOMATE),
+                        _ => {
+                            radula_help(constants::RADULA_HELP_BEHAVE_ENVENOMATE);
+                            exit(1);
+                        }
+                    }
+                    return;
+                }
+                // `return` should be removed to allow dealing with multiple cerata simultaneously
+                "i" | "binary" => {
+                    match x.next().as_deref().unwrap_or_default() {
+                        "h" | "help" => radula_help(constants::RADULA_HELP_BEHAVE_BINARY),
+                        _ => {
+                            radula_help(constants::RADULA_HELP_BEHAVE_BINARY);
+                            exit(1);
+                        }
+                    }
+                    return;
+                }
+                "h" | "help" => {
+                    radula_help(constants::RADULA_HELP_BEHAVE);
+                    return;
+                }
+                _ => {
+                    radula_help(constants::RADULA_HELP_BEHAVE);
+                    exit(1);
+                }
+            },
+            "-c" | "--ceras" => {
+                match x.next().as_deref().unwrap_or_default() {
+                    "c" | "cnt" => println!("Do nothing"),
+                    "h" | "help" => radula_help(constants::RADULA_HELP_CERAS),
+                    "n" | "nom" => println!("Do nothing"),
+                    "s" | "sum" => println!("Do nothing"),
+                    "u" | "url" => println!("Do nothing"),
+                    "v" | "ver" => println!("Do nothing"),
+                    "y" | "cys" => println!("Do nothing"),
+                    _ => {
+                        radula_help(constants::RADULA_HELP_CERAS);
+                        exit(1);
+                    }
+                }
+                return;
+            }
+            "-h" | "--help" => {
+                radula_help(constants::RADULA_HELP);
+                return;
+            }
+            "-v" | "--version" => {
+                println!("{}", constants::RADULA_HELP_VERSION);
+                return;
+            }
+            _ => {
+                radula_help(constants::RADULA_HELP);
+                exit(1);
+            }
+        }
+    }
 }

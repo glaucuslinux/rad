@@ -176,48 +176,40 @@ pub const RADULA_HELP: &'static str = "USAGE:
 \tradula [ OPTIONS ]
 
 OPTIONS:
-\tb, -b, --behave \tPerform any of the following behaviors:
-\t                \tbinary, bootstrap, envenomate
+\t-b, --behave \tPerform any of the following behaviors:
+\t             \tbinary, bootstrap, envenomate
 
-\tc, -c, --ceras  \tDisplay ceras information
-
-\th, -h, --help   \tDisplay this help message
-
-\tv, -v, --version\tDisplay current version number";
+\t-c, --ceras  \tDisplay ceras information
+\t-h, --help   \tDisplay this help message
+\t-v, --version\tDisplay current version number";
 
 pub const RADULA_HELP_BEHAVE: &'static str = "USAGE:
-\tradula [ b | -b | --behave ] [ OPTIONS ]
+\tradula [ -b | --behave ] [ OPTIONS ]
 
 OPTIONS:
 \tb, bootstrap \tPerform bootstrap behavior
 \te, envenomate\tPerform envenomate behavior
-
-\th, -h, --help\tDisplay this help message
-
+\th, help      \tDisplay this help message
 \ti, binary    \tPerform binary behavior";
 
 pub const RADULA_HELP_BEHAVE_BINARY: &'static str = "USAGE:
-\tradula [ b | -b | --behave ] [ i | binary ] [ OPTIONS ] [ cerata ]
+\tradula [ -b | --behave ] [ i | binary ] [ OPTIONS ] [ cerata ]
 
 OPTIONS:
 \td, decyst    \tRemove binary cerata without preserving their cysts
-
-\th, -h, --help\tDisplay this help message
-
+\th, help      \tDisplay this help message
 \ti, install   \tInstall binary cerata (default)
 \tr, remove    \tRemove binary cerata while preserving their cyst(s)
 \ts, search    \tSearch for binary cerata within the remote repositories
 \tu, upgrade   \tUpgrade binary cerata";
 
 pub const RADULA_HELP_BEHAVE_BOOTSTRAP: &'static str = "USAGE:
-\tradula [ b | -b | --behave ] [ b | bootstrap ] [ OPTIONS ]
+\tradula [ -b | --behave ] [ b | bootstrap ] [ OPTIONS ]
 
 OPTIONS:
 \tc, clean     \tClean up while preserving sources and backups
 \td, distclean \tClean up everything
-
-\th, -h, --help\tDisplay this help message
-
+\th, help      \tDisplay this help message
 \ti, image     \tCreate a .img file of the glaucus system
 \tl, list      \tList supported genomes
 \tr, require   \tCheck if host has all required packages
@@ -232,33 +224,29 @@ pub const RADULA_HELP_BEHAVE_BOOTSTRAP_LIST: &'static str = "GENOMES (ARCHITECTU
 \tx86-64,        x86_64";
 
 pub const RADULA_HELP_BEHAVE_ENVENOMATE: &'static str = "USAGE:
-\tradula [ b | -b | --behave ] [ e | envenomate ] [ OPTIONS ] [ cerata ]
+\tradula [ -b | --behave ] [ e | envenomate ] [ OPTIONS ] [ cerata ]
 
 OPTIONS:
 \td, decyst    \tRemove cerata without preserving their cyst(s)
-
-\th, -h, --help\tDisplay this help message
-
+\th, help      \tDisplay this help message
 \ti, install   \tInstall cerata from source (default)
 \tr, remove    \tRemove cerata while preserving their cyst(s)
 \ts, search    \tSearch for cerata within the cerata directory
 \tu, upgrade   \tUpgrade cerata";
 
 pub const RADULA_HELP_CERAS: &'static str = "USAGE:
-\tradula [ c | -c | --ceras ] [ OPTIONS ] [ cerata ]
+\tradula [ -c | --ceras ] [ OPTIONS ] [ cerata ]
 
 OPTIONS:
-\tc, cnt, concentrate, concentrates\tDisplay cerata concentrate(s)
+\tc, cnt \tDisplay cerata concentrate(s)\
+\th, help\tDisplay this help message\
+\tn, nom \tDisplay cerata name(s)\
+\ts, sum \tDisplay cerata sha512sum(s)\
+\tu, url \tDisplay cerata source(s)\
+\tv, ver \tDisplay cerata version(s)\
+\ty, cys \tDisplay cerata cyst(s)";
 
-\th, -h, --help                    \tDisplay this help message
-
-\tn, nom, name                     \tDisplay cerata name(s)
-\ts, sum, checksum, sha512sum      \tDisplay cerata sha512sum(s)
-\tu, url, source                   \tDisplay cerata source(s)
-\tv, ver, version                  \tDisplay cerata version(s)
-\ty, cys, cyst, cysts              \tDisplay cerata cyst(s)";
-
-pub const RADULA_HELP_VERSION: &'static str = "radula version 3.5.2
+pub const RADULA_HELP_VERSION: &'static str = "radula version 3.5.3
 
 Copyright (c) 2018-2021, Firas Khalil Khana
 Distributed under the terms of the ISC License";
