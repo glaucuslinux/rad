@@ -11,7 +11,7 @@ use std::string::String;
 use super::constants;
 
 //
-// Bootstrap Functions
+// Behave Functions
 //
 
 pub fn radula_behave_bootstrap_architecture_environment(x: &'static str) {
@@ -491,89 +491,6 @@ pub fn radula_behave_bootstrap_cross_strip() {
     );
 }
 
-pub fn radula_behave_bootstrap_cross_swallow() {
-    // Filesystem & Package Management
-    radula_behave_swallow("iana-etc");
-    radula_behave_swallow("cerata");
-    radula_behave_swallow("radula");
-
-    // Kernel
-    radula_behave_swallow("linux");
-
-    // Init
-    radula_behave_swallow("skalibs");
-    radula_behave_swallow("execline");
-    radula_behave_swallow("s6");
-    radula_behave_swallow("utmps");
-
-    // Permissions
-    radula_behave_swallow("attr");
-    radula_behave_swallow("acl");
-    radula_behave_swallow("shadow");
-    radula_behave_swallow("libressl");
-
-    // Userland
-    radula_behave_swallow("toybox");
-    radula_behave_swallow("bc");
-    radula_behave_swallow("diffutils");
-    radula_behave_swallow("file");
-    radula_behave_swallow("findutils");
-    radula_behave_swallow("grep");
-    radula_behave_swallow("hostname");
-    radula_behave_swallow("mlocate");
-    radula_behave_swallow("sed");
-    radula_behave_swallow("which");
-
-    // Compression
-    radula_behave_swallow("bzip2");
-    radula_behave_swallow("lbzip2");
-    radula_behave_swallow("lbzip2-utils");
-    radula_behave_swallow("lz4");
-    radula_behave_swallow("lzlib");
-    radula_behave_swallow("plzip");
-    radula_behave_swallow("xz");
-    radula_behave_swallow("zlib-ng");
-    radula_behave_swallow("pigz");
-    radula_behave_swallow("zstd");
-    radula_behave_swallow("libarchive");
-
-    // Synchronization
-    radula_behave_swallow("rsync");
-
-    // Shell
-    radula_behave_swallow("netbsd-curses");
-    radula_behave_swallow("oksh");
-    radula_behave_swallow("dash");
-
-    // Editors & Pagers
-    radula_behave_swallow("libedit");
-    radula_behave_swallow("pcre2");
-    radula_behave_swallow("less");
-    radula_behave_swallow("vim");
-    radula_behave_swallow("mandoc");
-
-    // Networking
-    radula_behave_swallow("libcap");
-    radula_behave_swallow("iproute2");
-    radula_behave_swallow("iputils");
-    radula_behave_swallow("dhcp");
-
-    // Utilities
-    radula_behave_swallow("psmisc");
-    radula_behave_swallow("procps-ng");
-    radula_behave_swallow("util-linux");
-    radula_behave_swallow("e2fsprogs");
-    radula_behave_swallow("kmod");
-    radula_behave_swallow("pciutils");
-    radula_behave_swallow("hwids");
-    radula_behave_swallow("eudev");
-
-    // Services
-    radula_behave_swallow("s6-linux-init");
-    radula_behave_swallow("s6-rc");
-    radula_behave_swallow("s6-boot-scripts");
-}
-
 pub fn radula_behave_bootstrap_distclean() {
     radula_behave_remove_dir_all_force(
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap(),
@@ -726,20 +643,6 @@ pub fn radula_behave_bootstrap_toolchain_prepare() {
     );
 }
 
-pub fn radula_behave_bootstrap_toolchain_swallow() {
-    radula_behave_swallow("musl");
-    radula_behave_swallow("binutils");
-    radula_behave_swallow("gmp");
-    radula_behave_swallow("mpfr");
-    radula_behave_swallow("mpc");
-    radula_behave_swallow("isl");
-    radula_behave_swallow("gcc");
-}
-
-//
-// General Functions
-//
-
 pub fn radula_behave_ccache_environment() {
     env::set_var(
         constants::RADULA_ENVIRONMENT_PATH,
@@ -755,6 +658,22 @@ pub fn radula_behave_ccache_environment() {
 pub fn radula_behave_construct(x: &'static str, y: &'static str) {
     // We only require `nom` and `ver` from the `ceras` file
     let z: [String; 8] = radula_behave_source(x);
+
+    // Perform swallow within construct since it makes more sense that way
+    match y {
+        // `gcc` will be removed from the list below when dependency resolution is working
+        "gcc" => {
+            radula_behave_swallow("gmp");
+            radula_behave_swallow("mpfr");
+            radula_behave_swallow("mpc");
+            radula_behave_swallow("isl");
+        }
+        "hydroskeleton" => (),
+        "libgcc" | "libgomp" | "libstdc++-v3" => radula_behave_swallow("gcc"),
+        "linux-headers" => radula_behave_swallow("linux"),
+        "musl-headers" | "musl-utils" => radula_behave_swallow("musl"),
+        _ => radula_behave_swallow(y),
+    }
 
     Command::new(constants::RADULA_TOOTH_SHELL)
         .args(&[
@@ -1129,7 +1048,6 @@ pub fn radula_options() {
                                 constants::RADULA_ARCHITECTURE_X86_64,
                             );
 
-                            radula_behave_bootstrap_toolchain_swallow();
                             radula_behave_bootstrap_toolchain_prepare();
                             radula_behave_bootstrap_toolchain_construct();
                             radula_behave_bootstrap_toolchain_backup();
@@ -1146,7 +1064,6 @@ pub fn radula_options() {
                             radula_behave_flags_environment();
 
                             radula_behave_bootstrap_cross_environment();
-                            radula_behave_bootstrap_cross_swallow();
                             radula_behave_bootstrap_cross_prepare();
 
                             radula_behave_bootstrap_cross_construct();

@@ -176,9 +176,7 @@ pub const RADULA_HELP: &'static str = "USAGE:
 \tradula [ OPTIONS ]
 
 OPTIONS:
-\t-b, --behave \tPerform any of the following behaviors:
-\t             \tbinary, bootstrap, envenomate
-
+\t-b, --behave \tPerform a behavior
 \t-c, --ceras  \tDisplay ceras information
 \t-h, --help   \tDisplay this help message
 \t-v, --version\tDisplay current version number";
@@ -238,15 +236,15 @@ pub const RADULA_HELP_CERAS: &'static str = "USAGE:
 \tradula [ -c | --ceras ] [ OPTIONS ] [ cerata ]
 
 OPTIONS:
-\tc, cnt \tDisplay cerata concentrate(s)\
-\th, help\tDisplay this help message\
-\tn, nom \tDisplay cerata name(s)\
-\ts, sum \tDisplay cerata sha512sum(s)\
-\tu, url \tDisplay cerata source(s)\
-\tv, ver \tDisplay cerata version(s)\
+\tc, cnt \tDisplay cerata concentrate(s)
+\th, help\tDisplay this help message
+\tn, nom \tDisplay cerata name(s)
+\ts, sum \tDisplay cerata sha512sum(s)
+\tu, url \tDisplay cerata source(s)
+\tv, ver \tDisplay cerata version(s)
 \ty, cys \tDisplay cerata cyst(s)";
 
-pub const RADULA_HELP_VERSION: &'static str = "radula version 3.5.3
+pub const RADULA_HELP_VERSION: &'static str = "radula version 3.6.0
 
 Copyright (c) 2018-2021, Firas Khalil Khana
 Distributed under the terms of the ISC License";
