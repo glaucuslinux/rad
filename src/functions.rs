@@ -564,7 +564,7 @@ pub fn radula_behave_bootstrap_environment() {
         .join(
             env::var(constants::RADULA_ENVIRONMENT_PATH)
                 .unwrap()
-                .strip_prefix("/")
+                .strip_prefix(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
                 .unwrap(),
         ),
     );
@@ -649,7 +649,7 @@ pub fn radula_behave_ccache_environment() {
         Path::new(&[constants::RADULA_PATH_CCACHE, ":"].concat()).join(
             env::var(constants::RADULA_ENVIRONMENT_PATH)
                 .unwrap()
-                .strip_prefix("/")
+                .strip_prefix(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
                 .unwrap(),
         ),
     );
@@ -660,19 +660,20 @@ pub fn radula_behave_construct(x: &'static str, y: &'static str) {
     let z: [String; 8] = radula_behave_source(x);
 
     // Perform swallow within construct since it makes more sense that way
-    match y {
+    match x {
         // `gcc` will be removed from the list below when dependency resolution is working
         "gcc" => {
             radula_behave_swallow("gmp");
             radula_behave_swallow("mpfr");
             radula_behave_swallow("mpc");
             radula_behave_swallow("isl");
+            radula_behave_swallow("gcc");
         }
         "hydroskeleton" => (),
         "libgcc" | "libgomp" | "libstdc++-v3" => radula_behave_swallow("gcc"),
         "linux-headers" => radula_behave_swallow("linux"),
         "musl-headers" | "musl-utils" => radula_behave_swallow("musl"),
-        _ => radula_behave_swallow(y),
+        _ => radula_behave_swallow(x),
     }
 
     Command::new(constants::RADULA_TOOTH_SHELL)
@@ -708,26 +709,42 @@ pub fn radula_behave_flags_environment() {}
 pub fn radula_behave_pkg_config_environment() {
     env::set_var(
         constants::RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR,
-        constants::RADULA_PATH_PKG_CONFIG_LIBDIR_PATH,
+        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap()).join(
+            constants::RADULA_PATH_PKG_CONFIG_LIBDIR_PATH
+                .strip_prefix(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
+                .unwrap(),
+        ),
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_PKG_CONFIG_PATH,
-        constants::RADULA_PATH_PKG_CONFIG_LIBDIR_PATH,
+        env::var(constants::RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR).unwrap(),
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_PKG_CONFIG_SYSROOT_DIR,
-        constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR,
+        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap()).join(
+            constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR
+                .strip_prefix(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
+                .unwrap(),
+        ),
     );
 
     // These environment variables are only `pkgconf` specific, but setting them
     // won't do any harm...
     env::set_var(
         constants::RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_INCLUDE_PATH,
-        constants::RADULA_PATH_PKG_CONFIG_SYSTEM_INCLUDE_PATH,
+        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap()).join(
+            constants::RADULA_PATH_PKG_CONFIG_SYSTEM_INCLUDE_PATH
+                .strip_prefix(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
+                .unwrap(),
+        ),
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_LIBRARY_PATH,
-        constants::RADULA_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH,
+        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap()).join(
+            constants::RADULA_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH
+                .strip_prefix(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
+                .unwrap(),
+        ),
     );
 }
 
@@ -1037,16 +1054,13 @@ pub fn radula_options() {
 
                             radula_behave_bootstrap_initialize();
 
-                            // Only including cross environment for clean to work
-                            radula_behave_bootstrap_cross_environment();
+                            radula_behave_bootstrap_architecture_environment(
+                                constants::RADULA_ARCHITECTURE_X86_64,
+                            );
 
                             radula_behave_bootstrap_toolchain_environment();
 
                             radula_behave_bootstrap_clean();
-
-                            radula_behave_bootstrap_architecture_environment(
-                                constants::RADULA_ARCHITECTURE_X86_64,
-                            );
 
                             radula_behave_bootstrap_toolchain_prepare();
                             radula_behave_bootstrap_toolchain_construct();
