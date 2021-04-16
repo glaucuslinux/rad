@@ -123,7 +123,6 @@ pub const RADULA_ENVIRONMENT_DIRECTORY_CERATA: &'static str = "CERD";
 
 pub const RADULA_ENVIRONMENT_DIRECTORY_CROSS: &'static str = "CRSD";
 pub const RADULA_ENVIRONMENT_DIRECTORY_CROSS_BUILDS: &'static str = "XBLD";
-pub const RADULA_ENVIRONMENT_DIRECTORY_CROSS_LOGS: &'static str = "XLOG";
 pub const RADULA_ENVIRONMENT_DIRECTORY_CROSS_SOURCES: &'static str = "XSRC";
 pub const RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY: &'static str = "XTMP";
 
@@ -134,9 +133,12 @@ pub const RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY: &'static str = "TMPD";
 
 pub const RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN: &'static str = "TLCD";
 pub const RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_BUILDS: &'static str = "TBLD";
-pub const RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_LOGS: &'static str = "TLOG";
 pub const RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_SOURCES: &'static str = "TSRC";
 pub const RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY: &'static str = "TTMP";
+
+// Files
+pub const RADULA_ENVIRONMENT_FILE_CROSS_LOG: &'static str = "XLOG";
+pub const RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG: &'static str = "TLOG";
 
 // Paths
 pub const RADULA_ENVIRONMENT_PATH: &'static str = "PATH";
@@ -167,6 +169,14 @@ pub const RADULA_ENVIRONMENT_TOOTH_UMOUNT: &'static str = "UMOUNT";
 // Tuples
 pub const RADULA_ENVIRONMENT_TUPLE_BUILD: &'static str = "BLD";
 pub const RADULA_ENVIRONMENT_TUPLE_TARGET: &'static str = "TGT";
+
+//
+// Files
+//
+
+pub const RADULA_FILE_CHARSET_ALIAS: &'static str = "charset.alias";
+pub const RADULA_FILE_CONFIG_GUESS: &'static str = "binutils/config.guess";
+pub const RADULA_FILE_GLAUCUS_IMAGE: &'static str = "glaucus.img";
 
 //
 // Help Messages
@@ -256,13 +266,7 @@ Distributed under the terms of the ISC License";
 // Default `ccache` directories on both Arch and Fedora
 pub const RADULA_PATH_CCACHE: &'static str = "/usr/lib/ccache/bin:/usr/lib64/ccache";
 
-pub const RADULA_PATH_CHARSET_ALIAS: &'static str = "charset.alias";
-
-pub const RADULA_PATH_CONFIG_GUESS: &'static str = "binutils/config.guess";
-
 pub const RADULA_PATH_ETC: &'static str = "etc";
-
-pub const RADULA_PATH_GLAUCUS_IMAGE: &'static str = "glaucus.img";
 
 pub const RADULA_PATH_LIB: &'static str = "lib";
 

@@ -20,7 +20,7 @@ fn radula_behave_bootstrap_architecture_environment(x: &'static str) {
         String::from_utf8_lossy(
             &Command::new(
                 Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA).unwrap())
-                    .join(constants::RADULA_PATH_CONFIG_GUESS),
+                    .join(constants::RADULA_FILE_CONFIG_GUESS),
             )
             .output()
             .unwrap()
@@ -411,11 +411,7 @@ fn radula_behave_bootstrap_cross_prepare() {
     );
     fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_BUILDS).unwrap());
 
-    // remove `logs/cross.log`
-    //fs::remove_file(
-    //Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS).unwrap())
-    //.join(constants::SOME_PATH_TO_LOG_FILE),
-    //);
+    fs::remove_file(env::var(constants::RADULA_ENVIRONMENT_FILE_CROSS_LOG).unwrap());
 
     fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_SOURCES).unwrap());
 }
@@ -470,7 +466,7 @@ fn radula_behave_bootstrap_cross_strip() {
     fs::remove_file(
         Path::new(&x)
             .join(constants::RADULA_PATH_LIB)
-            .join(constants::RADULA_PATH_CHARSET_ALIAS),
+            .join(constants::RADULA_FILE_CHARSET_ALIAS),
     );
 }
 
@@ -481,7 +477,7 @@ fn radula_behave_bootstrap_distclean() {
 
     fs::remove_file(
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS).unwrap())
-            .join(constants::RADULA_PATH_GLAUCUS_IMAGE),
+            .join(constants::RADULA_FILE_GLAUCUS_IMAGE),
     );
 
     radula_behave_remove_dir_all_force(
@@ -625,6 +621,8 @@ fn radula_behave_bootstrap_toolchain_prepare() {
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_BUILDS).unwrap(),
     );
     fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_BUILDS).unwrap());
+
+    fs::remove_file(env::var(constants::RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG).unwrap());
 
     fs::create_dir_all(
         env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_SOURCES).unwrap(),
@@ -1068,9 +1066,7 @@ pub fn radula_options() {
 
                             radula_behave_bootstrap_cross_environment();
                             radula_behave_bootstrap_cross_prepare();
-
                             radula_behave_bootstrap_cross_construct();
-
                             radula_behave_bootstrap_cross_strip();
                         }
                         _ => {
