@@ -5,6 +5,7 @@ https://app.codacy.com/gh/glaucuslinux/radula-rs?utm_source=github.com&utm_mediu
 [![Join the chat at https://gitter.im/glaucuslinux/radula-rs](
 https://badges.gitter.im/glaucuslinux/radula-rs.svg)](
 https://gitter.im/glaucuslinux/radula-rs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fglaucuslinux%2Fradula-rs.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fglaucuslinux%2Fradula-rs?ref=badge_shield)
 
 glaucus's radula in Rust
 
@@ -22,3 +23,7 @@ glaucus's radula in Rust
 * [NotABug](https://notabug.org/glaucuslinux/radula-rs)
 * [SourceForge](https://git.code.sf.net/p/glaucuslinux/radula-rs)
 * [SourceHut](https://git.sr.ht/~glaucuslinux/radula-rs)
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fglaucuslinux%2Fradula-rs.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fglaucuslinux%2Fradula-rs?ref=badge_large)
