@@ -883,6 +883,19 @@ fn radula_behave_teeth_environment() {
         ]
         .concat(),
     );
+
+    // Use `mawk` as the default AWK implementation
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_TOOTH_AWK,
+        constants::RADULA_TOOTH_MAWK,
+    );
+
+    // Use `byacc` as the default YACC implementation
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_TOOTH_BISON,
+        constants::RADULA_TOOTH_BYACC,
+    );
+
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_CHMOD,
         [
@@ -901,6 +914,25 @@ fn radula_behave_teeth_environment() {
         ]
         .concat(),
     );
+
+    // Use `flex` as the default LEX implementation (will be replaced by `reflex` in the future)
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_TOOTH_FLEX,
+        constants::RADULA_TOOTH_FLEX,
+    );
+
+    // Use `mawk` as the default AWK implementation
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_TOOTH_GAWK,
+        constants::RADULA_TOOTH_MAWK,
+    );
+
+    // Use `flex` as the default LEX implementation (will be replaced by `reflex` in the future)
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_TOOTH_LEX,
+        constants::RADULA_TOOTH_FLEX,
+    );
+
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_LN,
         [
@@ -917,7 +949,7 @@ fn radula_behave_teeth_environment() {
         constants::RADULA_TOOTH_MAKE,
     );
     env::set_var(
-        constants::RADULA_ENVIRONMENT_TOOTH_MAKE_FLAGS,
+        constants::RADULA_ENVIRONMENT_TOOTH_MAKEFLAGS,
         [
             "-j",
             // We need to trim the output or parse won't work...
@@ -933,7 +965,7 @@ fn radula_behave_teeth_environment() {
                 * 1.5)
                 .to_string(),
             " ",
-            constants::RADULA_TOOTH_MAKE_FLAGS,
+            constants::RADULA_TOOTH_MAKEFLAGS,
         ]
         .concat(),
     );
@@ -965,6 +997,13 @@ fn radula_behave_teeth_environment() {
         ]
         .concat(),
     );
+
+    // Use `pkgconf` as the default PKG_CONFIG implementation
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_TOOTH_PKG_CONFIG,
+        constants::RADULA_TOOTH_PKGCONF,
+    );
+
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_RM,
         [
@@ -991,6 +1030,12 @@ fn radula_behave_teeth_environment() {
             constants::RADULA_TOOTH_UMOUNT_FLAGS,
         ]
         .concat(),
+    );
+
+    // Use `byacc` as the default YACC implementation
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_TOOTH_YACC,
+        constants::RADULA_TOOTH_BYACC,
     );
 }
 
@@ -1085,6 +1130,7 @@ pub fn radula_options() {
 
                             radula_behave_bootstrap_cross_environment_directories();
                             radula_behave_bootstrap_cross_environment_teeth();
+
                             radula_behave_bootstrap_cross_prepare();
                             radula_behave_bootstrap_cross_construct();
                             radula_behave_bootstrap_cross_strip();

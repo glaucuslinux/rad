@@ -154,17 +154,24 @@ pub const RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_LIBRARY_PATH: &'static str =
 
 // Teeth
 pub const RADULA_ENVIRONMENT_TOOTH_AUTORECONF: &'static str = "AUTORECONF";
+pub const RADULA_ENVIRONMENT_TOOTH_AWK: &'static str = "AWK";
+pub const RADULA_ENVIRONMENT_TOOTH_BISON: &'static str = "BISON";
 pub const RADULA_ENVIRONMENT_TOOTH_CHMOD: &'static str = "CHMOD";
 pub const RADULA_ENVIRONMENT_TOOTH_CHOWN: &'static str = "CHOWN";
+pub const RADULA_ENVIRONMENT_TOOTH_FLEX: &'static str = "FLEX";
+pub const RADULA_ENVIRONMENT_TOOTH_GAWK: &'static str = "GAWK";
+pub const RADULA_ENVIRONMENT_TOOTH_LEX: &'static str = "LEX";
 pub const RADULA_ENVIRONMENT_TOOTH_LN: &'static str = "LN";
 pub const RADULA_ENVIRONMENT_TOOTH_MAKE: &'static str = "MAKE";
-pub const RADULA_ENVIRONMENT_TOOTH_MAKE_FLAGS: &'static str = "MAKEFLAGS";
+pub const RADULA_ENVIRONMENT_TOOTH_MAKEFLAGS: &'static str = "MAKEFLAGS";
 pub const RADULA_ENVIRONMENT_TOOTH_MKDIR: &'static str = "MKDIR";
 pub const RADULA_ENVIRONMENT_TOOTH_MV: &'static str = "MV";
 pub const RADULA_ENVIRONMENT_TOOTH_PATCH: &'static str = "PATCH";
+pub const RADULA_ENVIRONMENT_TOOTH_PKG_CONFIG: &'static str = "PKG_CONFIG";
 pub const RADULA_ENVIRONMENT_TOOTH_RM: &'static str = "RM";
 pub const RADULA_ENVIRONMENT_TOOTH_RSYNC: &'static str = "RSYNC";
 pub const RADULA_ENVIRONMENT_TOOTH_UMOUNT: &'static str = "UMOUNT";
+pub const RADULA_ENVIRONMENT_TOOTH_YACC: &'static str = "YACC";
 
 // Tuples
 pub const RADULA_ENVIRONMENT_TUPLE_BUILD: &'static str = "BLD";
@@ -291,6 +298,8 @@ pub const RADULA_TOOTH_AUTORECONF_FLAGS: &'static str = "-fvis";
 // for running shell scripts (we're using `dash` for that)
 pub const RADULA_TOOTH_BASH: &'static str = "bash";
 
+pub const RADULA_TOOTH_BYACC: &'static str = "byacc";
+
 // We're not going to use any hashing crate/library
 pub const RADULA_TOOTH_CHECKSUM: &'static str = "sha512sum";
 pub const RADULA_TOOTH_CHECKSUM_FLAGS: &'static str = "-c";
@@ -306,6 +315,8 @@ pub const RADULA_TOOTH_CURL_FLAGS: &'static str = "-Lo";
 
 pub const RADULA_TOOTH_FIND: &'static str = "find";
 
+pub const RADULA_TOOTH_FLEX: &'static str = "flex";
+
 // No default flags were included for `git` because there are many
 pub const RADULA_TOOTH_GIT: &'static str = "git";
 
@@ -313,7 +324,9 @@ pub const RADULA_TOOTH_LN: &'static str = "ln";
 pub const RADULA_TOOTH_LN_FLAGS: &'static str = "-fnsv";
 
 pub const RADULA_TOOTH_MAKE: &'static str = "make";
-pub const RADULA_TOOTH_MAKE_FLAGS: &'static str = "V=1";
+pub const RADULA_TOOTH_MAKEFLAGS: &'static str = "V=1";
+
+pub const RADULA_TOOTH_MAWK: &'static str = "mawk";
 
 // Full path is being used here to not overlap with the install() function in
 // .ceras files
@@ -328,6 +341,10 @@ pub const RADULA_TOOTH_NPROC: &'static str = "nproc";
 
 pub const RADULA_TOOTH_PATCH: &'static str = "patch";
 pub const RADULA_TOOTH_PATCH_FLAGS: &'static str = "-v";
+
+pub const RADULA_TOOTH_PKGCONF: &'static str = "pkgconf";
+
+pub const RADULA_TOOTH_REFLEX: &'static str = "reflex";
 
 pub const RADULA_TOOTH_RM: &'static str = "rm";
 pub const RADULA_TOOTH_RM_FLAGS: &'static str = "-frv";
