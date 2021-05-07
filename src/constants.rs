@@ -261,7 +261,7 @@ OPTIONS:
 \tv, ver \tDisplay cerata version(s)
 \ty, cys \tDisplay cerata cyst(s)";
 
-pub const RADULA_HELP_VERSION: &'static str = "radula version 3.6.1
+pub const RADULA_HELP_VERSION: &'static str = "radula version 3.6.2
 
 Copyright (c) 2018-2021, Firas Khalil Khana
 Distributed under the terms of the ISC License";

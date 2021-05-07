@@ -778,7 +778,7 @@ fn radula_behave_remove_dir_all_force(x: &str) {
 
 // Sources the `ceras` file and returns an array of strings representing the
 // variables inside of it
-fn radula_behave_source(x: &'static str) -> [String; 8] {
+fn radula_behave_source(x: &str) -> [String; 8] {
     // We can't have a `"".to_string()` copied 8 times, which is why we're using
     // a constant beforehand
     const S: String = String::new();
@@ -1188,17 +1188,48 @@ pub fn radula_options() {
                 }
             },
             "-c" | "--ceras" => {
-                match x.next().as_deref().unwrap_or_default() {
-                    "c" | "cnt" => println!("Do nothing"),
-                    "h" | "help" => radula_help(constants::RADULA_HELP_CERAS),
-                    "n" | "nom" => println!("Do nothing"),
-                    "s" | "sum" => println!("Do nothing"),
-                    "u" | "url" => println!("Do nothing"),
-                    "v" | "ver" => println!("Do nothing"),
-                    "y" | "cys" => println!("Do nothing"),
-                    _ => {
-                        radula_help(constants::RADULA_HELP_CERAS);
-                        exit(1);
+                // This needs to be changed to "/usr/cerata" (or "/var/cerata" or
+                // "/var/cache/cerata") on a glaucus system as `CERD` is known...
+                env::set_var(
+                    constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA,
+                    fs::canonicalize("..")
+                        .unwrap()
+                        .join(constants::RADULA_DIRECTORY_CERATA),
+                );
+
+                while let Some(z) = x.next().as_deref() {
+                    //let z = String::from(x.next().as_deref().unwrap_or_default());
+
+                    if Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA).unwrap())
+                        .join(&z)
+                        .join("ceras")
+                        .is_file()
+                    {
+                        for w in radula_behave_source(&z).iter() {
+                            println!("{}", w);
+                        }
+                    } else {
+                        let w: [String; 8] =
+                            radula_behave_source(x.next().as_deref().unwrap_or_default());
+                        match z {
+                            "c" | "cnt" => println!("{}", w[6]),
+                            "h" | "help" => radula_help(constants::RADULA_HELP_CERAS),
+                            "n" | "nom" => println!("{}", w[0]),
+                            "s" | "sum" => println!("{}", w[4]),
+                            "u" | "url" => println!("{}", w[3]),
+                            "v" | "ver" => {
+                                println!("{}", w[1]);
+                                if w[1] == constants::RADULA_TOOTH_GIT {
+                                    //if !w[2].is_empty() {
+                                    println!("{}", w[2]);
+                                };
+                            }
+                            "y" | "cys" => println!("{}", w[5]),
+                            _ => {
+                                radula_help(constants::RADULA_HELP_CERAS);
+                                exit(1);
+                            }
+                        };
                     }
                 }
                 return;
