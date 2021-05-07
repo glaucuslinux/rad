@@ -174,6 +174,20 @@ fn radula_behave_bootstrap_architecture_environment(x: &'static str) {
 
 fn radula_behave_bootstrap_clean() {
     radula_behave_remove_dir_all_force(
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap(),
+    );
+
+    radula_behave_remove_dir_all_force(
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN).unwrap(),
+    );
+
+    radula_behave_remove_dir_all_force(
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_BUILDS).unwrap(),
+    );
+
+    fs::remove_file(env::var(constants::RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG).unwrap());
+
+    radula_behave_remove_dir_all_force(
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS).unwrap(),
     );
 }
@@ -427,6 +441,7 @@ fn radula_behave_bootstrap_cross_prepare() {
 
     fs::remove_file(env::var(constants::RADULA_ENVIRONMENT_FILE_CROSS_LOG).unwrap());
 
+    // Create the `src` directory if it doesn't exist, but don't remove it if it does exist!
     fs::create_dir_all(
         env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_SOURCES).unwrap(),
     );
@@ -634,25 +649,15 @@ fn radula_behave_bootstrap_toolchain_environment() {
 }
 
 fn radula_behave_bootstrap_toolchain_prepare() {
-    radula_behave_remove_dir_all_force(
-        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap(),
-    );
     fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap());
 
-    radula_behave_remove_dir_all_force(
-        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN).unwrap(),
-    );
     fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN).unwrap());
 
-    radula_behave_remove_dir_all_force(
-        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_BUILDS).unwrap(),
-    );
     fs::create_dir_all(
         env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_BUILDS).unwrap(),
     );
 
-    fs::remove_file(env::var(constants::RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG).unwrap());
-
+    // Create the `src` directory if it doesn't exist, but don't remove it if it does exist!
     fs::create_dir_all(
         env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_SOURCES).unwrap(),
     );
@@ -674,7 +679,7 @@ fn radula_behave_construct(x: &'static str, y: &'static str) {
     // We only require `nom` and `ver` from the `ceras` file
     let z: [String; 8] = radula_behave_source(x);
 
-    // Perform swallow within construct since it makes more sense that way
+    // Perform swallow within construct for now (this may not be the best approach for parallelism)
     match x {
         // `gcc` will be removed from the list below when dependency resolution is working
         "gcc" => {
@@ -1090,7 +1095,7 @@ pub fn radula_options() {
                             println!("distclean complete");
                         }
                         "h" | "help" => radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP),
-                        "i" | "image" => println!("Do nothing"),
+                        "i" | "image" => println!("img complete"),
                         "l" | "list" => radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP_LIST),
                         "r" | "require" => {
                             println!("Checking if host has all required packages...")
@@ -1111,9 +1116,16 @@ pub fn radula_options() {
 
                             radula_behave_bootstrap_toolchain_environment();
 
+                            // Needed for clean to work...
+                            radula_behave_bootstrap_cross_environment_directories();
+
+                            radula_behave_bootstrap_clean();
+
                             radula_behave_bootstrap_toolchain_prepare();
                             radula_behave_bootstrap_toolchain_construct();
                             radula_behave_bootstrap_toolchain_backup();
+
+                            println!("toolchain complete");
                         }
                         "x" | "cross" => {
                             radula_behave_bootstrap_environment();
@@ -1134,6 +1146,8 @@ pub fn radula_options() {
                             radula_behave_bootstrap_cross_prepare();
                             radula_behave_bootstrap_cross_construct();
                             radula_behave_bootstrap_cross_strip();
+
+                            println!("cross complete");
                         }
                         _ => {
                             radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP);
