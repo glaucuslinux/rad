@@ -1198,8 +1198,6 @@ pub fn radula_options() {
                 );
 
                 while let Some(z) = x.next().as_deref() {
-                    //let z = String::from(x.next().as_deref().unwrap_or_default());
-
                     if Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA).unwrap())
                         .join(&z)
                         .join("ceras")
@@ -1220,7 +1218,6 @@ pub fn radula_options() {
                             "v" | "ver" => {
                                 println!("{}", w[1]);
                                 if w[1] == constants::RADULA_TOOTH_GIT {
-                                    //if !w[2].is_empty() {
                                     println!("{}", w[2]);
                                 };
                             }
