@@ -340,7 +340,7 @@ pub const RADULA_TOOTH_MV_FLAGS: &'static str = "-v";
 pub const RADULA_TOOTH_NPROC: &'static str = "nproc";
 
 pub const RADULA_TOOTH_PATCH: &'static str = "patch";
-pub const RADULA_TOOTH_PATCH_FLAGS: &'static str = "-v";
+pub const RADULA_TOOTH_PATCH_FLAGS: &'static str = "--verbose";
 
 pub const RADULA_TOOTH_PKGCONF: &'static str = "pkgconf";
 
