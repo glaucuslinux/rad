@@ -10,7 +10,7 @@
 //
 
 pub const RADULA_ARCHITECTURE_CERATA: &'static str = "--with-gcc-arch=";
-pub const RADULA_ARCHITECTURE_TUPLE_TARGET: &'static str = "glaucus-linux-musl";
+pub const RADULA_ARCHITECTURE_TUPLE_TARGET: &'static str = "-glaucus-linux-musl";
 
 // aarch64
 pub const RADULA_ARCHITECTURE_AARCH64: &'static str = "aarch64";
@@ -28,6 +28,7 @@ pub const RADULA_ARCHITECTURE_ARMV6ZK_GCC_CONFIGURATION: &'static str = "--with-
 pub const RADULA_ARCHITECTURE_ARMV6ZK_LINUX: &'static str = "arm";
 pub const RADULA_ARCHITECTURE_ARMV6ZK_LINUX_CONFIGURATION: &'static str = "bcm2835_";
 pub const RADULA_ARCHITECTURE_ARMV6ZK_LINUX_IMAGE: &'static str = "arch/arm/boot/zImage";
+pub const RADULA_ARCHITECTURE_ARMV6ZK_MUSL_LINKER: &'static str = "hf";
 pub const RADULA_ARCHITECTURE_ARMV6ZK_TUPLE_TARGET: &'static str = "eabihf";
 
 // i686
@@ -94,6 +95,7 @@ pub const RADULA_ENVIRONMENT_ARCHITECTURE_LINUX: &'static str = "LARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION: &'static str = "LCARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE: &'static str = "LIARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_MUSL: &'static str = "MARCH";
+pub const RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER: &'static str = "MLARCH";
 
 // Cross
 pub const RADULA_ENVIRONMENT_CROSS_ARCHIVER: &'static str = "AR";
@@ -261,7 +263,7 @@ OPTIONS:
 \tv, ver \tDisplay cerata version(s)
 \ty, cys \tDisplay cerata cyst(s)";
 
-pub const RADULA_HELP_VERSION: &'static str = "radula version 3.6.2
+pub const RADULA_HELP_VERSION: &'static str = "radula version 3.6.3
 
 Copyright (c) 2018-2021, Firas Khalil Khana
 Distributed under the terms of the ISC License";
