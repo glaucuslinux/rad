@@ -443,8 +443,8 @@ fn radula_behave_bootstrap_cross_prepare() {
             .spawn();
     };
 
-    radula_behave_bootstrap_restore(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS);
-    radula_behave_bootstrap_restore(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN);
+    radula_behave_bootstrap_restore(constants::RADULA_DIRECTORY_CROSS);
+    radula_behave_bootstrap_restore(constants::RADULA_DIRECTORY_TOOLCHAIN);
 
     radula_behave_remove_dir_all_force(
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS).unwrap(),
