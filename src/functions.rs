@@ -239,7 +239,6 @@ fn radula_behave_bootstrap_cross_construct() {
     radula_behave_construct_cross("diffutils");
     radula_behave_construct_cross("file");
     radula_behave_construct_cross("findutils");
-    radula_behave_construct_cross("grep");
     radula_behave_construct_cross("hostname");
     radula_behave_construct_cross("sed");
     radula_behave_construct_cross("which");
@@ -257,8 +256,12 @@ fn radula_behave_bootstrap_cross_construct() {
     radula_behave_construct_cross("zstd");
     radula_behave_construct_cross("libarchive");
 
-    // Userland (Requires Compression `zstd`)
+    // Userland (Requires Compression)
     radula_behave_construct_cross("plocate");
+    radula_behave_construct_cross("ugrep");
+
+    // Development
+    radula_behave_construct_cross("gcc");
 
     // Synchronization
     radula_behave_construct_cross("rsync");
@@ -717,7 +720,7 @@ fn radula_behave_construct(x: &'static str, y: &'static str) {
         .args(&[
             constants::RADULA_TOOTH_SHELL_FLAGS,
             &format!(
-                // `ceras` and `*.ceras` files are only using `nom` and `ver`.
+                // `ceras` and stage files are only using `nom` and `ver`.
                 //
                 // All basic functions need to be called together to prevent the loss of the
                 // current working directory, otherwise we'd have to store it and pass it or `cd`
@@ -729,7 +732,7 @@ fn radula_behave_construct(x: &'static str, y: &'static str) {
                 z[1],
                 Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA).unwrap())
                     .join(x)
-                    .join([y, ".ceras"].concat())
+                    .join(y)
                     .to_str()
                     .unwrap()
             ),
@@ -1204,8 +1207,8 @@ pub fn radula_options() {
                 }
             },
             "-c" | "--ceras" => {
-                // This needs to be changed to "/usr/cerata" (or "/var/cerata" or
-                // "/var/cache/cerata") on a glaucus system as `CERD` is known...
+                // This needs to be changed to "/var/db/radula/clusters/glaucus" on a glaucus
+                // system as `CERD` is known.
                 env::set_var(
                     constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA,
                     fs::canonicalize("..")

@@ -330,8 +330,7 @@ pub const RADULA_TOOTH_MAKEFLAGS: &'static str = "V=1";
 
 pub const RADULA_TOOTH_MAWK: &'static str = "mawk";
 
-// Full path is being used here to not overlap with the install() function in
-// .ceras files
+// Full path is being used here to not overlap with the install() function in stage files
 pub const RADULA_TOOTH_MKDIR: &'static str = "/usr/bin/install";
 pub const RADULA_TOOTH_MKDIR_FLAGS: &'static str = "-dv";
 
