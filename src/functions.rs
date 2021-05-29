@@ -700,6 +700,7 @@ fn radula_behave_construct(x: &'static str, y: &'static str) {
 
     // Perform swallow within construct for now (this may not be the best approach for parallelism)
     match x {
+        "elfutils-libelf" => radula_behave_swallow("elfutils"),
         // `gcc` will be removed from the list below when dependency resolution is working
         "gcc" => {
             radula_behave_swallow("gmp");
@@ -711,6 +712,7 @@ fn radula_behave_construct(x: &'static str, y: &'static str) {
         "hydroskeleton" => {}
         "libgcc" | "libgomp" | "libstdc++-v3" => radula_behave_swallow("gcc"),
         "linux-headers" => radula_behave_swallow("linux"),
+        "lksh" => radula_behave_swallow("mksh"),
         "musl-headers" | "musl-utils" => radula_behave_swallow("musl"),
         _ => radula_behave_swallow(x),
     }
