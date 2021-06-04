@@ -23,7 +23,7 @@ pub const RADULA_ARCHITECTURE_AARCH64_LINUX_IMAGE: &'static str = "arch/arm64/bo
 
 // armv6zk
 pub const RADULA_ARCHITECTURE_ARMV6ZK: &'static str = "armv6zk";
-pub const RADULA_ARCHITECTURE_ARMV6ZK_FLAGS: &'static str = "-mabi=aapcs-linux -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -mcpu=arm1176jzf-s -mfpu=vfpv2";
+pub const RADULA_ARCHITECTURE_ARMV6ZK_FLAGS: &'static str = "-mabi=aapcs-linux -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -mcpu=arm1176jzf-s -mfpu=vfpv2 -mtls-dialect=gnu2";
 pub const RADULA_ARCHITECTURE_ARMV6ZK_GCC_CONFIGURATION: &'static str = "--with-arch=armv6zk --with-tune=arm1176jzf-s --with-abi=aapcs-linux --with-fpu=vfpv2 --with-float=hard";
 pub const RADULA_ARCHITECTURE_ARMV6ZK_LINUX: &'static str = "arm";
 pub const RADULA_ARCHITECTURE_ARMV6ZK_LINUX_CONFIGURATION: &'static str = "bcm2835_";
@@ -43,7 +43,7 @@ pub const RADULA_ARCHITECTURE_I686_LINUX_IMAGE: &'static str = "arch/x86/boot/bz
 // x86-64
 pub const RADULA_ARCHITECTURE_X86_64: &'static str = "x86-64";
 pub const RADULA_ARCHITECTURE_X86_64_FLAGS: &'static str =
-    "-march=x86-64 -mtune=generic -mabi=sysv";
+    "-march=x86-64 -mtune=generic -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2";
 pub const RADULA_ARCHITECTURE_X86_64_GCC_CONFIGURATION: &'static str =
     "--with-arch=x86-64 --with-tune=generic";
 pub const RADULA_ARCHITECTURE_X86_64_LINUX: &'static str = "x86_64";
@@ -142,6 +142,11 @@ pub const RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_SOURCES: &'static str
 pub const RADULA_ENVIRONMENT_FILE_CROSS_LOG: &'static str = "XLOG";
 pub const RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG: &'static str = "TLOG";
 
+// Flags
+pub const RADULA_ENVIRONMENT_FLAGS_C_COMPILER: &'static str = "CFLAGS";
+pub const RADULA_ENVIRONMENT_FLAGS_CXX_COMPILER: &'static str = "CXXFLAGS";
+pub const RADULA_ENVIRONMENT_FLAGS_LINKER: &'static str = "LDFLAGS";
+
 // Paths
 pub const RADULA_ENVIRONMENT_PATH: &'static str = "PATH";
 
@@ -186,6 +191,14 @@ pub const RADULA_ENVIRONMENT_TUPLE_TARGET: &'static str = "TGT";
 pub const RADULA_FILE_CHARSET_ALIAS: &'static str = "charset.alias";
 pub const RADULA_FILE_CONFIG_GUESS: &'static str = "binutils/config.guess";
 pub const RADULA_FILE_GLAUCUS_IMAGE: &'static str = "glaucus.img";
+
+//
+// Flags
+//
+
+pub const RADULA_FLAGS_C_COMPILER: &'static str = "-pipe -fopenmp -g0 -Ofast -fomit-frame-pointer -fmerge-all-constants -fmodulo-sched -fmodulo-sched-allow-regmoves -fgcse-sm -fgcse-las -fdevirtualize-at-ltrans -fira-loop-pressure -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -floop-parallelize-all -ftree-parallelize-loops=8 -fvariable-expansion-in-unroller -falign-functions=32 -flimit-function-alignment -flto=auto -flto-compression-level=19 -fuse-linker-plugin -ftracer -funroll-loops -ffunction-sections -fdata-sections -fno-stack-protector -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt";
+pub const RADULA_FLAGS_CXX_COMPILER: &'static str = "-fno-rtti -fvisibility-inlines-hidden";
+pub const RADULA_FLAGS_LINKER: &'static str = "-Wl,--strip-all -Wl,-z,noexecstack,-z,now,-z,relro -Wl,--as-needed -Wl,--gc-sections -Wl,--sort-common -Wl,--hash-style=gnu -lgomp";
 
 //
 // Help Messages
