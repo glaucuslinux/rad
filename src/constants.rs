@@ -33,21 +33,22 @@ pub const RADULA_ARCHITECTURE_ARMV6ZK_TUPLE_TARGET: &'static str = "eabihf";
 
 // i686
 pub const RADULA_ARCHITECTURE_I686: &'static str = "i686";
-pub const RADULA_ARCHITECTURE_I686_FLAGS: &'static str = "-march=i686 -mtune=generic -mabi=sysv";
+pub const RADULA_ARCHITECTURE_I686_FLAGS: &'static str =
+    "-march=i686 -mtune=generic -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2";
 pub const RADULA_ARCHITECTURE_I686_GCC_CONFIGURATION: &'static str =
     "--with-arch=i686 --with-tune=generic";
 pub const RADULA_ARCHITECTURE_I686_LINUX: &'static str = "i386";
 pub const RADULA_ARCHITECTURE_I686_LINUX_CONFIGURATION: &'static str = "i386_";
 pub const RADULA_ARCHITECTURE_I686_LINUX_IMAGE: &'static str = "arch/x86/boot/bzImage";
 
-// x86-64
-pub const RADULA_ARCHITECTURE_X86_64: &'static str = "x86-64";
-pub const RADULA_ARCHITECTURE_X86_64_FLAGS: &'static str =
-    "-march=x86-64 -mtune=generic -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2";
-pub const RADULA_ARCHITECTURE_X86_64_GCC_CONFIGURATION: &'static str =
-    "--with-arch=x86-64 --with-tune=generic";
-pub const RADULA_ARCHITECTURE_X86_64_LINUX: &'static str = "x86_64";
-pub const RADULA_ARCHITECTURE_X86_64_LINUX_CONFIGURATION: &'static str = "x86_64_";
+// x86-64-v3
+pub const RADULA_ARCHITECTURE_X86_64_V3: &'static str = "x86-64";
+pub const RADULA_ARCHITECTURE_X86_64_V3_FLAGS: &'static str =
+    "-march=x86-64-v3 -mtune=generic -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2";
+pub const RADULA_ARCHITECTURE_X86_64_V3_GCC_CONFIGURATION: &'static str =
+    "--with-arch=x86-64-v3 --with-tune=generic";
+pub const RADULA_ARCHITECTURE_X86_64_V3_LINUX: &'static str = "x86_64";
+pub const RADULA_ARCHITECTURE_X86_64_V3_LINUX_CONFIGURATION: &'static str = "x86_64_";
 
 //
 // Cross
@@ -248,10 +249,10 @@ OPTIONS:
 \tx, cross     \tBootstrap a cross compiled glaucus system";
 
 pub const RADULA_HELP_BEHAVE_BOOTSTRAP_LIST: &'static str = "GENOMES (ARCHITECTURES):
-\taarch64,       arm64,        armv8-a
-\tarm,           armv6zk,      bcm2835
-\ti386,          i686,         x86
-\tx86-64,        x86_64";
+\taarch64,     \tarm64,       \tarmv8-a
+\tarm,         \tarmv6zk,     \tbcm2835
+\ti386,        \ti686,        \tx86
+\tx86-64,      \tx86-64-v3,   \tx86_64     \tx86_64-v3    \tx86_64_v3";
 
 pub const RADULA_HELP_BEHAVE_ENVENOMATE: &'static str = "USAGE:
 \tradula [ -b | --behave ] [ e | envenomate ] [ OPTIONS ] [ cerata ]
@@ -268,15 +269,15 @@ pub const RADULA_HELP_CERAS: &'static str = "USAGE:
 \tradula [ -c | --ceras ] [ OPTIONS ] [ cerata ]
 
 OPTIONS:
-\tc, cnt \tDisplay cerata concentrate(s)
-\th, help\tDisplay this help message
-\tn, nom \tDisplay cerata name(s)
-\ts, sum \tDisplay cerata sha512sum(s)
-\tu, url \tDisplay cerata source(s)
-\tv, ver \tDisplay cerata version(s)
-\ty, cys \tDisplay cerata cyst(s)";
+\tc, cnt       \tDisplay cerata concentrate(s)
+\th, help      \tDisplay this help message
+\tn, nom       \tDisplay cerata name(s)
+\ts, sum       \tDisplay cerata sha512sum(s)
+\tu, url       \tDisplay cerata source(s)
+\tv, ver       \tDisplay cerata version(s)
+\ty, cys       \tDisplay cerata cyst(s)";
 
-pub const RADULA_HELP_VERSION: &'static str = "radula version 3.6.3
+pub const RADULA_HELP_VERSION: &'static str = "radula version 3.7.0
 
 Copyright (c) 2018-2021, Firas Khalil Khana
 Distributed under the terms of the ISC License";

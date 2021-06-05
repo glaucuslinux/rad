@@ -144,22 +144,22 @@ fn radula_behave_bootstrap_architecture_environment(x: &'static str) {
                 constants::RADULA_ARCHITECTURE_I686_LINUX,
             );
         }
-        constants::RADULA_ARCHITECTURE_X86_64 => {
+        constants::RADULA_ARCHITECTURE_X86_64_V3 => {
             env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS,
-                constants::RADULA_ARCHITECTURE_X86_64_FLAGS,
+                constants::RADULA_ARCHITECTURE_X86_64_V3_FLAGS,
             );
             env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION,
-                constants::RADULA_ARCHITECTURE_X86_64_GCC_CONFIGURATION,
+                constants::RADULA_ARCHITECTURE_X86_64_V3_GCC_CONFIGURATION,
             );
             env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX,
-                constants::RADULA_ARCHITECTURE_X86_64_LINUX,
+                constants::RADULA_ARCHITECTURE_X86_64_V3_LINUX,
             );
             env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION,
-                constants::RADULA_ARCHITECTURE_X86_64_LINUX_CONFIGURATION,
+                constants::RADULA_ARCHITECTURE_X86_64_V3_LINUX_CONFIGURATION,
             );
             env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE,
@@ -167,16 +167,16 @@ fn radula_behave_bootstrap_architecture_environment(x: &'static str) {
             );
             env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL,
-                constants::RADULA_ARCHITECTURE_X86_64_LINUX,
+                constants::RADULA_ARCHITECTURE_X86_64_V3_LINUX,
             );
             env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER,
-                constants::RADULA_ARCHITECTURE_X86_64_LINUX,
+                constants::RADULA_ARCHITECTURE_X86_64_V3_LINUX,
             );
             env::set_var(
                 constants::RADULA_ENVIRONMENT_TUPLE_TARGET,
                 [
-                    constants::RADULA_ARCHITECTURE_X86_64_LINUX,
+                    constants::RADULA_ARCHITECTURE_X86_64_V3_LINUX,
                     constants::RADULA_ARCHITECTURE_TUPLE_TARGET,
                 ]
                 .concat(),
@@ -1160,7 +1160,7 @@ pub fn radula_options() {
                             radula_behave_bootstrap_initialize();
 
                             radula_behave_bootstrap_architecture_environment(
-                                constants::RADULA_ARCHITECTURE_X86_64,
+                                constants::RADULA_ARCHITECTURE_X86_64_V3,
                             );
 
                             radula_behave_bootstrap_toolchain_environment();
@@ -1184,7 +1184,7 @@ pub fn radula_options() {
                             radula_behave_pkg_config_environment();
 
                             radula_behave_bootstrap_architecture_environment(
-                                constants::RADULA_ARCHITECTURE_X86_64,
+                                constants::RADULA_ARCHITECTURE_X86_64_V3,
                             );
 
                             radula_behave_flags_environment();
