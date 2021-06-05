@@ -198,7 +198,8 @@ pub const RADULA_FILE_GLAUCUS_IMAGE: &'static str = "glaucus.img";
 //
 
 pub const RADULA_FLAGS_C_COMPILER: &'static str = "-pipe -fopenmp -g0 -Ofast -fomit-frame-pointer -fmerge-all-constants -fmodulo-sched -fmodulo-sched-allow-regmoves -fgcse-sm -fgcse-las -fdevirtualize-at-ltrans -fira-loop-pressure -fsched-pressure -fno-semantic-interposition -fipa-pta -fgraphite-identity -floop-nest-optimize -floop-parallelize-all -ftree-parallelize-loops=8 -fvariable-expansion-in-unroller -falign-functions=32 -flimit-function-alignment -flto=auto -flto-compression-level=19 -fuse-linker-plugin -ftracer -funroll-loops -ffunction-sections -fdata-sections -fno-stack-protector -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt";
-pub const RADULA_FLAGS_CXX_COMPILER: &'static str = "-fno-rtti -fvisibility-inlines-hidden";
+pub const RADULA_FLAGS_CXX_COMPILER: &'static str =
+    "-fno-rtti -fvisibility-inlines-hidden -fvisibility=hidden";
 pub const RADULA_FLAGS_LINKER: &'static str = "-Wl,--strip-all -Wl,-z,noexecstack,-z,now,-z,relro -Wl,--as-needed -Wl,--gc-sections -Wl,--sort-common -Wl,--hash-style=gnu -lgomp";
 
 //
