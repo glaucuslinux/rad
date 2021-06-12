@@ -189,7 +189,6 @@ pub const RADULA_ENVIRONMENT_TUPLE_TARGET: &'static str = "TGT";
 // Files
 //
 
-pub const RADULA_FILE_CHARSET_ALIAS: &'static str = "charset.alias";
 pub const RADULA_FILE_CONFIG_GUESS: &'static str = "binutils/config.guess";
 pub const RADULA_FILE_GLAUCUS_IMAGE: &'static str = "glaucus.img";
 
@@ -278,7 +277,7 @@ OPTIONS:
 \tv, ver       \tDisplay cerata version(s)
 \ty, cys       \tDisplay cerata cyst(s)";
 
-pub const RADULA_HELP_VERSION: &'static str = "radula version 3.7.0
+pub const RADULA_HELP_VERSION: &'static str = "radula version 3.8.0
 
 Copyright (c) 2018-2021, Firas Khalil Khana
 Distributed under the terms of the ISC License";
