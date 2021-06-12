@@ -192,17 +192,19 @@ fn radula_behave_bootstrap_clean() {
     );
 
     radula_behave_remove_dir_all_force(
-        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN).unwrap(),
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS).unwrap(),
     );
 
     radula_behave_remove_dir_all_force(
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_BUILDS).unwrap(),
     );
 
-    fs::remove_file(env::var(constants::RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG).unwrap());
-
     radula_behave_remove_dir_all_force(
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS).unwrap(),
+    );
+
+    radula_behave_remove_dir_all_force(
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN).unwrap(),
     );
 }
 
@@ -230,77 +232,77 @@ fn radula_behave_bootstrap_cross_construct() {
     // Permissions
     radula_behave_construct_cross("attr");
     radula_behave_construct_cross("acl");
-    radula_behave_construct_cross("shadow");
-    radula_behave_construct_cross("libressl");
+    //radula_behave_construct_cross("shadow");
+    //radula_behave_construct_cross("libressl");
 
     // Userland
-    radula_behave_construct_cross("toybox");
-    radula_behave_construct_cross("bc");
-    radula_behave_construct_cross("diffutils");
-    radula_behave_construct_cross("file");
-    radula_behave_construct_cross("findutils");
-    radula_behave_construct_cross("hostname");
-    radula_behave_construct_cross("sed");
-    radula_behave_construct_cross("which");
+    //radula_behave_construct_cross("toybox");
+    //radula_behave_construct_cross("bc");
+    //radula_behave_construct_cross("diffutils");
+    //radula_behave_construct_cross("file");
+    //radula_behave_construct_cross("findutils");
+    //radula_behave_construct_cross("hostname");
+    //radula_behave_construct_cross("sed");
+    //radula_behave_construct_cross("which");
 
     // Compression
-    radula_behave_construct_cross("bzip2");
-    radula_behave_construct_cross("lbzip2");
-    radula_behave_construct_cross("lbzip2-utils");
-    radula_behave_construct_cross("lz4");
-    radula_behave_construct_cross("lzlib");
-    radula_behave_construct_cross("plzip");
-    radula_behave_construct_cross("xz");
-    radula_behave_construct_cross("zlib-ng");
-    radula_behave_construct_cross("pigz");
-    radula_behave_construct_cross("zstd");
-    radula_behave_construct_cross("libarchive");
+    //radula_behave_construct_cross("bzip2");
+    //radula_behave_construct_cross("lbzip2");
+    //radula_behave_construct_cross("lbzip2-utils");
+    //radula_behave_construct_cross("lz4");
+    //radula_behave_construct_cross("lzlib");
+    //radula_behave_construct_cross("plzip");
+    //radula_behave_construct_cross("xz");
+    //radula_behave_construct_cross("zlib-ng");
+    //radula_behave_construct_cross("pigz");
+    //radula_behave_construct_cross("zstd");
+    //radula_behave_construct_cross("libarchive");
 
     // Userland (Requires Compression)
-    radula_behave_construct_cross("plocate");
-    radula_behave_construct_cross("ugrep");
+    //radula_behave_construct_cross("plocate");
+    //radula_behave_construct_cross("ugrep");
 
     // Development
-    radula_behave_construct_cross("gcc");
+    //radula_behave_construct_cross("gcc");
 
     // Synchronization
-    radula_behave_construct_cross("rsync");
+    //radula_behave_construct_cross("rsync");
 
     // Shell
-    radula_behave_construct_cross("netbsd-curses");
-    radula_behave_construct_cross("oksh");
-    radula_behave_construct_cross("dash");
+    //radula_behave_construct_cross("netbsd-curses");
+    //radula_behave_construct_cross("oksh");
+    //radula_behave_construct_cross("dash");
 
     // Editors & Pagers
-    radula_behave_construct_cross("libedit");
-    radula_behave_construct_cross("pcre2");
-    radula_behave_construct_cross("less");
-    radula_behave_construct_cross("vim");
-    radula_behave_construct_cross("mandoc");
+    //radula_behave_construct_cross("libedit");
+    //radula_behave_construct_cross("pcre2");
+    //radula_behave_construct_cross("less");
+    //radula_behave_construct_cross("vim");
+    //radula_behave_construct_cross("mandoc");
 
     // Networking
-    radula_behave_construct_cross("libcap");
-    radula_behave_construct_cross("iproute2");
-    radula_behave_construct_cross("iputils");
-    radula_behave_construct_cross("dhcp");
+    //radula_behave_construct_cross("libcap");
+    //radula_behave_construct_cross("iproute2");
+    //radula_behave_construct_cross("iputils");
+    //radula_behave_construct_cross("dhcp");
 
     // Utilities
-    radula_behave_construct_cross("psmisc");
-    radula_behave_construct_cross("procps-ng");
-    radula_behave_construct_cross("util-linux");
-    radula_behave_construct_cross("e2fsprogs");
-    radula_behave_construct_cross("kmod");
-    radula_behave_construct_cross("pciutils");
-    radula_behave_construct_cross("hwids");
-    radula_behave_construct_cross("eudev");
+    //radula_behave_construct_cross("psmisc");
+    //radula_behave_construct_cross("procps-ng");
+    //radula_behave_construct_cross("util-linux");
+    //radula_behave_construct_cross("e2fsprogs");
+    //radula_behave_construct_cross("kmod");
+    //radula_behave_construct_cross("pciutils");
+    //radula_behave_construct_cross("hwids");
+    //radula_behave_construct_cross("eudev");
 
     // Services
-    radula_behave_construct_cross("s6-linux-init");
-    radula_behave_construct_cross("s6-rc");
-    radula_behave_construct_cross("s6-boot-scripts");
+    //radula_behave_construct_cross("s6-linux-init");
+    //radula_behave_construct_cross("s6-rc");
+    //radula_behave_construct_cross("s6-boot-scripts");
 
     // Kernel
-    radula_behave_construct_cross("linux");
+    //radula_behave_construct_cross("linux");
 }
 
 fn radula_behave_bootstrap_cross_environment_directories() {
@@ -318,6 +320,7 @@ fn radula_behave_bootstrap_cross_environment_directories() {
         x.join(constants::RADULA_DIRECTORY_SOURCES),
     );
 
+    // cross log file
     env::set_var(
         constants::RADULA_ENVIRONMENT_FILE_CROSS_LOG,
         [
@@ -458,12 +461,16 @@ fn radula_behave_bootstrap_cross_prepare() {
         env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS).unwrap(),
     );
 
-    fs::remove_file(env::var(constants::RADULA_ENVIRONMENT_FILE_CROSS_LOG).unwrap());
-
     // Create the `src` directory if it doesn't exist, but don't remove it if it does exist!
     fs::create_dir_all(
         env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_SOURCES).unwrap(),
     );
+
+    // Create the `log` directory if it doesn't exist, but don't remove it if it does exist!
+    fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS).unwrap());
+
+    // Remove cross log file if it exists
+    fs::remove_file(env::var(constants::RADULA_ENVIRONMENT_FILE_CROSS_LOG).unwrap());
 }
 
 fn radula_behave_bootstrap_cross_strip() {
@@ -601,6 +608,7 @@ fn radula_behave_bootstrap_environment() {
 
 fn radula_behave_bootstrap_initialize() {
     fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap());
+    fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS).unwrap());
     fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES).unwrap());
 }
 
@@ -619,6 +627,9 @@ fn radula_behave_bootstrap_toolchain_backup() {
 
     radula_behave_bootstrap_backup(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS);
     radula_behave_bootstrap_backup(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN);
+
+    // Backup toolchain log file
+    radula_behave_bootstrap_backup(constants::RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG);
 }
 
 fn radula_behave_bootstrap_toolchain_construct() {
@@ -653,6 +664,7 @@ fn radula_behave_bootstrap_toolchain_environment() {
         x.join(constants::RADULA_DIRECTORY_SOURCES),
     );
 
+    // toolchain log file
     env::set_var(
         constants::RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG,
         [
@@ -729,15 +741,19 @@ fn radula_behave_construct(x: &'static str, y: &'static str) {
                 // into it whenever a basic function is called.
                 //
                 // The basic function `check` won't be used for now...
-                "nom={} ver={} . {} && prepare && configure && build && install",
+                "nom={} ver={} . {} && prepare {} && configure {3} && build {3} && {} && install {3}",
                 z[0],
                 z[1],
                 Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA).unwrap())
                     .join(x)
                     .join(y)
                     .to_str()
-                    .unwrap()
-            ),
+                    .unwrap(),
+                &format!(
+                    ">> {}",
+                    env::var(if y == constants::RADULA_DIRECTORY_CROSS { constants::RADULA_ENVIRONMENT_FILE_CROSS_LOG } else { constants::RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG }).unwrap()
+                ),
+                if true { "check" } else { ":" }),
         ])
         .spawn()
         .unwrap()
@@ -770,7 +786,7 @@ fn radula_behave_flags_environment() {
         [
             constants::RADULA_FLAGS_LINKER,
             " ",
-            &env::var(constants::RADULA_ENVIRONMENT_FLAGS_CXX_COMPILER).unwrap(),
+            &env::var(constants::RADULA_ENVIRONMENT_FLAGS_C_COMPILER).unwrap(),
         ]
         .concat(),
     );
@@ -887,6 +903,7 @@ fn radula_behave_swallow(x: &'static str) {
             Command::new(constants::RADULA_TOOTH_CHECKSUM)
                 .arg(constants::RADULA_TOOTH_CHECKSUM_FLAGS)
                 .stdin(Stdio::piped())
+                .stdout(Stdio::null())
                 .spawn()
                 .unwrap()
                 .stdin
@@ -1157,8 +1174,6 @@ pub fn radula_options() {
 
                             radula_behave_ccache_environment();
 
-                            radula_behave_bootstrap_initialize();
-
                             radula_behave_bootstrap_architecture_environment(
                                 constants::RADULA_ARCHITECTURE_X86_64_V3,
                             );
@@ -1169,6 +1184,8 @@ pub fn radula_options() {
                             radula_behave_bootstrap_cross_environment_directories();
 
                             radula_behave_bootstrap_clean();
+
+                            radula_behave_bootstrap_initialize();
 
                             radula_behave_bootstrap_toolchain_prepare();
                             radula_behave_bootstrap_toolchain_construct();
@@ -1194,7 +1211,7 @@ pub fn radula_options() {
 
                             radula_behave_bootstrap_cross_prepare();
                             radula_behave_bootstrap_cross_construct();
-                            radula_behave_bootstrap_cross_strip();
+                            //radula_behave_bootstrap_cross_strip();
 
                             println!("cross complete");
                         }
