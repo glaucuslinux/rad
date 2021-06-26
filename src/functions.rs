@@ -208,10 +208,10 @@ fn radula_behave_bootstrap_cross_construct() {
     };
 
     // Filesystem & Package Management
-    radula_behave_construct_cross("iana-etc");
+    //radula_behave_construct_cross("iana-etc");
     radula_behave_construct_cross("hydroskeleton");
-    radula_behave_construct_cross("cerata");
-    radula_behave_construct_cross("radula");
+    //radula_behave_construct_cross("cerata");
+    //radula_behave_construct_cross("radula");
 
     // Headers
     //radula_behave_construct_cross("musl-utils");
@@ -240,32 +240,32 @@ fn radula_behave_bootstrap_cross_construct() {
     radula_behave_construct_cross("which");
 
     // Compression
-    //radula_behave_construct_cross("bzip2");
-    //radula_behave_construct_cross("lbzip2");
-    //radula_behave_construct_cross("lbzip2-utils");
-    //radula_behave_construct_cross("lz4");
-    //radula_behave_construct_cross("lzlib");
-    //radula_behave_construct_cross("plzip");
-    //radula_behave_construct_cross("xz");
-    //radula_behave_construct_cross("zlib-ng");
-    //radula_behave_construct_cross("pigz");
-    //radula_behave_construct_cross("zstd");
-    //radula_behave_construct_cross("libarchive");
+    radula_behave_construct_cross("bzip2");
+    radula_behave_construct_cross("lbzip2");
+    radula_behave_construct_cross("lbzip2-utils");
+    radula_behave_construct_cross("lz4");
+    radula_behave_construct_cross("lzlib");
+    radula_behave_construct_cross("plzip");
+    radula_behave_construct_cross("xz");
+    radula_behave_construct_cross("zlib-ng");
+    radula_behave_construct_cross("pigz");
+    radula_behave_construct_cross("zstd");
+    radula_behave_construct_cross("libarchive");
 
     // Userland (Requires Compression)
-    //radula_behave_construct_cross("plocate");
+    radula_behave_construct_cross("plocate");
     //radula_behave_construct_cross("ugrep");
 
     // Development
     //radula_behave_construct_cross("gcc");
 
     // Synchronization
-    //radula_behave_construct_cross("rsync");
+    radula_behave_construct_cross("rsync");
 
     // Shell
-    //radula_behave_construct_cross("netbsd-curses");
-    //radula_behave_construct_cross("oksh");
-    //radula_behave_construct_cross("dash");
+    radula_behave_construct_cross("netbsd-curses");
+    radula_behave_construct_cross("oksh");
+    radula_behave_construct_cross("dash");
 
     // Editors & Pagers
     //radula_behave_construct_cross("libedit");
@@ -940,6 +940,7 @@ fn radula_behave_swallow(x: &'static str) {
             Command::new(constants::RADULA_TOOTH_GIT)
                 .args(&["clone", &y[3], z])
                 .stdout(Stdio::null())
+                .stderr(Stdio::null())
                 .spawn()
                 .unwrap()
                 .wait()
@@ -948,6 +949,7 @@ fn radula_behave_swallow(x: &'static str) {
             Command::new(constants::RADULA_TOOTH_GIT)
                 .args(&["-C", z, "checkout", &y[2]])
                 .stdout(Stdio::null())
+                .stderr(Stdio::null())
                 .spawn()
                 .unwrap()
                 .wait()
