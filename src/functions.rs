@@ -208,10 +208,10 @@ fn radula_behave_bootstrap_cross_construct() {
     };
 
     // Filesystem & Package Management
-    //radula_behave_construct_cross("iana-etc");
+    radula_behave_construct_cross("iana-etc");
     radula_behave_construct_cross("hydroskeleton");
-    //radula_behave_construct_cross("cerata");
-    //radula_behave_construct_cross("radula");
+    radula_behave_construct_cross("cerata");
+    radula_behave_construct_cross("radula");
 
     // Headers
     //radula_behave_construct_cross("musl-utils");
@@ -268,11 +268,11 @@ fn radula_behave_bootstrap_cross_construct() {
     radula_behave_construct_cross("dash");
 
     // Editors & Pagers
-    //radula_behave_construct_cross("libedit");
-    //radula_behave_construct_cross("pcre2");
-    //radula_behave_construct_cross("less");
-    //radula_behave_construct_cross("vim");
-    //radula_behave_construct_cross("mandoc");
+    radula_behave_construct_cross("libedit");
+    radula_behave_construct_cross("pcre2");
+    radula_behave_construct_cross("less");
+    radula_behave_construct_cross("vim");
+    radula_behave_construct_cross("mandoc");
 
     // Networking
     //radula_behave_construct_cross("libcap");
