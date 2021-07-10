@@ -144,6 +144,38 @@ fn radula_behave_bootstrap_architecture_environment(x: &'static str) {
                 constants::RADULA_ARCHITECTURE_I686_LINUX,
             );
         }
+        constants::RADULA_ARCHITECTURE_RISCV64 => {
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_CERATA,
+                [
+                    constants::RADULA_ARCHITECTURE_CERATA,
+                    constants::RADULA_ARCHITECTURE_RISCV64_CERATA,
+                ]
+                .concat(),
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS,
+                constants::RADULA_ARCHITECTURE_RISCV64_FLAGS,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION,
+                constants::RADULA_ARCHITECTURE_RISCV64_GCC_CONFIGURATION,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX,
+                constants::RADULA_ARCHITECTURE_RISCV64_LINUX,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION,
+                "",
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE,
+                constants::RADULA_ARCHITECTURE_RISCV64_LINUX_IMAGE,
+            );
+            env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL, x);
+            env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER, x);
+        }
         constants::RADULA_ARCHITECTURE_X86_64_V3 => {
             env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS,
@@ -208,10 +240,10 @@ fn radula_behave_bootstrap_cross_construct() {
     };
 
     // Filesystem & Package Management
-    radula_behave_construct_cross("iana-etc");
+    //radula_behave_construct_cross("iana-etc");
     radula_behave_construct_cross("hydroskeleton");
-    radula_behave_construct_cross("cerata");
-    radula_behave_construct_cross("radula");
+    //radula_behave_construct_cross("cerata");
+    //radula_behave_construct_cross("radula");
 
     // Headers
     //radula_behave_construct_cross("musl-utils");
@@ -230,14 +262,14 @@ fn radula_behave_bootstrap_cross_construct() {
     radula_behave_construct_cross("libressl");
 
     // Userland
-    radula_behave_construct_cross("toybox");
-    radula_behave_construct_cross("bc");
-    radula_behave_construct_cross("diffutils");
-    radula_behave_construct_cross("file");
-    radula_behave_construct_cross("findutils");
-    radula_behave_construct_cross("hostname");
-    radula_behave_construct_cross("sed");
-    radula_behave_construct_cross("which");
+    //radula_behave_construct_cross("toybox");
+    //radula_behave_construct_cross("bc");
+    //radula_behave_construct_cross("diffutils");
+    //radula_behave_construct_cross("file");
+    //radula_behave_construct_cross("findutils");
+    //radula_behave_construct_cross("hostname");
+    //radula_behave_construct_cross("sed");
+    //radula_behave_construct_cross("which");
 
     // Compression
     radula_behave_construct_cross("bzip2");
@@ -253,42 +285,42 @@ fn radula_behave_bootstrap_cross_construct() {
     radula_behave_construct_cross("libarchive");
 
     // Userland (Requires Compression)
-    radula_behave_construct_cross("plocate");
+    //radula_behave_construct_cross("plocate");
     //radula_behave_construct_cross("ugrep");
 
     // Development
-    //radula_behave_construct_cross("gcc");
+    radula_behave_construct_cross("gcc");
 
     // Synchronization
-    radula_behave_construct_cross("rsync");
+    //radula_behave_construct_cross("rsync");
 
     // Shell
     radula_behave_construct_cross("netbsd-curses");
-    radula_behave_construct_cross("oksh");
-    radula_behave_construct_cross("dash");
+    //radula_behave_construct_cross("oksh");
+    //radula_behave_construct_cross("dash");
 
     // Editors & Pagers
     radula_behave_construct_cross("libedit");
     radula_behave_construct_cross("pcre2");
     radula_behave_construct_cross("less");
-    radula_behave_construct_cross("vim");
-    radula_behave_construct_cross("mandoc");
+    //radula_behave_construct_cross("vim");
+    //radula_behave_construct_cross("mandoc");
 
     // Networking
-    //radula_behave_construct_cross("libcap");
+    radula_behave_construct_cross("libcap");
     //radula_behave_construct_cross("iproute2");
-    //radula_behave_construct_cross("iputils");
-    //radula_behave_construct_cross("dhcp");
+    radula_behave_construct_cross("iputils");
+    radula_behave_construct_cross("dhcp");
 
     // Utilities
-    //radula_behave_construct_cross("psmisc");
-    //radula_behave_construct_cross("procps-ng");
-    //radula_behave_construct_cross("util-linux");
-    //radula_behave_construct_cross("e2fsprogs");
+    radula_behave_construct_cross("psmisc");
+    radula_behave_construct_cross("procps-ng");
+    radula_behave_construct_cross("util-linux");
+    radula_behave_construct_cross("e2fsprogs");
     //radula_behave_construct_cross("kmod");
+    //radula_behave_construct_cross("eudev");
     //radula_behave_construct_cross("pciutils");
     //radula_behave_construct_cross("hwids");
-    //radula_behave_construct_cross("eudev");
 
     // Services
     //radula_behave_construct_cross("s6-linux-init");

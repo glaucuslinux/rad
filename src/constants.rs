@@ -41,6 +41,16 @@ pub const RADULA_ARCHITECTURE_I686_LINUX: &'static str = "i386";
 pub const RADULA_ARCHITECTURE_I686_LINUX_CONFIGURATION: &'static str = "i386_";
 pub const RADULA_ARCHITECTURE_I686_LINUX_IMAGE: &'static str = "arch/x86/boot/bzImage";
 
+// riscv64
+pub const RADULA_ARCHITECTURE_RISCV64: &'static str = "riscv64";
+pub const RADULA_ARCHITECTURE_RISCV64_CERATA: &'static str = "rv64gc";
+pub const RADULA_ARCHITECTURE_RISCV64_FLAGS: &'static str =
+    "-mabi=lp64d -march=rv64gc -mcpu=sifive-u74 -mtune=sifive-7-series -mcmodel=medany";
+pub const RADULA_ARCHITECTURE_RISCV64_GCC_CONFIGURATION: &'static str =
+    "--with-cpu=sifive-u74 --with-arch=rv64gc --with-tune=sifive-7-series --with-abi=lp64d";
+pub const RADULA_ARCHITECTURE_RISCV64_LINUX: &'static str = "riscv";
+pub const RADULA_ARCHITECTURE_RISCV64_LINUX_IMAGE: &'static str = "arch/riscv/boot/Image";
+
 // x86-64-v3
 pub const RADULA_ARCHITECTURE_X86_64_V3: &'static str = "x86-64";
 pub const RADULA_ARCHITECTURE_X86_64_V3_FLAGS: &'static str =
@@ -252,6 +262,7 @@ pub const RADULA_HELP_BEHAVE_BOOTSTRAP_LIST: &'static str = "GENOMES (ARCHITECTU
 \taarch64,     \tarm64,       \tarmv8-a
 \tarm,         \tarmv6zk,     \tbcm2835
 \ti386,        \ti686,        \tx86
+\triscv,       \triscv64,     \trv64gc
 \tx86-64,      \tx86-64-v3,   \tx86_64     \tx86_64-v3    \tx86_64_v3";
 
 pub const RADULA_HELP_BEHAVE_ENVENOMATE: &'static str = "USAGE:
