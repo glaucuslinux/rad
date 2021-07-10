@@ -689,6 +689,7 @@ fn radula_behave_bootstrap_toolchain_construct() {
     radula_behave_construct_toolchain("musl");
     radula_behave_construct_toolchain("libgcc");
     radula_behave_construct_toolchain("libstdc++-v3");
+    radula_behave_construct_toolchain("libgomp");
 }
 
 fn radula_behave_bootstrap_toolchain_environment() {
@@ -769,7 +770,7 @@ fn radula_behave_construct(x: &'static str, y: &'static str) {
             radula_behave_swallow(x);
         }
         "hydroskeleton" => {}
-        "libgcc" | "libstdc++-v3" => radula_behave_swallow("gcc"),
+        "libgcc" | "libgomp" | "libstdc++-v3" => radula_behave_swallow("gcc"),
         "linux-headers" => radula_behave_swallow("linux"),
         "lksh" => radula_behave_swallow("mksh"),
         "musl-headers" | "musl-utils" => radula_behave_swallow("musl"),
