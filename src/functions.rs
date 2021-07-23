@@ -262,14 +262,14 @@ fn radula_behave_bootstrap_cross_construct() {
     radula_behave_construct_cross("libressl");
 
     // Userland
-    //radula_behave_construct_cross("toybox");
-    //radula_behave_construct_cross("bc");
-    //radula_behave_construct_cross("diffutils");
-    //radula_behave_construct_cross("file");
-    //radula_behave_construct_cross("findutils");
-    //radula_behave_construct_cross("hostname");
-    //radula_behave_construct_cross("sed");
-    //radula_behave_construct_cross("which");
+    radula_behave_construct_cross("toybox");
+    radula_behave_construct_cross("bc");
+    radula_behave_construct_cross("diffutils");
+    radula_behave_construct_cross("file");
+    radula_behave_construct_cross("findutils");
+    radula_behave_construct_cross("hostname");
+    radula_behave_construct_cross("sed");
+    radula_behave_construct_cross("which");
 
     // Compression
     radula_behave_construct_cross("bzip2");
@@ -306,14 +306,14 @@ fn radula_behave_bootstrap_cross_construct() {
     // Networking
     radula_behave_construct_cross("libcap");
     //radula_behave_construct_cross("iproute2");
-    radula_behave_construct_cross("iputils");
-    radula_behave_construct_cross("dhcp");
+    //radula_behave_construct_cross("iputils");
+    radula_behave_construct_cross("sdhcp");
 
     // Utilities
     radula_behave_construct_cross("psmisc");
     radula_behave_construct_cross("procps-ng");
     radula_behave_construct_cross("util-linux");
-    radula_behave_construct_cross("e2fsprogs");
+    //radula_behave_construct_cross("e2fsprogs");
     //radula_behave_construct_cross("kmod");
     //radula_behave_construct_cross("eudev");
     //radula_behave_construct_cross("pciutils");
@@ -756,7 +756,7 @@ fn radula_behave_construct(x: &'static str, y: &'static str) {
     // We only require `nom` and `ver` from the `ceras` file
     let z: [String; 8] = radula_behave_source(x);
 
-    println!("{} {}", z[0], z[1]);
+    println!("{}", [&z[0], " ", &z[1], " ", &z[2]].concat().trim());
 
     // Perform swallow within construct for now (this may not be the best approach for parallelism)
     match x {
@@ -1108,6 +1108,15 @@ fn radula_behave_teeth_environment() {
 
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_MKDIR,
+        [
+            constants::RADULA_TOOTH_MKDIR,
+            " ",
+            constants::RADULA_TOOTH_MKDIR_FLAGS,
+        ]
+        .concat(),
+    );
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_TOOTH_MKDIR_P,
         [
             constants::RADULA_TOOTH_MKDIR,
             " ",

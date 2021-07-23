@@ -183,6 +183,7 @@ pub const RADULA_ENVIRONMENT_TOOTH_LN: &'static str = "LN";
 pub const RADULA_ENVIRONMENT_TOOTH_MAKE: &'static str = "MAKE";
 pub const RADULA_ENVIRONMENT_TOOTH_MAKEFLAGS: &'static str = "MAKEFLAGS";
 pub const RADULA_ENVIRONMENT_TOOTH_MKDIR: &'static str = "MKDIR";
+pub const RADULA_ENVIRONMENT_TOOTH_MKDIR_P: &'static str = "MKDIR_P";
 pub const RADULA_ENVIRONMENT_TOOTH_MV: &'static str = "MV";
 pub const RADULA_ENVIRONMENT_TOOTH_PATCH: &'static str = "PATCH";
 pub const RADULA_ENVIRONMENT_TOOTH_PKG_CONFIG: &'static str = "PKG_CONFIG";
@@ -288,7 +289,7 @@ OPTIONS:
 \tv, ver       \tDisplay cerata version(s)
 \ty, cys       \tDisplay cerata cyst(s)";
 
-pub const RADULA_HELP_VERSION: &'static str = "radula version 3.8.0
+pub const RADULA_HELP_VERSION: &'static str = "radula version 3.8.1
 
 Copyright (c) 2018-2021, Firas Khalil Khana
 Distributed under the terms of the ISC License";
