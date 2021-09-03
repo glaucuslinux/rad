@@ -4,4 +4,4 @@ version = 3
 
 [[package]]
 name = "radula-rs"
-version = "3.8.1"
+version = "1.0.0"
