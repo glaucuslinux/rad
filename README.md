@@ -13,15 +13,15 @@ glaucus's radula in Rust
 
 ## Community
 * [Discord](https://discord.gg/nDKNmNc)
-* [Gitter](https://gitter.im/glaucuslinux/radula-rs)
+* [Gitter](https://gitter.im/glaucuslinux/radula)
 * [Reddit](https://www.reddit.com/r/glaucus)
 * [Telegram](https://t.me/glaucuslinux)
 
 ## Mirrors
-* [BitBucket](https://bitbucket.org/glaucuslinux/radula-rs)
-* [Framagit](https://framagit.org/glaucuslinux/radula-rs)
-* [GitHub](https://github.com/glaucuslinux/radula-rs)
-* [GitLab](https://gitlab.com/glaucuslinux/radula-rs)
-* [NotABug](https://notabug.org/glaucuslinux/radula-rs)
-* [SourceForge](https://git.code.sf.net/p/glaucuslinux/radula-rs)
-* [SourceHut](https://git.sr.ht/~glaucuslinux/radula-rs)
+* [BitBucket](https://bitbucket.org/glaucuslinux/radula)
+* [Framagit](https://framagit.org/glaucuslinux/radula)
+* [GitHub](https://github.com/glaucuslinux/radula)
+* [GitLab](https://gitlab.com/glaucuslinux/radula)
+* [NotABug](https://notabug.org/glaucuslinux/radula)
+* [SourceForge](https://git.code.sf.net/p/glaucuslinux/radula)
+* [SourceHut](https://git.sr.ht/~glaucuslinux/radula)

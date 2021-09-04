@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "radula-rs"
+name = "radula"
 version = "1.0.0"
