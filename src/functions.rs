@@ -882,7 +882,7 @@ fn radula_behave_bootstrap_toolchain_release() {
                 .trim(),
             ),
             "-I",
-            "zstd",
+            "zstd -22 --ultra --long=31 -T0",
             ".",
         ])
         .current_dir(x)
