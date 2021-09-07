@@ -796,8 +796,11 @@ fn radula_behave_bootstrap_toolchain_release() {
         .unwrap();
 
     let radula_behave_bootstrap_toolchain_strip_libraries = |x: &str| {
-        Command::new(constants::RADULA_CROSS_STRIP)
-            .args(&["-gv", &format!("{}/*", x)])
+        Command::new(constants::RADULA_TOOTH_SHELL)
+            .args(&[
+                constants::RADULA_TOOTH_SHELL_FLAGS,
+                &[constants::RADULA_CROSS_STRIP, &format!(" -gv {}/*", x)].concat(),
+            ])
             .stderr(Stdio::null())
             .stdout(Stdio::null())
             .spawn()
@@ -823,8 +826,15 @@ fn radula_behave_bootstrap_toolchain_release() {
     );
 
     let radula_behave_bootstrap_toolchain_strip_binaries = |x: &str| {
-        Command::new(constants::RADULA_CROSS_STRIP)
-            .args(&["--strip-unneeded", "-v", &format!("{}/*", x)])
+        Command::new(constants::RADULA_TOOTH_SHELL)
+            .args(&[
+                constants::RADULA_TOOTH_SHELL_FLAGS,
+                &[
+                    constants::RADULA_CROSS_STRIP,
+                    &format!(" --strip-unneeded -v {}/*", x),
+                ]
+                .concat(),
+            ])
             .stderr(Stdio::null())
             .stdout(Stdio::null())
             .spawn()
