@@ -247,85 +247,89 @@ fn radula_behave_bootstrap_cross_construct() {
 
     // Headers
     radula_behave_construct_cross("musl-utils");
-    radula_behave_construct_cross("linux-headers");
+    //radula_behave_construct_cross("linux-headers");
 
     // Init
-    radula_behave_construct_cross("skalibs");
-    radula_behave_construct_cross("execline");
-    radula_behave_construct_cross("s6");
-    radula_behave_construct_cross("utmps");
+    //radula_behave_construct_cross("skalibs");
+    //radula_behave_construct_cross("execline");
+    //radula_behave_construct_cross("s6");
+    //radula_behave_construct_cross("utmps");
 
     // Permissions
-    radula_behave_construct_cross("attr");
-    radula_behave_construct_cross("acl");
-    radula_behave_construct_cross("shadow");
-    radula_behave_construct_cross("libressl");
+    //radula_behave_construct_cross("attr");
+    //radula_behave_construct_cross("acl");
+    //radula_behave_construct_cross("shadow");
+    //radula_behave_construct_cross("libressl");
 
     // Userland
-    radula_behave_construct_cross("toybox");
-    radula_behave_construct_cross("bc");
-    radula_behave_construct_cross("diffutils");
-    radula_behave_construct_cross("file");
-    radula_behave_construct_cross("findutils");
-    radula_behave_construct_cross("hostname");
-    radula_behave_construct_cross("sed");
-    radula_behave_construct_cross("which");
+    //radula_behave_construct_cross("toybox");
+    //radula_behave_construct_cross("bc");
+    //radula_behave_construct_cross("diffutils");
+    //radula_behave_construct_cross("file");
+    //radula_behave_construct_cross("findutils");
+    //radula_behave_construct_cross("hostname");
+    //radula_behave_construct_cross("sed");
+    //radula_behave_construct_cross("which");
 
     // Compression
-    radula_behave_construct_cross("bzip2");
-    radula_behave_construct_cross("lbzip2");
-    radula_behave_construct_cross("lbzip2-utils");
-    radula_behave_construct_cross("lz4");
-    radula_behave_construct_cross("lzlib");
-    radula_behave_construct_cross("plzip");
-    radula_behave_construct_cross("xz");
+    //radula_behave_construct_cross("bzip2");
+    //radula_behave_construct_cross("lbzip2");
+    //radula_behave_construct_cross("lbzip2-utils");
+    //radula_behave_construct_cross("lz4");
+    //radula_behave_construct_cross("lzlib");
+    //radula_behave_construct_cross("plzip");
+    //radula_behave_construct_cross("xz");
     radula_behave_construct_cross("zlib-ng");
-    radula_behave_construct_cross("pigz");
-    radula_behave_construct_cross("zstd");
-    radula_behave_construct_cross("libarchive");
+    //radula_behave_construct_cross("pigz");
+    //radula_behave_construct_cross("zstd");
+    //radula_behave_construct_cross("libarchive");
 
     // Synchronization
-    radula_behave_construct_cross("rsync");
+    //radula_behave_construct_cross("rsync");
 
     // Shell
-    radula_behave_construct_cross("netbsd-curses");
-    radula_behave_construct_cross("oksh");
-    radula_behave_construct_cross("dash");
+    //radula_behave_construct_cross("netbsd-curses");
+    //radula_behave_construct_cross("oksh");
+    //radula_behave_construct_cross("dash");
 
     // Editors & Pagers
-    radula_behave_construct_cross("libedit");
-    radula_behave_construct_cross("pcre2");
-    radula_behave_construct_cross("less");
-    radula_behave_construct_cross("vim");
-    radula_behave_construct_cross("mandoc");
+    //radula_behave_construct_cross("libedit");
+    //radula_behave_construct_cross("pcre2");
+    //radula_behave_construct_cross("less");
+    //radula_behave_construct_cross("vim");
+    //radula_behave_construct_cross("mandoc");
 
     // Userland
-    radula_behave_construct_cross("plocate");
-    radula_behave_construct_cross("grep");
+    //radula_behave_construct_cross("plocate");
+    //radula_behave_construct_cross("grep");
 
     // Networking
-    radula_behave_construct_cross("libcap");
-    radula_behave_construct_cross("iproute2");
-    radula_behave_construct_cross("iputils");
-    radula_behave_construct_cross("sdhcp");
+    //radula_behave_construct_cross("libcap");
+    //radula_behave_construct_cross("iproute2");
+    //radula_behave_construct_cross("iputils");
+    //radula_behave_construct_cross("sdhcp");
 
     // Utilities
-    radula_behave_construct_cross("kmod");
-    radula_behave_construct_cross("eudev");
-    radula_behave_construct_cross("psmisc");
-    radula_behave_construct_cross("procps-ng");
-    radula_behave_construct_cross("util-linux");
-    radula_behave_construct_cross("e2fsprogs");
-    radula_behave_construct_cross("pciutils");
-    radula_behave_construct_cross("hwids");
+    //radula_behave_construct_cross("kmod");
+    //radula_behave_construct_cross("eudev");
+    //radula_behave_construct_cross("psmisc");
+    //radula_behave_construct_cross("procps-ng");
+    //radula_behave_construct_cross("util-linux");
+    //radula_behave_construct_cross("e2fsprogs");
+    //radula_behave_construct_cross("pciutils");
+    //radula_behave_construct_cross("hwids");
 
     // Services
-    radula_behave_construct_cross("s6-linux-init");
-    radula_behave_construct_cross("s6-rc");
-    radula_behave_construct_cross("s6-boot-scripts");
+    //radula_behave_construct_cross("s6-linux-init");
+    //radula_behave_construct_cross("s6-rc");
+    //radula_behave_construct_cross("s6-boot-scripts");
 
     // Kernel
-    radula_behave_construct_cross("linux");
+    radula_behave_construct_cross("libuargp");
+    radula_behave_construct_cross("musl-fts");
+    radula_behave_construct_cross("musl-obstack");
+    radula_behave_construct_cross("libelf");
+    //radula_behave_construct_cross("linux");
 }
 
 fn radula_behave_bootstrap_cross_environment_directories() {
@@ -923,7 +927,7 @@ fn radula_behave_construct(x: &'static str, y: &'static str) {
 
     // Perform swallow within construct for now (this may not be the best approach for parallelism)
     match x {
-        "elfutils-libelf" => radula_behave_swallow("elfutils"),
+        "libelf" => radula_behave_swallow("elfutils"),
         // `gcc` will be removed from the list below when dependency resolution is working
         "gcc" => {
             radula_behave_swallow("gmp");
