@@ -329,7 +329,7 @@ pub const RADULA_PATH_USR: &'static str = "usr";
 
 // A tooth is a tool available on the host system
 pub const RADULA_TOOTH_AUTORECONF: &'static str = "autoreconf";
-pub const RADULA_TOOTH_AUTORECONF_FLAGS: &'static str = "-fvis";
+pub const RADULA_TOOTH_AUTORECONF_FLAGS: &'static str = "-vfis";
 
 // `bash` is only required for building some packages, and isn't actually used
 // for running shell scripts (we're using `dash` for that)
