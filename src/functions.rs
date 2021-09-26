@@ -267,6 +267,7 @@ fn radula_behave_bootstrap_cross_construct() {
     radula_behave_construct_cross("diffutils");
     radula_behave_construct_cross("file");
     radula_behave_construct_cross("findutils");
+    radula_behave_construct_cross("grep");
     radula_behave_construct_cross("hostname");
     radula_behave_construct_cross("sed");
     radula_behave_construct_cross("which");
@@ -283,6 +284,9 @@ fn radula_behave_bootstrap_cross_construct() {
     radula_behave_construct_cross("pigz");
     radula_behave_construct_cross("zstd");
     radula_behave_construct_cross("libarchive");
+
+    // Development
+    radula_behave_construct_cross("gcc");
 
     // Synchronization
     radula_behave_construct_cross("rsync");
@@ -301,13 +305,14 @@ fn radula_behave_bootstrap_cross_construct() {
 
     // Userland
     radula_behave_construct_cross("plocate");
-    radula_behave_construct_cross("grep");
 
     // Networking
     radula_behave_construct_cross("libcap");
     radula_behave_construct_cross("iproute2");
     radula_behave_construct_cross("iputils");
     radula_behave_construct_cross("sdhcp");
+    radula_behave_construct_cross("curl");
+    radula_behave_construct_cross("wget");
 
     // Utilities
     radula_behave_construct_cross("kmod");
@@ -461,6 +466,8 @@ fn radula_behave_bootstrap_cross_environment_teeth() {
         [x, constants::RADULA_CROSS_STRIP].concat(),
     );
 }
+
+fn radula_behave_bootstrap_cross_img() {}
 
 fn radula_behave_bootstrap_cross_prepare() {
     radula_behave_rsync(
@@ -1406,7 +1413,13 @@ pub fn radula_options() {
                             println!("distclean complete");
                         }
                         "h" | "help" => radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP),
-                        "i" | "image" => println!("img complete"),
+                        "i" | "image" => {
+                            radula_behave_bootstrap_environment();
+
+                            radula_behave_bootstrap_cross_img();
+
+                            println!("img complete");
+                        }
                         "l" | "list" => radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP_LIST),
                         "r" | "require" => {
                             println!("Checking if host has all required packages...")
