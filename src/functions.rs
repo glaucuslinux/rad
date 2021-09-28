@@ -286,6 +286,7 @@ fn radula_behave_bootstrap_cross_construct() {
     radula_behave_construct_cross("libarchive");
 
     // Development
+    radula_behave_construct_cross("binutils");
     radula_behave_construct_cross("gcc");
 
     // Synchronization
