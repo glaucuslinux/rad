@@ -1550,10 +1550,7 @@ pub fn radula_options() {
                             "s" | "sum" => println!("{}", w[4]),
                             "u" | "url" => println!("{}", w[3]),
                             "v" | "ver" => {
-                                println!("{}", w[1]);
-                                if w[1] == constants::RADULA_TOOTH_GIT {
-                                    println!("{}", w[2]);
-                                };
+                                println!("{}", [&w[1], " ", &w[2]].concat().trim());
                             }
                             "y" | "cys" => println!("{}", w[5]),
                             _ => {
