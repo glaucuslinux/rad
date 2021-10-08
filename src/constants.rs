@@ -18,6 +18,7 @@ pub const RADULA_ARCHITECTURE_AARCH64_CERATA: &'static str = "armv8-a";
 pub const RADULA_ARCHITECTURE_AARCH64_FLAGS: &'static str =
     "-mabi=lp64 -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 -march=armv8-a -mtune=generic";
 pub const RADULA_ARCHITECTURE_AARCH64_GCC_CONFIGURATION: &'static str = "--with-arch=armv8-a --with-abi=lp64 --enable-fix-cortex-a53-835769 --enable-fix-cortex-a53-843419";
+pub const RADULA_ARCHITECTURE_AARCH64_GCOMPAT: &'static str = ".so.1";
 pub const RADULA_ARCHITECTURE_AARCH64_LINUX: &'static str = "arm64";
 pub const RADULA_ARCHITECTURE_AARCH64_LINUX_IMAGE: &'static str = "arch/arm64/boot/Image";
 
@@ -25,6 +26,7 @@ pub const RADULA_ARCHITECTURE_AARCH64_LINUX_IMAGE: &'static str = "arch/arm64/bo
 pub const RADULA_ARCHITECTURE_ARMV6ZK: &'static str = "armv6zk";
 pub const RADULA_ARCHITECTURE_ARMV6ZK_FLAGS: &'static str = "-mabi=aapcs-linux -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -mcpu=arm1176jzf-s -mfpu=vfpv2 -mtls-dialect=gnu2";
 pub const RADULA_ARCHITECTURE_ARMV6ZK_GCC_CONFIGURATION: &'static str = "--with-arch=armv6zk --with-tune=arm1176jzf-s --with-abi=aapcs-linux --with-fpu=vfpv2 --with-float=hard";
+pub const RADULA_ARCHITECTURE_ARMV6ZK_GCOMPAT: &'static str = ".so.3";
 pub const RADULA_ARCHITECTURE_ARMV6ZK_LINUX: &'static str = "arm";
 pub const RADULA_ARCHITECTURE_ARMV6ZK_LINUX_CONFIGURATION: &'static str = "bcm2835_";
 pub const RADULA_ARCHITECTURE_ARMV6ZK_LINUX_IMAGE: &'static str = "arch/arm/boot/zImage";
@@ -37,9 +39,11 @@ pub const RADULA_ARCHITECTURE_I686_FLAGS: &'static str =
     "-march=i686 -mtune=generic -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2";
 pub const RADULA_ARCHITECTURE_I686_GCC_CONFIGURATION: &'static str =
     "--with-arch=i686 --with-tune=generic";
+pub const RADULA_ARCHITECTURE_I686_GCOMPAT: &'static str = ".so.2";
 pub const RADULA_ARCHITECTURE_I686_LINUX: &'static str = "i386";
 pub const RADULA_ARCHITECTURE_I686_LINUX_CONFIGURATION: &'static str = "i386_";
 pub const RADULA_ARCHITECTURE_I686_LINUX_IMAGE: &'static str = "arch/x86/boot/bzImage";
+pub const RADULA_ARCHITECTURE_I686_UCONTEXT: &'static str = "x86";
 
 // riscv64
 pub const RADULA_ARCHITECTURE_RISCV64: &'static str = "riscv64";
@@ -48,6 +52,7 @@ pub const RADULA_ARCHITECTURE_RISCV64_FLAGS: &'static str =
     "-mabi=lp64d -march=rv64gc -mcpu=sifive-u74 -mtune=sifive-7-series -mcmodel=medany";
 pub const RADULA_ARCHITECTURE_RISCV64_GCC_CONFIGURATION: &'static str =
     "--with-cpu=sifive-u74 --with-arch=rv64gc --with-tune=sifive-7-series --with-abi=lp64d";
+pub const RADULA_ARCHITECTURE_RISCV64_GCOMPAT: &'static str = "-lp64d.so.1";
 pub const RADULA_ARCHITECTURE_RISCV64_LINUX: &'static str = "riscv";
 pub const RADULA_ARCHITECTURE_RISCV64_LINUX_IMAGE: &'static str = "arch/riscv/boot/Image";
 
@@ -102,11 +107,13 @@ pub const RADULA_ENVIRONMENT_ARCHITECTURE: &'static str = "ARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_CERATA: &'static str = "CARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS: &'static str = "FARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION: &'static str = "GCARCH";
+pub const RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT: &'static str = "GARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_LINUX: &'static str = "LARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION: &'static str = "LCARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE: &'static str = "LIARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_MUSL: &'static str = "MARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER: &'static str = "MLARCH";
+pub const RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT: &'static str = "UARCH";
 
 // Cross
 pub const RADULA_ENVIRONMENT_CROSS_ARCHIVER: &'static str = "AR";
@@ -289,7 +296,7 @@ OPTIONS:
 \tv, ver       \tDisplay cerata version(s)
 \ty, cys       \tDisplay cerata cyst(s)";
 
-pub const RADULA_HELP_VERSION: &'static str = "radula version 1.0.2
+pub const RADULA_HELP_VERSION: &'static str = "radula version 1.0.3
 
 Copyright (c) 2018-2021, Firas Khalil Khana
 Distributed under the terms of the ISC License";

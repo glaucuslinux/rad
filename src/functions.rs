@@ -58,6 +58,15 @@ fn radula_behave_bootstrap_architecture_environment(x: &'static str) {
                 constants::RADULA_ARCHITECTURE_AARCH64_GCC_CONFIGURATION,
             );
             env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT,
+                [
+                    "-",
+                    constants::RADULA_ARCHITECTURE_AARCH64,
+                    constants::RADULA_ARCHITECTURE_AARCH64_GCOMPAT,
+                ]
+                .concat(),
+            );
+            env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX,
                 constants::RADULA_ARCHITECTURE_AARCH64_LINUX,
             );
@@ -71,6 +80,7 @@ fn radula_behave_bootstrap_architecture_environment(x: &'static str) {
             );
             env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL, x);
             env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER, x);
+            env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT, x);
         }
         constants::RADULA_ARCHITECTURE_ARMV6ZK => {
             env::set_var(
@@ -80,6 +90,16 @@ fn radula_behave_bootstrap_architecture_environment(x: &'static str) {
             env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION,
                 constants::RADULA_ARCHITECTURE_ARMV6ZK_GCC_CONFIGURATION,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT,
+                [
+                    "-",
+                    constants::RADULA_ARCHITECTURE_ARMV6ZK_LINUX,
+                    constants::RADULA_ARCHITECTURE_ARMV6ZK_MUSL_LINKER,
+                    constants::RADULA_ARCHITECTURE_ARMV6ZK_GCOMPAT,
+                ]
+                .concat(),
             );
             env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX,
@@ -113,6 +133,10 @@ fn radula_behave_bootstrap_architecture_environment(x: &'static str) {
                 ]
                 .concat(),
             );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT,
+                constants::RADULA_ARCHITECTURE_ARMV6ZK_LINUX,
+            );
         }
         constants::RADULA_ARCHITECTURE_I686 => {
             env::set_var(
@@ -122,6 +146,10 @@ fn radula_behave_bootstrap_architecture_environment(x: &'static str) {
             env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION,
                 constants::RADULA_ARCHITECTURE_I686_GCC_CONFIGURATION,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT,
+                constants::RADULA_ARCHITECTURE_I686_GCOMPAT,
             );
             env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX,
@@ -143,6 +171,10 @@ fn radula_behave_bootstrap_architecture_environment(x: &'static str) {
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER,
                 constants::RADULA_ARCHITECTURE_I686_LINUX,
             );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT,
+                constants::RADULA_ARCHITECTURE_I686_UCONTEXT,
+            );
         }
         constants::RADULA_ARCHITECTURE_RISCV64 => {
             env::set_var(
@@ -162,6 +194,15 @@ fn radula_behave_bootstrap_architecture_environment(x: &'static str) {
                 constants::RADULA_ARCHITECTURE_RISCV64_GCC_CONFIGURATION,
             );
             env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT,
+                [
+                    "-",
+                    constants::RADULA_ARCHITECTURE_RISCV64,
+                    constants::RADULA_ARCHITECTURE_RISCV64_GCOMPAT,
+                ]
+                .concat(),
+            );
+            env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX,
                 constants::RADULA_ARCHITECTURE_RISCV64_LINUX,
             );
@@ -175,6 +216,7 @@ fn radula_behave_bootstrap_architecture_environment(x: &'static str) {
             );
             env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL, x);
             env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER, x);
+            env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT, x);
         }
         constants::RADULA_ARCHITECTURE_X86_64_V3 => {
             env::set_var(
@@ -184,6 +226,15 @@ fn radula_behave_bootstrap_architecture_environment(x: &'static str) {
             env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION,
                 constants::RADULA_ARCHITECTURE_X86_64_V3_GCC_CONFIGURATION,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT,
+                [
+                    "-",
+                    constants::RADULA_ARCHITECTURE_X86_64_V3,
+                    constants::RADULA_ARCHITECTURE_I686_GCOMPAT,
+                ]
+                .concat(),
             );
             env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX,
@@ -212,6 +263,10 @@ fn radula_behave_bootstrap_architecture_environment(x: &'static str) {
                     constants::RADULA_ARCHITECTURE_TUPLE_TARGET,
                 ]
                 .concat(),
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT,
+                constants::RADULA_ARCHITECTURE_X86_64_V3_LINUX,
             );
         }
         _ => {}
@@ -254,6 +309,12 @@ fn radula_behave_bootstrap_cross_construct() {
     radula_behave_construct_cross("execline");
     radula_behave_construct_cross("s6");
     radula_behave_construct_cross("utmps");
+
+    // Compatibility
+    radula_behave_construct_cross("musl-fts");
+    radula_behave_construct_cross("musl-obstack");
+    radula_behave_construct_cross("libucontext");
+    radula_behave_construct_cross("gcompat");
 
     // Permissions
     radula_behave_construct_cross("attr");
@@ -332,8 +393,6 @@ fn radula_behave_bootstrap_cross_construct() {
 
     // Kernel
     radula_behave_construct_cross("libuargp");
-    radula_behave_construct_cross("musl-fts");
-    radula_behave_construct_cross("musl-obstack");
     radula_behave_construct_cross("libelf");
     radula_behave_construct_cross("linux");
 }

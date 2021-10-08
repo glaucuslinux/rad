@@ -1,5 +1,5 @@
 [package]
 name = "radula"
-version = "1.0.2"
+version = "1.0.3"
 authors = ["Firas Khalil Khana <firasuke@glaucuslinux.org>"]
 edition = "2018"
