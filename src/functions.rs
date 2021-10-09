@@ -329,7 +329,6 @@ fn radula_behave_bootstrap_cross_construct() {
     radula_behave_construct_cross("diffutils");
     radula_behave_construct_cross("file");
     radula_behave_construct_cross("findutils");
-    radula_behave_construct_cross("grep");
     radula_behave_construct_cross("hostname");
     radula_behave_construct_cross("sed");
     radula_behave_construct_cross("which");
@@ -368,6 +367,7 @@ fn radula_behave_bootstrap_cross_construct() {
 
     // Userland
     radula_behave_construct_cross("plocate");
+    radula_behave_construct_cross("ugrep");
 
     // Networking
     radula_behave_construct_cross("libcap");
