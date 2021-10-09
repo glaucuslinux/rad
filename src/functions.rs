@@ -941,7 +941,7 @@ fn radula_behave_bootstrap_toolchain_release() {
 
     Command::new(constants::RADULA_TOOTH_TAR)
         .args(&[
-            "cvf",
+            "cpvf",
             &format!(
                 "{}-{}.tar.zst",
                 Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS).unwrap())
@@ -1236,7 +1236,7 @@ fn radula_behave_swallow(x: &'static str) {
             radula_behave_verify();
 
             Command::new(constants::RADULA_TOOTH_TAR)
-                .args(&["xvf", &w, "-C", z])
+                .args(&["xpvf", &w, "-C", z])
                 .stdout(Stdio::null())
                 .spawn()
                 .unwrap()
