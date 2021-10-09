@@ -313,6 +313,7 @@ fn radula_behave_bootstrap_cross_construct() {
     // Compatibility
     radula_behave_construct_cross("musl-fts");
     radula_behave_construct_cross("musl-obstack");
+    radula_behave_construct_cross("musl-rpmatch");
     radula_behave_construct_cross("libucontext");
     radula_behave_construct_cross("gcompat");
 
