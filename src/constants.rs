@@ -93,6 +93,7 @@ pub const RADULA_DIRECTORY_BACKUPS: &'static str = "bak";
 pub const RADULA_DIRECTORY_BUILDS: &'static str = "bld";
 pub const RADULA_DIRECTORY_CERATA: &'static str = "cerata";
 pub const RADULA_DIRECTORY_CROSS: &'static str = "cross";
+pub const RADULA_DIRECTORY_GLAUCUS: &'static str = "glaucus";
 pub const RADULA_DIRECTORY_LOGS: &'static str = "log";
 pub const RADULA_DIRECTORY_SOURCES: &'static str = "src";
 pub const RADULA_DIRECTORY_TEMPORARY: &'static str = "tmp";
@@ -196,7 +197,6 @@ pub const RADULA_ENVIRONMENT_TOOTH_PATCH: &'static str = "PATCH";
 pub const RADULA_ENVIRONMENT_TOOTH_PKG_CONFIG: &'static str = "PKG_CONFIG";
 pub const RADULA_ENVIRONMENT_TOOTH_RM: &'static str = "RM";
 pub const RADULA_ENVIRONMENT_TOOTH_RSYNC: &'static str = "RSYNC";
-pub const RADULA_ENVIRONMENT_TOOTH_UMOUNT: &'static str = "UMOUNT";
 pub const RADULA_ENVIRONMENT_TOOTH_YACC: &'static str = "YACC";
 
 // Tuples
@@ -208,7 +208,13 @@ pub const RADULA_ENVIRONMENT_TUPLE_TARGET: &'static str = "TGT";
 //
 
 pub const RADULA_FILE_CONFIG_GUESS: &'static str = "binutils/config.guess";
+
+pub const RADULA_FILE_EXTLINUX_CONF: &'static str = "extlinux/extlinux.conf";
+
 pub const RADULA_FILE_GLAUCUS_IMAGE: &'static str = "glaucus.img";
+pub const RADULA_FILE_GLAUCUS_IMAGE_SIZE: &'static str = "1024M";
+
+pub const RADULA_FILE_MBR_BIN: &'static str = "extlinux/mbr.bin";
 
 //
 // Flags
@@ -259,7 +265,7 @@ OPTIONS:
 \tc, clean     \tClean up while preserving sources and backups
 \td, distclean \tClean up everything
 \th, help      \tDisplay this help message
-\ti, image     \tCreate a .img file of the glaucus system
+\ti, image     \tCreate an image file of the glaucus system
 \tl, list      \tList supported genomes
 \tr, require   \tCheck if host has all required packages
 \ts, release   \tRelease a compressed tarball of the toolchain
@@ -296,7 +302,7 @@ OPTIONS:
 \tv, ver       \tDisplay cerata version(s)
 \ty, cys       \tDisplay cerata cyst(s)";
 
-pub const RADULA_HELP_VERSION: &'static str = "radula version 1.0.3
+pub const RADULA_HELP_VERSION: &'static str = "radula version 1.0.4
 
 Copyright (c) 2018-2021, Firas Khalil Khana
 Distributed under the terms of the ISC License";
@@ -306,6 +312,8 @@ Distributed under the terms of the ISC License";
 //
 
 pub const RADULA_PATH_BIN: &'static str = "bin";
+
+pub const RADULA_PATH_BOOT: &'static str = "boot";
 
 // Default `ccache` directories on both Arch and Fedora
 pub const RADULA_PATH_CCACHE: &'static str = "/usr/lib/ccache/bin:/usr/lib64/ccache";
@@ -317,7 +325,11 @@ pub const RADULA_PATH_INFO: &'static str = "info";
 pub const RADULA_PATH_LIB: &'static str = "lib";
 pub const RADULA_PATH_LIB64: &'static str = "lib64";
 
+pub const RADULA_PATH_LOST_FOUND: &'static str = "lost+found";
+
 pub const RADULA_PATH_MAN: &'static str = "man";
+
+pub const RADULA_PATH_MNT: &'static str = "mnt";
 
 // `pkgconf` and `pkg-config` don't respect the provided sysroot (it doesn't get
 // automatically prefixed to PATH and LIBDIR)
@@ -329,6 +341,8 @@ pub const RADULA_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH: &'static str = "/usr/lib";
 pub const RADULA_PATH_SHARE: &'static str = "share";
 
 pub const RADULA_PATH_USR: &'static str = "usr";
+
+pub const RADULA_PATH_UTMPS: &'static str = "s6/current/run-image/utmps";
 
 //
 // Teeth
@@ -359,6 +373,11 @@ pub const RADULA_TOOTH_CURL_FLAGS: &'static str = "-Lo";
 
 pub const RADULA_TOOTH_DATE: &'static str = "date";
 
+pub const RADULA_TOOTH_DD: &'static str = "dd";
+
+pub const RADULA_TOOTH_EXTLINUX: &'static str = "extlinux";
+pub const RADULA_TOOTH_EXTLINUX_FLAGS: &'static str = "--install";
+
 pub const RADULA_TOOTH_FIND: &'static str = "find";
 
 pub const RADULA_TOOTH_FLEX: &'static str = "flex";
@@ -369,6 +388,8 @@ pub const RADULA_TOOTH_GIT: &'static str = "git";
 pub const RADULA_TOOTH_LN: &'static str = "ln";
 pub const RADULA_TOOTH_LN_FLAGS: &'static str = "-fnsv";
 
+pub const RADULA_TOOTH_LOSETUP: &'static str = "losetup";
+
 pub const RADULA_TOOTH_MAKE: &'static str = "make";
 pub const RADULA_TOOTH_MAKEFLAGS: &'static str = "V=1";
 
@@ -378,16 +399,31 @@ pub const RADULA_TOOTH_MAWK: &'static str = "mawk";
 pub const RADULA_TOOTH_MKDIR: &'static str = "/usr/bin/install";
 pub const RADULA_TOOTH_MKDIR_FLAGS: &'static str = "-dv";
 
+pub const RADULA_TOOTH_MKE2FS: &'static str = "mke2fs";
+pub const RADULA_TOOTH_MKE2FS_FLAGS: &'static str = "-t";
+
+pub const RADULA_TOOTH_MODPROBE: &'static str = "modprobe";
+
+pub const RADULA_TOOTH_MOUNT: &'static str = "mount";
+
 pub const RADULA_TOOTH_MV: &'static str = "mv";
 pub const RADULA_TOOTH_MV_FLAGS: &'static str = "-v";
 
 // We're not going to use the `num_cpus` crate
 pub const RADULA_TOOTH_NPROC: &'static str = "nproc";
 
+pub const RADULA_TOOTH_PARTED: &'static str = "parted";
+pub const RADULA_TOOTH_PARTED_FLAGS: &'static str = "-s";
+
+pub const RADULA_TOOTH_PARTX: &'static str = "partx";
+pub const RADULA_TOOTH_PARTX_FLAGS: &'static str = "-a";
+
 pub const RADULA_TOOTH_PATCH: &'static str = "patch";
 pub const RADULA_TOOTH_PATCH_FLAGS: &'static str = "--verbose";
 
 pub const RADULA_TOOTH_PKGCONF: &'static str = "pkgconf";
+
+pub const RADULA_TOOTH_QEMU_IMAGE: &'static str = "qemu-img";
 
 pub const RADULA_TOOTH_REFLEX: &'static str = "reflex";
 
