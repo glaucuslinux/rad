@@ -209,12 +209,11 @@ pub const RADULA_ENVIRONMENT_TUPLE_TARGET: &'static str = "TGT";
 
 pub const RADULA_FILE_CONFIG_GUESS: &'static str = "binutils/config.guess";
 
-pub const RADULA_FILE_EXTLINUX_CONF: &'static str = "extlinux/extlinux.conf";
-
 pub const RADULA_FILE_GLAUCUS_IMAGE: &'static str = "glaucus.img";
 pub const RADULA_FILE_GLAUCUS_IMAGE_SIZE: &'static str = "1024M";
 
-pub const RADULA_FILE_MBR_BIN: &'static str = "extlinux/mbr.bin";
+pub const RADULA_FILE_SYSLINUX_EXTLINUX_CONF: &'static str = "syslinux/extlinux.conf";
+pub const RADULA_FILE_SYSLINUX_MBR_BIN: &'static str = "syslinux/mbr.bin";
 
 //
 // Flags
@@ -416,7 +415,6 @@ pub const RADULA_TOOTH_PARTED: &'static str = "parted";
 pub const RADULA_TOOTH_PARTED_FLAGS: &'static str = "-s";
 
 pub const RADULA_TOOTH_PARTX: &'static str = "partx";
-pub const RADULA_TOOTH_PARTX_FLAGS: &'static str = "-a";
 
 pub const RADULA_TOOTH_PATCH: &'static str = "patch";
 pub const RADULA_TOOTH_PATCH_FLAGS: &'static str = "--verbose";

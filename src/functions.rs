@@ -568,7 +568,7 @@ fn radula_behave_bootstrap_cross_image() {
             &format!(
                 "if={}",
                 Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA).unwrap())
-                    .join(constants::RADULA_FILE_MBR_BIN)
+                    .join(constants::RADULA_FILE_SYSLINUX_MBR_BIN)
                     .to_str()
                     .unwrap()
             ),
@@ -659,7 +659,7 @@ fn radula_behave_bootstrap_cross_image() {
 
     // Notify the kernel about the new partition on the image
     Command::new(constants::RADULA_TOOTH_PARTX)
-        .args(&[constants::RADULA_TOOTH_PARTX_FLAGS, y])
+        .args(&["-a", y])
         .spawn()
         .unwrap()
         .wait()
@@ -674,7 +674,8 @@ fn radula_behave_bootstrap_cross_image() {
         .unwrap();
 
     let w = &String::from(
-        Path::new(constants::RADULA_PATH_MNT)
+        Path::new(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
+            .join(constants::RADULA_PATH_MNT)
             .join(constants::RADULA_DIRECTORY_GLAUCUS)
             .to_str()
             .unwrap(),
@@ -716,7 +717,7 @@ fn radula_behave_bootstrap_cross_image() {
     fs::create_dir(r);
     radula_behave_rsync(
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA).unwrap())
-            .join(constants::RADULA_FILE_EXTLINUX_CONF)
+            .join(constants::RADULA_FILE_SYSLINUX_EXTLINUX_CONF)
             .to_str()
             .unwrap(),
         r,
