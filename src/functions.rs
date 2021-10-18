@@ -317,6 +317,9 @@ fn radula_behave_bootstrap_cross_construct() {
     radula_behave_construct_cross("libucontext");
     radula_behave_construct_cross("gcompat");
 
+    // i18n & L10n
+    radula_behave_construct_cross("gettext-tiny");
+
     // Permissions
     radula_behave_construct_cross("attr");
     radula_behave_construct_cross("acl");
@@ -395,7 +398,7 @@ fn radula_behave_bootstrap_cross_construct() {
     // Kernel
     radula_behave_construct_cross("libuargp");
     radula_behave_construct_cross("libelf");
-    //radula_behave_construct_cross("linux");
+    radula_behave_construct_cross("linux");
 }
 
 fn radula_behave_bootstrap_cross_environment_directories() {
