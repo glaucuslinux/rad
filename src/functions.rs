@@ -295,110 +295,110 @@ fn radula_behave_bootstrap_cross_construct() {
     };
 
     // Filesystem & Package Management
-    radula_behave_construct_cross("iana-etc");
-    radula_behave_construct_cross("hydroskeleton");
-    radula_behave_construct_cross("cerata");
-    radula_behave_construct_cross("radula");
+    radula_behave_construct_cross(constants::RADULA_CERAS_IANA_ETC);
+    radula_behave_construct_cross(constants::RADULA_CERAS_HYDROSKELETON);
+    radula_behave_construct_cross(constants::RADULA_CERAS_CERATA);
+    radula_behave_construct_cross(constants::RADULA_CERAS_RADULA);
 
     // Headers
-    radula_behave_construct_cross("musl-utils");
-    radula_behave_construct_cross("linux-headers");
+    radula_behave_construct_cross(constants::RADULA_CERAS_MUSL_UTILS);
+    radula_behave_construct_cross(constants::RADULA_CERAS_LINUX_HEADERS);
 
     // Init
-    radula_behave_construct_cross("skalibs");
-    radula_behave_construct_cross("execline");
-    radula_behave_construct_cross("s6");
-    radula_behave_construct_cross("utmps");
+    radula_behave_construct_cross(constants::RADULA_CERAS_SKALIBS);
+    radula_behave_construct_cross(constants::RADULA_CERAS_EXECLINE);
+    radula_behave_construct_cross(constants::RADULA_CERAS_S6);
+    radula_behave_construct_cross(constants::RADULA_CERAS_UTMPS);
 
     // Compatibility
-    radula_behave_construct_cross("musl-fts");
-    radula_behave_construct_cross("musl-obstack");
-    radula_behave_construct_cross("musl-rpmatch");
-    radula_behave_construct_cross("libucontext");
-    radula_behave_construct_cross("gcompat");
+    radula_behave_construct_cross(constants::RADULA_CERAS_MUSL_FTS);
+    radula_behave_construct_cross(constants::RADULA_CERAS_MUSL_OBSTACK);
+    radula_behave_construct_cross(constants::RADULA_CERAS_MUSL_RPMATCH);
+    radula_behave_construct_cross(constants::RADULA_CERAS_LIBUCONTEXT);
+    radula_behave_construct_cross(constants::RADULA_CERAS_GCOMPAT);
 
     // i18n & L10n
-    radula_behave_construct_cross("gettext-tiny");
+    radula_behave_construct_cross(constants::RADULA_CERAS_GETTEXT_TINY);
 
     // Permissions
-    radula_behave_construct_cross("attr");
-    radula_behave_construct_cross("acl");
-    radula_behave_construct_cross("shadow");
-    radula_behave_construct_cross("libressl");
+    radula_behave_construct_cross(constants::RADULA_CERAS_ATTR);
+    radula_behave_construct_cross(constants::RADULA_CERAS_ACL);
+    radula_behave_construct_cross(constants::RADULA_CERAS_SHADOW);
+    radula_behave_construct_cross(constants::RADULA_CERAS_LIBRESSL);
 
     // Userland
-    radula_behave_construct_cross("toybox");
-    radula_behave_construct_cross("bc");
-    radula_behave_construct_cross("diffutils");
-    radula_behave_construct_cross("file");
-    radula_behave_construct_cross("findutils");
-    radula_behave_construct_cross("grep");
-    radula_behave_construct_cross("hostname");
-    radula_behave_construct_cross("sed");
-    radula_behave_construct_cross("which");
+    radula_behave_construct_cross(constants::RADULA_CERAS_TOYBOX);
+    radula_behave_construct_cross(constants::RADULA_CERAS_BC);
+    radula_behave_construct_cross(constants::RADULA_CERAS_DIFFUTILS);
+    radula_behave_construct_cross(constants::RADULA_CERAS_FILE);
+    radula_behave_construct_cross(constants::RADULA_CERAS_FINDUTILS);
+    radula_behave_construct_cross(constants::RADULA_CERAS_GREP);
+    radula_behave_construct_cross(constants::RADULA_CERAS_HOSTNAME);
+    radula_behave_construct_cross(constants::RADULA_CERAS_SED);
+    radula_behave_construct_cross(constants::RADULA_CERAS_WHICH);
 
     // Compression
-    radula_behave_construct_cross("bzip2");
-    radula_behave_construct_cross("lbzip2");
-    radula_behave_construct_cross("lbzip2-utils");
-    radula_behave_construct_cross("lz4");
-    radula_behave_construct_cross("lzlib");
-    radula_behave_construct_cross("plzip");
-    radula_behave_construct_cross("xz");
-    radula_behave_construct_cross("zlib-ng");
-    radula_behave_construct_cross("pigz");
-    radula_behave_construct_cross("zstd");
-    radula_behave_construct_cross("libarchive");
+    radula_behave_construct_cross(constants::RADULA_CERAS_BZIP2);
+    radula_behave_construct_cross(constants::RADULA_CERAS_LBZIP2);
+    radula_behave_construct_cross(constants::RADULA_CERAS_LBZIP2_UTILS);
+    radula_behave_construct_cross(constants::RADULA_CERAS_LZ4);
+    radula_behave_construct_cross(constants::RADULA_CERAS_LZLIB);
+    radula_behave_construct_cross(constants::RADULA_CERAS_PLZIP);
+    radula_behave_construct_cross(constants::RADULA_CERAS_XZ);
+    radula_behave_construct_cross(constants::RADULA_CERAS_ZLIB_NG);
+    radula_behave_construct_cross(constants::RADULA_CERAS_PIGZ);
+    radula_behave_construct_cross(constants::RADULA_CERAS_ZSTD);
+    radula_behave_construct_cross(constants::RADULA_CERAS_LIBARCHIVE);
 
     // Development
-    radula_behave_construct_cross("binutils");
-    radula_behave_construct_cross("gcc");
+    radula_behave_construct_cross(constants::RADULA_CERAS_BINUTILS);
+    radula_behave_construct_cross(constants::RADULA_CERAS_GCC);
 
     // Synchronization
-    radula_behave_construct_cross("rsync");
+    radula_behave_construct_cross(constants::RADULA_CERAS_RSYNC);
 
     // Shell
-    radula_behave_construct_cross("netbsd-curses");
-    radula_behave_construct_cross("oksh");
-    radula_behave_construct_cross("dash");
+    radula_behave_construct_cross(constants::RADULA_CERAS_NETBSD_CURSES);
+    radula_behave_construct_cross(constants::RADULA_CERAS_OKSH);
+    radula_behave_construct_cross(constants::RADULA_CERAS_DASH);
 
     // Editors & Pagers
-    radula_behave_construct_cross("libedit");
-    radula_behave_construct_cross("pcre2");
-    radula_behave_construct_cross("less");
-    radula_behave_construct_cross("vim");
-    radula_behave_construct_cross("mandoc");
+    radula_behave_construct_cross(constants::RADULA_CERAS_LIBEDIT);
+    radula_behave_construct_cross(constants::RADULA_CERAS_PCRE2);
+    radula_behave_construct_cross(constants::RADULA_CERAS_LESS);
+    radula_behave_construct_cross(constants::RADULA_CERAS_VIM);
+    radula_behave_construct_cross(constants::RADULA_CERAS_MANDOC);
 
     // Userland
-    radula_behave_construct_cross("plocate");
+    radula_behave_construct_cross(constants::RADULA_CERAS_PLOCATE);
 
     // Networking
-    radula_behave_construct_cross("libcap");
-    radula_behave_construct_cross("iproute2");
-    radula_behave_construct_cross("iputils");
-    radula_behave_construct_cross("sdhcp");
-    radula_behave_construct_cross("curl");
-    radula_behave_construct_cross("wget");
+    radula_behave_construct_cross(constants::RADULA_CERAS_LIBCAP);
+    radula_behave_construct_cross(constants::RADULA_CERAS_IPROUTE2);
+    radula_behave_construct_cross(constants::RADULA_CERAS_IPUTILS);
+    radula_behave_construct_cross(constants::RADULA_CERAS_SDHCP);
+    radula_behave_construct_cross(constants::RADULA_CERAS_CURL);
+    radula_behave_construct_cross(constants::RADULA_CERAS_WGET);
 
     // Utilities
-    radula_behave_construct_cross("kmod");
-    radula_behave_construct_cross("eudev");
-    radula_behave_construct_cross("psmisc");
-    radula_behave_construct_cross("procps-ng");
-    radula_behave_construct_cross("util-linux");
-    radula_behave_construct_cross("e2fsprogs");
-    radula_behave_construct_cross("pciutils");
-    radula_behave_construct_cross("hwids");
+    radula_behave_construct_cross(constants::RADULA_CERAS_KMOD);
+    radula_behave_construct_cross(constants::RADULA_CERAS_EUDEV);
+    radula_behave_construct_cross(constants::RADULA_CERAS_PSMISC);
+    radula_behave_construct_cross(constants::RADULA_CERAS_PROCPS_NG);
+    radula_behave_construct_cross(constants::RADULA_CERAS_UTIL_LINUX);
+    radula_behave_construct_cross(constants::RADULA_CERAS_E2FSPROGS);
+    radula_behave_construct_cross(constants::RADULA_CERAS_PCIUTILS);
+    radula_behave_construct_cross(constants::RADULA_CERAS_HWIDS);
 
     // Services
-    radula_behave_construct_cross("s6-linux-init");
-    radula_behave_construct_cross("s6-rc");
-    radula_behave_construct_cross("s6-boot-scripts");
+    radula_behave_construct_cross(constants::RADULA_CERAS_S6_LINUX_INIT);
+    radula_behave_construct_cross(constants::RADULA_CERAS_S6_RC);
+    radula_behave_construct_cross(constants::RADULA_CERAS_S6_BOOT_SCRIPTS);
 
     // Kernel
-    radula_behave_construct_cross("libuargp");
-    radula_behave_construct_cross("libelf");
-    radula_behave_construct_cross("linux");
+    radula_behave_construct_cross(constants::RADULA_CERAS_LIBUARGP);
+    radula_behave_construct_cross(constants::RADULA_CERAS_LIBELF);
+    //radula_behave_construct_cross(constants::RADULA_CERAS_LINUX);
 }
 
 fn radula_behave_bootstrap_cross_environment_directories() {
@@ -1010,13 +1010,13 @@ fn radula_behave_bootstrap_toolchain_construct() {
         radula_behave_construct(x, constants::RADULA_DIRECTORY_TOOLCHAIN);
     };
 
-    radula_behave_construct_toolchain("musl-headers");
-    radula_behave_construct_toolchain("binutils");
-    radula_behave_construct_toolchain("gcc");
-    radula_behave_construct_toolchain("musl");
-    radula_behave_construct_toolchain("libgcc");
-    radula_behave_construct_toolchain("libstdc++-v3");
-    radula_behave_construct_toolchain("libgomp");
+    radula_behave_construct_toolchain(constants::RADULA_CERAS_MUSL_HEADERS);
+    radula_behave_construct_toolchain(constants::RADULA_CERAS_BINUTILS);
+    radula_behave_construct_toolchain(constants::RADULA_CERAS_GCC);
+    radula_behave_construct_toolchain(constants::RADULA_CERAS_MUSL);
+    radula_behave_construct_toolchain(constants::RADULA_CERAS_LIBGCC);
+    radula_behave_construct_toolchain(constants::RADULA_CERAS_LIBSTDCXX_V3);
+    radula_behave_construct_toolchain(constants::RADULA_CERAS_LIBGOMP);
 }
 
 fn radula_behave_bootstrap_toolchain_environment() {
@@ -1247,20 +1247,28 @@ fn radula_behave_construct(x: &'static str, y: &'static str) {
 
     // Perform swallow within construct for now (this may not be the best approach for parallelism)
     match x {
-        "libelf" => radula_behave_swallow("elfutils"),
+        constants::RADULA_CERAS_LIBELF => radula_behave_swallow(constants::RADULA_CERAS_ELFUTILS),
         // `gcc` will be removed from the list below when dependency resolution is working
-        "gcc" => {
-            radula_behave_swallow("gmp");
-            radula_behave_swallow("mpfr");
-            radula_behave_swallow("mpc");
-            radula_behave_swallow("isl");
+        constants::RADULA_CERAS_GCC => {
+            radula_behave_swallow(constants::RADULA_CERAS_GMP);
+            radula_behave_swallow(constants::RADULA_CERAS_MPFR);
+            radula_behave_swallow(constants::RADULA_CERAS_MPC);
+            radula_behave_swallow(constants::RADULA_CERAS_ISL);
             radula_behave_swallow(x);
         }
-        "hydroskeleton" => {}
-        "libgcc" | "libgomp" | "libstdc++-v3" => radula_behave_swallow("gcc"),
-        "linux-headers" => radula_behave_swallow("linux"),
-        "lksh" => radula_behave_swallow("mksh"),
-        "musl-headers" | "musl-utils" => radula_behave_swallow("musl"),
+        constants::RADULA_CERAS_HYDROSKELETON => {}
+        constants::RADULA_CERAS_LIBGCC
+        | constants::RADULA_CERAS_LIBGOMP
+        | constants::RADULA_CERAS_LIBSTDCXX_V3 => {
+            radula_behave_swallow(constants::RADULA_CERAS_GCC)
+        }
+        constants::RADULA_CERAS_LINUX_HEADERS => {
+            radula_behave_swallow(constants::RADULA_CERAS_LINUX)
+        }
+        constants::RADULA_CERAS_LKSH => radula_behave_swallow(constants::RADULA_CERAS_MKSH),
+        constants::RADULA_CERAS_MUSL_HEADERS | constants::RADULA_CERAS_MUSL_UTILS => {
+            radula_behave_swallow(constants::RADULA_CERAS_MUSL)
+        }
         _ => radula_behave_swallow(x),
     }
 
@@ -1402,7 +1410,7 @@ fn radula_behave_source(x: &str) -> [String; 8] {
                     ". {} && echo $nom~~$ver~~$cmt~~$url~~$sum~~$cys~~$cnt",
                     Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA).unwrap())
                         .join(x)
-                        .join("ceras")
+                        .join(constants::RADULA_CERAS)
                         .to_str()
                         .unwrap(),
                 ),
@@ -1785,7 +1793,7 @@ pub fn radula_options() {
 
                             radula_behave_bootstrap_cross_prepare();
                             radula_behave_bootstrap_cross_construct();
-                            radula_behave_bootstrap_cross_strip();
+                            //radula_behave_bootstrap_cross_strip();
 
                             println!("cross complete");
                         }
@@ -1840,7 +1848,7 @@ pub fn radula_options() {
                 while let Some(z) = x.next().as_deref() {
                     if Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA).unwrap())
                         .join(&z)
-                        .join("ceras")
+                        .join(constants::RADULA_CERAS)
                         .is_file()
                     {
                         for w in radula_behave_source(&z).iter() {

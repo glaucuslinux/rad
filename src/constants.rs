@@ -66,6 +66,120 @@ pub const RADULA_ARCHITECTURE_X86_64_V3_LINUX: &'static str = "x86_64";
 pub const RADULA_ARCHITECTURE_X86_64_V3_LINUX_CONFIGURATION: &'static str = "x86_64_";
 
 //
+// Cerata
+//
+
+pub const RADULA_CERAS: &'static str = "ceras";
+
+pub const RADULA_CERAS_ATTR: &'static str = "attr";
+pub const RADULA_CERAS_ACL: &'static str = "acl";
+
+pub const RADULA_CERAS_BC: &'static str = "bc";
+pub const RADULA_CERAS_BINUTILS: &'static str = "binutils";
+pub const RADULA_CERAS_BZIP2: &'static str = "bzip2";
+
+pub const RADULA_CERAS_CERATA: &'static str = "cerata";
+pub const RADULA_CERAS_CURL: &'static str = "curl";
+
+pub const RADULA_CERAS_DASH: &'static str = "dash";
+
+pub const RADULA_CERAS_DIFFUTILS: &'static str = "diffutils";
+
+pub const RADULA_CERAS_E2FSPROGS: &'static str = "e2fsprogs";
+pub const RADULA_CERAS_ELFUTILS: &'static str = "elfutils";
+pub const RADULA_CERAS_EUDEV: &'static str = "eudev";
+pub const RADULA_CERAS_EXECLINE: &'static str = "execline";
+
+pub const RADULA_CERAS_FILE: &'static str = "file";
+pub const RADULA_CERAS_FINDUTILS: &'static str = "findutils";
+
+pub const RADULA_CERAS_GCC: &'static str = "gcc";
+pub const RADULA_CERAS_GCOMPAT: &'static str = "gcompat";
+pub const RADULA_CERAS_GETTEXT_TINY: &'static str = "gettext-tiny";
+pub const RADULA_CERAS_GMP: &'static str = "gmp";
+pub const RADULA_CERAS_GREP: &'static str = "grep";
+
+pub const RADULA_CERAS_HOSTNAME: &'static str = "hostname";
+pub const RADULA_CERAS_HWIDS: &'static str = "hwids";
+pub const RADULA_CERAS_HYDROSKELETON: &'static str = "hydroskeleton";
+
+pub const RADULA_CERAS_IANA_ETC: &'static str = "iana-etc";
+pub const RADULA_CERAS_IPROUTE2: &'static str = "iproute2";
+pub const RADULA_CERAS_IPUTILS: &'static str = "iputils";
+pub const RADULA_CERAS_ISL: &'static str = "isl";
+
+pub const RADULA_CERAS_KMOD: &'static str = "kmod";
+
+pub const RADULA_CERAS_LBZIP2: &'static str = "lbzip2";
+pub const RADULA_CERAS_LBZIP2_UTILS: &'static str = "lbzip2-utils";
+pub const RADULA_CERAS_LESS: &'static str = "less";
+pub const RADULA_CERAS_LIBARCHIVE: &'static str = "libarchive";
+pub const RADULA_CERAS_LIBCAP: &'static str = "libcap";
+pub const RADULA_CERAS_LIBEDIT: &'static str = "libedit";
+pub const RADULA_CERAS_LIBELF: &'static str = "libelf";
+pub const RADULA_CERAS_LIBGCC: &'static str = "libgcc";
+pub const RADULA_CERAS_LIBGOMP: &'static str = "libgomp";
+pub const RADULA_CERAS_LIBRESSL: &'static str = "libressl";
+pub const RADULA_CERAS_LIBSTDCXX_V3: &'static str = "libstdc++-v3";
+pub const RADULA_CERAS_LIBUARGP: &'static str = "libuargp";
+pub const RADULA_CERAS_LIBUCONTEXT: &'static str = "libucontext";
+pub const RADULA_CERAS_LINUX: &'static str = "linux";
+pub const RADULA_CERAS_LINUX_HEADERS: &'static str = "linux-headers";
+pub const RADULA_CERAS_LKSH: &'static str = "lksh";
+pub const RADULA_CERAS_LZ4: &'static str = "lz4";
+pub const RADULA_CERAS_LZLIB: &'static str = "lzlib";
+
+pub const RADULA_CERAS_MANDOC: &'static str = "mandoc";
+pub const RADULA_CERAS_MKSH: &'static str = "mksh";
+pub const RADULA_CERAS_MPC: &'static str = "mpc";
+pub const RADULA_CERAS_MPFR: &'static str = "mpfr";
+pub const RADULA_CERAS_MUSL: &'static str = "musl";
+pub const RADULA_CERAS_MUSL_FTS: &'static str = "musl-fts";
+pub const RADULA_CERAS_MUSL_HEADERS: &'static str = "musl-headers";
+pub const RADULA_CERAS_MUSL_OBSTACK: &'static str = "musl-obstack";
+pub const RADULA_CERAS_MUSL_RPMATCH: &'static str = "musl-rpmatch";
+pub const RADULA_CERAS_MUSL_UTILS: &'static str = "musl-utils";
+
+pub const RADULA_CERAS_NETBSD_CURSES: &'static str = "netbsd-curses";
+
+pub const RADULA_CERAS_OKSH: &'static str = "oksh";
+
+pub const RADULA_CERAS_PCIUTILS: &'static str = "pciutils";
+pub const RADULA_CERAS_PCRE2: &'static str = "pcre2";
+pub const RADULA_CERAS_PIGZ: &'static str = "pigz";
+pub const RADULA_CERAS_PLOCATE: &'static str = "plocate";
+pub const RADULA_CERAS_PLZIP: &'static str = "plzip";
+pub const RADULA_CERAS_PROCPS_NG: &'static str = "procps-ng";
+pub const RADULA_CERAS_PSMISC: &'static str = "psmisc";
+
+pub const RADULA_CERAS_RADULA: &'static str = "radula";
+pub const RADULA_CERAS_RSYNC: &'static str = "rsync";
+
+pub const RADULA_CERAS_S6: &'static str = "s6";
+pub const RADULA_CERAS_S6_BOOT_SCRIPTS: &'static str = "s6-boot-scripts";
+pub const RADULA_CERAS_S6_LINUX_INIT: &'static str = "s6-linux-init";
+pub const RADULA_CERAS_S6_RC: &'static str = "s6-rc";
+pub const RADULA_CERAS_SDHCP: &'static str = "sdhcp";
+pub const RADULA_CERAS_SED: &'static str = "sed";
+pub const RADULA_CERAS_SHADOW: &'static str = "shadow";
+pub const RADULA_CERAS_SKALIBS: &'static str = "skalibs";
+
+pub const RADULA_CERAS_TOYBOX: &'static str = "toybox";
+
+pub const RADULA_CERAS_UTIL_LINUX: &'static str = "util-linux";
+pub const RADULA_CERAS_UTMPS: &'static str = "utmps";
+
+pub const RADULA_CERAS_VIM: &'static str = "vim";
+
+pub const RADULA_CERAS_WGET: &'static str = "wget";
+pub const RADULA_CERAS_WHICH: &'static str = "which";
+
+pub const RADULA_CERAS_XZ: &'static str = "xz";
+
+pub const RADULA_CERAS_ZLIB_NG: &'static str = "zlib-ng";
+pub const RADULA_CERAS_ZSTD: &'static str = "zstd";
+
+//
 // Cross
 //
 
