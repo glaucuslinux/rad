@@ -71,8 +71,8 @@ pub const RADULA_ARCHITECTURE_X86_64_V3_LINUX_CONFIGURATION: &'static str = "x86
 
 pub const RADULA_CERAS: &'static str = "ceras";
 
-pub const RADULA_CERAS_ATTR: &'static str = "attr";
 pub const RADULA_CERAS_ACL: &'static str = "acl";
+pub const RADULA_CERAS_ATTR: &'static str = "attr";
 
 pub const RADULA_CERAS_BC: &'static str = "bc";
 pub const RADULA_CERAS_BINUTILS: &'static str = "binutils";
@@ -82,7 +82,6 @@ pub const RADULA_CERAS_CERATA: &'static str = "cerata";
 pub const RADULA_CERAS_CURL: &'static str = "curl";
 
 pub const RADULA_CERAS_DASH: &'static str = "dash";
-
 pub const RADULA_CERAS_DIFFUTILS: &'static str = "diffutils";
 
 pub const RADULA_CERAS_E2FSPROGS: &'static str = "e2fsprogs";

@@ -694,7 +694,7 @@ fn radula_behave_bootstrap_cross_image() {
         .unwrap();
 
     // Remove `/lost+found` directory
-    fs::remove_dir_all(Path::new(w).join("lost+found"));
+    fs::remove_dir_all(Path::new(w).join(constants::RADULA_PATH_LOST_FOUND));
 
     radula_behave_rsync(
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap())
