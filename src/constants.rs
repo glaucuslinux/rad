@@ -88,6 +88,7 @@ pub const RADULA_CERAS_E2FSPROGS: &'static str = "e2fsprogs";
 pub const RADULA_CERAS_ELFUTILS: &'static str = "elfutils";
 pub const RADULA_CERAS_EUDEV: &'static str = "eudev";
 pub const RADULA_CERAS_EXECLINE: &'static str = "execline";
+pub const RADULA_CERAS_EXPAT: &'static str = "expat";
 
 pub const RADULA_CERAS_FILE: &'static str = "file";
 pub const RADULA_CERAS_FINDUTILS: &'static str = "findutils";
