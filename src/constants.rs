@@ -123,6 +123,7 @@ pub const RADULA_CERAS_LIBRESSL: &'static str = "libressl";
 pub const RADULA_CERAS_LIBSTDCXX_V3: &'static str = "libstdc++-v3";
 pub const RADULA_CERAS_LIBUARGP: &'static str = "libuargp";
 pub const RADULA_CERAS_LIBUCONTEXT: &'static str = "libucontext";
+pub const RADULA_CERAS_LIBURING: &'static str = "liburing";
 pub const RADULA_CERAS_LINUX: &'static str = "linux";
 pub const RADULA_CERAS_LINUX_HEADERS: &'static str = "linux-headers";
 pub const RADULA_CERAS_LKSH: &'static str = "lksh";
