@@ -339,7 +339,6 @@ fn radula_behave_bootstrap_cross_construct() {
 
     // Development
     radula_behave_construct_cross(constants::RADULA_CERAS_EXPAT);
-    radula_behave_construct_cross(constants::RADULA_CERAS_LIBURING);
 
     // Compression
     radula_behave_construct_cross(constants::RADULA_CERAS_BZIP2);
