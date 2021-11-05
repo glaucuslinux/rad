@@ -381,7 +381,7 @@ fn radula_behave_bootstrap_cross_construct() {
     radula_behave_construct_cross(constants::RADULA_CERAS_IPUTILS);
     radula_behave_construct_cross(constants::RADULA_CERAS_SDHCP);
     radula_behave_construct_cross(constants::RADULA_CERAS_CURL);
-    radula_behave_construct_cross(constants::RADULA_CERAS_WGET);
+    radula_behave_construct_cross(constants::RADULA_CERAS_WGET2);
 
     // Utilities
     radula_behave_construct_cross(constants::RADULA_CERAS_KMOD);

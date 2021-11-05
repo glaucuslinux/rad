@@ -171,7 +171,7 @@ pub const RADULA_CERAS_UTMPS: &'static str = "utmps";
 
 pub const RADULA_CERAS_VIM: &'static str = "vim";
 
-pub const RADULA_CERAS_WGET: &'static str = "wget";
+pub const RADULA_CERAS_WGET2: &'static str = "wget2";
 pub const RADULA_CERAS_WHICH: &'static str = "which";
 
 pub const RADULA_CERAS_XZ: &'static str = "xz";
