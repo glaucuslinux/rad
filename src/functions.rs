@@ -401,7 +401,7 @@ fn radula_behave_bootstrap_cross_construct() {
     // Kernel
     radula_behave_construct_cross(constants::RADULA_CERAS_LIBUARGP);
     radula_behave_construct_cross(constants::RADULA_CERAS_LIBELF);
-    //radula_behave_construct_cross(constants::RADULA_CERAS_LINUX);
+    radula_behave_construct_cross(constants::RADULA_CERAS_LINUX);
 }
 
 fn radula_behave_bootstrap_cross_environment_directories() {
@@ -1432,7 +1432,7 @@ fn radula_behave_source(x: &str) -> [String; 8] {
     return y;
 }
 
-// Fetches and verifies ceras's source
+// Fetch, verify and extract ceras's source
 fn radula_behave_swallow(x: &'static str) {
     // Receive the variables from the `ceras` file
     let y: [String; 8] = radula_behave_source(x);
@@ -1454,7 +1454,7 @@ fn radula_behave_swallow(x: &'static str) {
             .unwrap(),
     );
 
-    // verify
+    // Verify ceras's source tarball
     let radula_behave_verify = || {
         write!(
             Command::new(constants::RADULA_TOOTH_CHECKSUM)
@@ -1473,7 +1473,7 @@ fn radula_behave_swallow(x: &'static str) {
 
     if !Path::is_dir(Path::new(z)) {
         if y[1] == constants::RADULA_TOOTH_GIT {
-            // Clone the `git` repo
+            // Clone ceras's source `git` repository
             Command::new(constants::RADULA_TOOTH_GIT)
                 .args(&["clone", &y[3], z])
                 .stderr(Stdio::null())
@@ -1482,7 +1482,7 @@ fn radula_behave_swallow(x: &'static str) {
                 .unwrap()
                 .wait()
                 .unwrap();
-            // Checkout the freshly cloned `git` repo at the specified commit number
+            // Checkout the freshly cloned `git` repository at the specified commit number
             Command::new(constants::RADULA_TOOTH_GIT)
                 .args(&["-C", z, "checkout", &y[2]])
                 .stderr(Stdio::null())
@@ -1504,6 +1504,7 @@ fn radula_behave_swallow(x: &'static str) {
 
             radula_behave_verify();
 
+            // Extract ceras's source tarball
             Command::new(constants::RADULA_TOOTH_TAR)
                 .args(&["xpvf", &w, "-C", z])
                 .stdout(Stdio::null())
@@ -1513,6 +1514,7 @@ fn radula_behave_swallow(x: &'static str) {
                 .unwrap();
         }
     } else if y[1] != constants::RADULA_TOOTH_GIT {
+        // Only verify existing ceras's source tarballs without extracting them again
         radula_behave_verify();
     }
 }
