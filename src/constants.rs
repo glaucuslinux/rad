@@ -537,8 +537,6 @@ pub const RADULA_TOOTH_PKGCONF: &'static str = "pkgconf";
 
 pub const RADULA_TOOTH_QEMU_IMAGE: &'static str = "qemu-img";
 
-pub const RADULA_TOOTH_REFLEX: &'static str = "reflex";
-
 pub const RADULA_TOOTH_RM: &'static str = "rm";
 pub const RADULA_TOOTH_RM_FLAGS: &'static str = "-frv";
 
