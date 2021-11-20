@@ -319,6 +319,7 @@ fn radula_behave_bootstrap_cross_construct() {
 
     // i18n & L10n
     radula_behave_construct_cross(constants::RADULA_CERAS_GETTEXT_TINY);
+    radula_behave_construct_cross(constants::RADULA_CERAS_MUSL_LOCALES);
 
     // Permissions
     radula_behave_construct_cross(constants::RADULA_CERAS_ATTR);

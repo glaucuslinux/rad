@@ -136,6 +136,7 @@ pub const RADULA_CERAS_MPFR: &'static str = "mpfr";
 pub const RADULA_CERAS_MUSL: &'static str = "musl";
 pub const RADULA_CERAS_MUSL_FTS: &'static str = "musl-fts";
 pub const RADULA_CERAS_MUSL_HEADERS: &'static str = "musl-headers";
+pub const RADULA_CERAS_MUSL_LOCALES: &'static str = "musl-locales";
 pub const RADULA_CERAS_MUSL_OBSTACK: &'static str = "musl-obstack";
 pub const RADULA_CERAS_MUSL_RPMATCH: &'static str = "musl-rpmatch";
 pub const RADULA_CERAS_MUSL_UTILS: &'static str = "musl-utils";
@@ -415,7 +416,7 @@ OPTIONS:
 \tv, ver       \tDisplay cerata version(s)
 \ty, cys       \tDisplay cerata cyst(s)";
 
-pub const RADULA_HELP_VERSION: &'static str = "radula version 1.0.4
+pub const RADULA_HELP_VERSION: &'static str = "radula version 1.0.5
 
 Copyright (c) 2018-2021, Firas Khalil Khana
 Distributed under the terms of the ISC License";
