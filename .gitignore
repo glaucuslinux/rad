@@ -8,4 +8,5 @@ radula
 # Directories
 #
 
+.idea/
 target/
