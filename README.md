@@ -19,6 +19,7 @@ glaucus's radula
 
 ## Mirrors
 * [BitBucket](https://bitbucket.org/glaucuslinux/radula)
+* [Codeberg](https://codeberg.org/glaucuslinux/radula)
 * [Framagit](https://framagit.org/glaucuslinux/radula)
 * [GitHub](https://github.com/glaucuslinux/radula)
 * [GitLab](https://gitlab.com/glaucuslinux/radula)
