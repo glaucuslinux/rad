@@ -9,4 +9,5 @@ radula
 #
 
 .idea/
+.vscode/
 target/

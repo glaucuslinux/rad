@@ -79,7 +79,6 @@ pub const RADULA_CERAS_BINUTILS: &'static str = "binutils";
 pub const RADULA_CERAS_BZIP2: &'static str = "bzip2";
 
 pub const RADULA_CERAS_CERATA: &'static str = "cerata";
-pub const RADULA_CERAS_CURL: &'static str = "curl";
 
 pub const RADULA_CERAS_DASH: &'static str = "dash";
 pub const RADULA_CERAS_DIFFUTILS: &'static str = "diffutils";
@@ -416,7 +415,7 @@ OPTIONS:
 \tv, ver       \tDisplay cerata version(s)
 \ty, cys       \tDisplay cerata cyst(s)";
 
-pub const RADULA_HELP_VERSION: &'static str = "radula version 1.0.5
+pub const RADULA_HELP_VERSION: &'static str = "radula version 1.1.0
 
 Copyright (c) 2018-2021, Firas Khalil Khana
 Distributed under the terms of the ISC License";
@@ -431,6 +430,8 @@ pub const RADULA_PATH_BOOT: &'static str = "boot";
 
 // Default `ccache` directories on both Arch and Fedora
 pub const RADULA_PATH_CCACHE: &'static str = "/usr/lib/ccache/bin:/usr/lib64/ccache";
+
+pub const RADULA_PATH_CLUSTERS: &'static str = "/var/db/radula/clusters/glaucus";
 
 pub const RADULA_PATH_ETC: &'static str = "etc";
 
@@ -481,10 +482,6 @@ pub const RADULA_TOOTH_CHMOD: &'static str = "chmod";
 pub const RADULA_TOOTH_CHMOD_CHOWN_FLAGS: &'static str = "-Rv";
 pub const RADULA_TOOTH_CHOWN: &'static str = "chown";
 
-// Prefer `curl` over `wget`
-pub const RADULA_TOOTH_CURL: &'static str = "curl";
-pub const RADULA_TOOTH_CURL_FLAGS: &'static str = "-Lo";
-
 pub const RADULA_TOOTH_DATE: &'static str = "date";
 
 pub const RADULA_TOOTH_DD: &'static str = "dd";
@@ -496,7 +493,6 @@ pub const RADULA_TOOTH_FIND: &'static str = "find";
 
 pub const RADULA_TOOTH_FLEX: &'static str = "flex";
 
-// No default flags were included for `git` because there are many
 pub const RADULA_TOOTH_GIT: &'static str = "git";
 
 pub const RADULA_TOOTH_LN: &'static str = "ln";
@@ -522,9 +518,6 @@ pub const RADULA_TOOTH_MOUNT: &'static str = "mount";
 
 pub const RADULA_TOOTH_MV: &'static str = "mv";
 pub const RADULA_TOOTH_MV_FLAGS: &'static str = "-v";
-
-// We're not going to use the `num_cpus` crate
-pub const RADULA_TOOTH_NPROC: &'static str = "nproc";
 
 pub const RADULA_TOOTH_PARTED: &'static str = "parted";
 pub const RADULA_TOOTH_PARTED_FLAGS: &'static str = "-s";

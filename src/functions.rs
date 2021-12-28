@@ -3,293 +3,23 @@
 
 use std::env;
 use std::fs;
-use std::io::Write;
 use std::path::Path;
-use std::process::{exit, Command, Stdio};
+use std::process::{Command, Stdio};
 use std::string::String;
 
+use super::ceras;
 use super::constants;
+use super::swallow;
+
+use colored::Colorize;
+
+extern crate num_cpus;
 
 //
 // Behave Functions
 //
 
-fn radula_behave_bootstrap_architecture_environment(x: &'static str) {
-    env::set_var(
-        constants::RADULA_ENVIRONMENT_TUPLE_BUILD,
-        String::from_utf8_lossy(
-            &Command::new(
-                Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA).unwrap())
-                    .join(constants::RADULA_FILE_CONFIG_GUESS),
-            )
-            .output()
-            .unwrap()
-            .stdout,
-        )
-        .trim(),
-    );
-
-    env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE, x);
-    env::set_var(
-        constants::RADULA_ENVIRONMENT_ARCHITECTURE_CERATA,
-        [constants::RADULA_ARCHITECTURE_CERATA, x].concat(),
-    );
-    env::set_var(
-        constants::RADULA_ENVIRONMENT_TUPLE_TARGET,
-        [x, constants::RADULA_ARCHITECTURE_TUPLE_TARGET].concat(),
-    );
-
-    match x {
-        constants::RADULA_ARCHITECTURE_AARCH64 => {
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_CERATA,
-                [
-                    constants::RADULA_ARCHITECTURE_CERATA,
-                    constants::RADULA_ARCHITECTURE_AARCH64_CERATA,
-                ]
-                .concat(),
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS,
-                constants::RADULA_ARCHITECTURE_AARCH64_FLAGS,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION,
-                constants::RADULA_ARCHITECTURE_AARCH64_GCC_CONFIGURATION,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT,
-                [
-                    "-",
-                    constants::RADULA_ARCHITECTURE_AARCH64,
-                    constants::RADULA_ARCHITECTURE_AARCH64_GCOMPAT,
-                ]
-                .concat(),
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX,
-                constants::RADULA_ARCHITECTURE_AARCH64_LINUX,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION,
-                "",
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE,
-                constants::RADULA_ARCHITECTURE_AARCH64_LINUX_IMAGE,
-            );
-            env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL, x);
-            env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER, x);
-            env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT, x);
-        }
-        constants::RADULA_ARCHITECTURE_ARMV6ZK => {
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS,
-                constants::RADULA_ARCHITECTURE_ARMV6ZK_FLAGS,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION,
-                constants::RADULA_ARCHITECTURE_ARMV6ZK_GCC_CONFIGURATION,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT,
-                [
-                    "-",
-                    constants::RADULA_ARCHITECTURE_ARMV6ZK_LINUX,
-                    constants::RADULA_ARCHITECTURE_ARMV6ZK_MUSL_LINKER,
-                    constants::RADULA_ARCHITECTURE_ARMV6ZK_GCOMPAT,
-                ]
-                .concat(),
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX,
-                constants::RADULA_ARCHITECTURE_ARMV6ZK_LINUX,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION,
-                constants::RADULA_ARCHITECTURE_ARMV6ZK_LINUX_CONFIGURATION,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE,
-                constants::RADULA_ARCHITECTURE_ARMV6ZK_LINUX_IMAGE,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL,
-                constants::RADULA_ARCHITECTURE_ARMV6ZK_LINUX,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER,
-                [
-                    constants::RADULA_ARCHITECTURE_ARMV6ZK_LINUX,
-                    constants::RADULA_ARCHITECTURE_ARMV6ZK_MUSL_LINKER,
-                ]
-                .concat(),
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_TUPLE_TARGET,
-                [
-                    &env::var(constants::RADULA_ENVIRONMENT_TUPLE_TARGET).unwrap(),
-                    constants::RADULA_ARCHITECTURE_ARMV6ZK_TUPLE_TARGET,
-                ]
-                .concat(),
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT,
-                constants::RADULA_ARCHITECTURE_ARMV6ZK_LINUX,
-            );
-        }
-        constants::RADULA_ARCHITECTURE_I686 => {
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS,
-                constants::RADULA_ARCHITECTURE_I686_FLAGS,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION,
-                constants::RADULA_ARCHITECTURE_I686_GCC_CONFIGURATION,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT,
-                constants::RADULA_ARCHITECTURE_I686_GCOMPAT,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX,
-                constants::RADULA_ARCHITECTURE_I686_LINUX,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION,
-                constants::RADULA_ARCHITECTURE_I686_LINUX_CONFIGURATION,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE,
-                constants::RADULA_ARCHITECTURE_I686_LINUX_IMAGE,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL,
-                constants::RADULA_ARCHITECTURE_I686_LINUX,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER,
-                constants::RADULA_ARCHITECTURE_I686_LINUX,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT,
-                constants::RADULA_ARCHITECTURE_I686_UCONTEXT,
-            );
-        }
-        constants::RADULA_ARCHITECTURE_RISCV64 => {
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_CERATA,
-                [
-                    constants::RADULA_ARCHITECTURE_CERATA,
-                    constants::RADULA_ARCHITECTURE_RISCV64_CERATA,
-                ]
-                .concat(),
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS,
-                constants::RADULA_ARCHITECTURE_RISCV64_FLAGS,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION,
-                constants::RADULA_ARCHITECTURE_RISCV64_GCC_CONFIGURATION,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT,
-                [
-                    "-",
-                    constants::RADULA_ARCHITECTURE_RISCV64,
-                    constants::RADULA_ARCHITECTURE_RISCV64_GCOMPAT,
-                ]
-                .concat(),
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX,
-                constants::RADULA_ARCHITECTURE_RISCV64_LINUX,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION,
-                "",
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE,
-                constants::RADULA_ARCHITECTURE_RISCV64_LINUX_IMAGE,
-            );
-            env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL, x);
-            env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER, x);
-            env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT, x);
-        }
-        constants::RADULA_ARCHITECTURE_X86_64_V3 => {
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS,
-                constants::RADULA_ARCHITECTURE_X86_64_V3_FLAGS,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION,
-                constants::RADULA_ARCHITECTURE_X86_64_V3_GCC_CONFIGURATION,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT,
-                [
-                    "-",
-                    constants::RADULA_ARCHITECTURE_X86_64_V3,
-                    constants::RADULA_ARCHITECTURE_I686_GCOMPAT,
-                ]
-                .concat(),
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX,
-                constants::RADULA_ARCHITECTURE_X86_64_V3_LINUX,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION,
-                constants::RADULA_ARCHITECTURE_X86_64_V3_LINUX_CONFIGURATION,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE,
-                constants::RADULA_ARCHITECTURE_I686_LINUX_IMAGE,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL,
-                constants::RADULA_ARCHITECTURE_X86_64_V3_LINUX,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER,
-                constants::RADULA_ARCHITECTURE_X86_64_V3_LINUX,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_TUPLE_TARGET,
-                [
-                    constants::RADULA_ARCHITECTURE_X86_64_V3_LINUX,
-                    constants::RADULA_ARCHITECTURE_TUPLE_TARGET,
-                ]
-                .concat(),
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT,
-                constants::RADULA_ARCHITECTURE_X86_64_V3_LINUX,
-            );
-        }
-        _ => {}
-    }
-}
-
-fn radula_behave_bootstrap_clean() {
-    fs::remove_dir_all(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap());
-
-    fs::remove_dir_all(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS).unwrap());
-
-    fs::remove_dir_all(
-        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_BUILDS).unwrap(),
-    );
-
-    fs::remove_dir_all(
-        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS).unwrap(),
-    );
-
-    fs::remove_dir_all(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN).unwrap());
-}
-
-fn radula_behave_bootstrap_cross_construct() {
+pub fn radula_behave_bootstrap_cross_construct() {
     let radula_behave_construct_cross = |x: &'static str| {
         radula_behave_construct(x, constants::RADULA_DIRECTORY_CROSS);
     };
@@ -381,7 +111,6 @@ fn radula_behave_bootstrap_cross_construct() {
     radula_behave_construct_cross(constants::RADULA_CERAS_IPROUTE2);
     radula_behave_construct_cross(constants::RADULA_CERAS_IPUTILS);
     radula_behave_construct_cross(constants::RADULA_CERAS_SDHCP);
-    radula_behave_construct_cross(constants::RADULA_CERAS_CURL);
     radula_behave_construct_cross(constants::RADULA_CERAS_WGET2);
 
     // Utilities
@@ -405,7 +134,7 @@ fn radula_behave_bootstrap_cross_construct() {
     radula_behave_construct_cross(constants::RADULA_CERAS_LINUX);
 }
 
-fn radula_behave_bootstrap_cross_environment_directories() {
+pub fn radula_behave_bootstrap_cross_environment_directories() {
     let x = &Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY).unwrap())
         .join(constants::RADULA_DIRECTORY_CROSS);
 
@@ -435,7 +164,7 @@ fn radula_behave_bootstrap_cross_environment_directories() {
     );
 }
 
-fn radula_behave_bootstrap_cross_environment_teeth() {
+pub fn radula_behave_bootstrap_cross_environment_teeth() {
     let x = &[
         &env::var(constants::RADULA_ENVIRONMENT_TUPLE_TARGET).unwrap(),
         "-",
@@ -535,263 +264,7 @@ fn radula_behave_bootstrap_cross_environment_teeth() {
     );
 }
 
-fn radula_behave_bootstrap_cross_image() {
-    // A custom rsync function to prevent permission errors (`-S` is not used)
-    let radula_behave_rsync = |x: &str, y: &str| {
-        Command::new(constants::RADULA_TOOTH_RSYNC)
-            .args(&["-vaHAXx", x, y, "--delete"])
-            .stdout(Stdio::null())
-            .spawn()
-            .unwrap()
-            .wait()
-            .unwrap();
-    };
-
-    let x = &String::from(
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS).unwrap())
-            .join(constants::RADULA_FILE_GLAUCUS_IMAGE)
-            .to_str()
-            .unwrap(),
-    );
-
-    // Create a new image
-    fs::remove_file(x);
-    Command::new(constants::RADULA_TOOTH_QEMU_IMAGE)
-        .args(&[
-            "create",
-            "-f",
-            "raw",
-            x,
-            constants::RADULA_FILE_GLAUCUS_IMAGE_SIZE,
-        ])
-        .stdout(Stdio::null())
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
-    // Write mbr.bin (from SYSLINUX) to the first 440 bytes of the image
-    Command::new(constants::RADULA_TOOTH_DD)
-        .args(&[
-            &format!(
-                "if={}",
-                Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA).unwrap())
-                    .join(constants::RADULA_FILE_SYSLINUX_MBR_BIN)
-                    .to_str()
-                    .unwrap()
-            ),
-            &format!("of={}", x),
-            "conv=notrunc",
-            "bs=440",
-            "count=1",
-        ])
-        .stderr(Stdio::null())
-        .stdout(Stdio::null())
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
-
-    // Partition the image
-    Command::new(constants::RADULA_TOOTH_PARTED)
-        .args(&[constants::RADULA_TOOTH_PARTED_FLAGS, x, "mklabel", "msdos"])
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
-    Command::new(constants::RADULA_TOOTH_PARTED)
-        .args(&[
-            constants::RADULA_TOOTH_PARTED_FLAGS,
-            "-a",
-            "none",
-            x,
-            "mkpart",
-            "primary",
-            "ext4",
-            "0",
-            constants::RADULA_FILE_GLAUCUS_IMAGE_SIZE,
-        ])
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
-    Command::new(constants::RADULA_TOOTH_PARTED)
-        .args(&[
-            constants::RADULA_TOOTH_PARTED_FLAGS,
-            "-a",
-            "none",
-            x,
-            "set",
-            "1",
-            "boot",
-            "on",
-        ])
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
-
-    Command::new(constants::RADULA_TOOTH_MODPROBE)
-        .arg("loop")
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
-
-    // Find the first unused loop device
-    let y = &String::from_utf8_lossy(
-        &Command::new(constants::RADULA_TOOTH_LOSETUP)
-            .arg("-f")
-            .output()
-            .unwrap()
-            .stdout,
-    )
-    .trim()
-    .to_owned();
-
-    let z = &[y, "p1"].concat();
-
-    // Associate the first unused loop device with the image
-    Command::new(constants::RADULA_TOOTH_LOSETUP)
-        .arg("-D")
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
-    Command::new(constants::RADULA_TOOTH_LOSETUP)
-        .args(&[y, x])
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
-
-    // Notify the kernel about the new partition on the image
-    Command::new(constants::RADULA_TOOTH_PARTX)
-        .args(&["-a", y])
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
-    Command::new(constants::RADULA_TOOTH_MKE2FS)
-        .args(&[constants::RADULA_TOOTH_MKE2FS_FLAGS, "ext4", z])
-        .stderr(Stdio::null())
-        .stdout(Stdio::null())
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
-
-    let w = &String::from(
-        Path::new(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
-            .join(constants::RADULA_PATH_MNT)
-            .join(constants::RADULA_DIRECTORY_GLAUCUS)
-            .to_str()
-            .unwrap(),
-    );
-
-    fs::create_dir(w);
-
-    Command::new(constants::RADULA_TOOTH_MOUNT)
-        .args(&[z, w])
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
-
-    // Remove `/lost+found` directory
-    fs::remove_dir_all(Path::new(w).join(constants::RADULA_PATH_LOST_FOUND));
-
-    radula_behave_rsync(
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap())
-            .join(
-                constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR
-                    .strip_prefix(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
-                    .unwrap(),
-            )
-            .to_str()
-            .unwrap(),
-        w,
-    );
-
-    let r = &String::from(
-        Path::new(w)
-            .join(constants::RADULA_PATH_BOOT)
-            .join(constants::RADULA_TOOTH_EXTLINUX)
-            .to_str()
-            .unwrap(),
-    );
-
-    // Install extlinux as the default bootloader
-    fs::create_dir(r);
-    radula_behave_rsync(
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA).unwrap())
-            .join(constants::RADULA_FILE_SYSLINUX_EXTLINUX_CONF)
-            .to_str()
-            .unwrap(),
-        r,
-    );
-    Command::new(constants::RADULA_TOOTH_EXTLINUX)
-        .args(&[constants::RADULA_TOOTH_EXTLINUX_FLAGS, r])
-        .stderr(Stdio::null())
-        .stdout(Stdio::null())
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
-
-    // Change ownerships
-    Command::new(constants::RADULA_TOOTH_CHOWN)
-        .args(&[constants::RADULA_TOOTH_CHMOD_CHOWN_FLAGS, "0:0", w])
-        .stdout(Stdio::null())
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
-    Command::new(constants::RADULA_TOOTH_CHOWN)
-        .args(&[
-            constants::RADULA_TOOTH_CHMOD_CHOWN_FLAGS,
-            "20:20",
-            Path::new(w)
-                .join(constants::RADULA_PATH_ETC)
-                .join(constants::RADULA_PATH_UTMPS)
-                .to_str()
-                .unwrap(),
-        ])
-        .stdout(Stdio::null())
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
-
-    // Clean up
-    Command::new(constants::RADULA_TOOTH_UMOUNT)
-        .args(&[constants::RADULA_TOOTH_UMOUNT_FLAGS, w])
-        .stderr(Stdio::null())
-        .stdout(Stdio::null())
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
-    Command::new(constants::RADULA_TOOTH_PARTX)
-        .args(&["-d", z])
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
-    Command::new(constants::RADULA_TOOTH_LOSETUP)
-        .args(&["-d", z])
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
-
-    // Backup the new image
-    radula_behave_rsync(
-        x,
-        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap(),
-    );
-}
-
-fn radula_behave_bootstrap_cross_prepare() {
+pub fn radula_behave_bootstrap_cross_prepare() {
     radula_behave_rsync(
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap())
             .join(constants::RADULA_DIRECTORY_CROSS)
@@ -912,25 +385,7 @@ fn radula_behave_bootstrap_cross_strip() {
         .unwrap();
 }
 
-fn radula_behave_bootstrap_distclean() {
-    fs::remove_dir_all(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap());
-
-    fs::remove_file(
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS).unwrap())
-            .join(constants::RADULA_FILE_GLAUCUS_IMAGE),
-    );
-
-    fs::remove_dir_all(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES).unwrap());
-
-    radula_behave_bootstrap_clean();
-
-    // Only remove `RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY` completely after
-    // `RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_BUILDS` and
-    // `RADULA_ENVIRONMENT_DIRECTORY_CROSS_BUILDS` are removed
-    fs::remove_dir_all(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY).unwrap());
-}
-
-fn radula_behave_bootstrap_environment() {
+pub fn radula_behave_bootstrap_environment() {
     let x = &fs::canonicalize("..").unwrap();
 
     env::set_var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS, x);
@@ -985,14 +440,14 @@ fn radula_behave_bootstrap_environment() {
     );
 }
 
-fn radula_behave_bootstrap_initialize() {
+pub fn radula_behave_bootstrap_initialize() {
     fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap());
     fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS).unwrap());
     fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES).unwrap());
     fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY).unwrap());
 }
 
-fn radula_behave_bootstrap_toolchain_backup() {
+pub fn radula_behave_bootstrap_toolchain_backup() {
     radula_behave_rsync(
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap(),
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap(),
@@ -1009,7 +464,7 @@ fn radula_behave_bootstrap_toolchain_backup() {
     );
 }
 
-fn radula_behave_bootstrap_toolchain_construct() {
+pub fn radula_behave_bootstrap_toolchain_construct() {
     let radula_behave_construct_toolchain = |x: &'static str| {
         radula_behave_construct(x, constants::RADULA_DIRECTORY_TOOLCHAIN);
     };
@@ -1023,7 +478,7 @@ fn radula_behave_bootstrap_toolchain_construct() {
     radula_behave_construct_toolchain(constants::RADULA_CERAS_LIBGOMP);
 }
 
-fn radula_behave_bootstrap_toolchain_environment() {
+pub fn radula_behave_bootstrap_toolchain_environment() {
     let x = &Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY).unwrap())
         .join(constants::RADULA_DIRECTORY_TOOLCHAIN);
 
@@ -1056,7 +511,7 @@ fn radula_behave_bootstrap_toolchain_environment() {
     );
 }
 
-fn radula_behave_bootstrap_toolchain_prepare() {
+pub fn radula_behave_bootstrap_toolchain_prepare() {
     fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap());
 
     fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN).unwrap());
@@ -1071,7 +526,7 @@ fn radula_behave_bootstrap_toolchain_prepare() {
     );
 }
 
-fn radula_behave_bootstrap_toolchain_release() {
+pub fn radula_behave_bootstrap_toolchain_release() {
     let x = &String::from(
         Path::new(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
             .join(constants::RADULA_DIRECTORY_TEMPORARY)
@@ -1231,7 +686,7 @@ fn radula_behave_bootstrap_toolchain_release() {
         .unwrap();
 }
 
-fn radula_behave_ccache_environment() {
+pub fn radula_behave_ccache_environment() {
     env::set_var(
         constants::RADULA_ENVIRONMENT_PATH,
         Path::new(&[constants::RADULA_PATH_CCACHE, ":"].concat()).join(
@@ -1245,38 +700,49 @@ fn radula_behave_ccache_environment() {
 
 fn radula_behave_construct(x: &'static str, y: &'static str) {
     // We only require `nom` and `ver` from the `ceras` file
-    let z: [String; 8] = radula_behave_source(x);
+    let z = ceras::radula_behave_ceras_parse(x);
+    let w = z.ver.unwrap_or("".to_string().into());
 
-    println!("{}", [&z[0], " ", &z[1], " ", &z[2]].concat().trim());
+    println!(
+        "{}{}",
+        &z.nom.blue(),
+        [" ", &w, " ", &z.cmt.unwrap_or_default()]
+            .concat()
+            .trim_end()
+    );
 
     // Perform swallow within construct for now (this may not be the best approach for parallelism)
     match x {
-        constants::RADULA_CERAS_LIBELF => radula_behave_swallow(constants::RADULA_CERAS_ELFUTILS),
+        constants::RADULA_CERAS_LIBELF => {
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_ELFUTILS)
+        }
         // `gcc` will be removed from the list below when dependency resolution is working
         constants::RADULA_CERAS_GCC => {
-            radula_behave_swallow(constants::RADULA_CERAS_GMP);
-            radula_behave_swallow(constants::RADULA_CERAS_MPFR);
-            radula_behave_swallow(constants::RADULA_CERAS_MPC);
-            radula_behave_swallow(constants::RADULA_CERAS_ISL);
-            radula_behave_swallow(x);
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_GMP);
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_MPFR);
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_MPC);
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_ISL);
+            swallow::radula_behave_swallow(x);
         }
         constants::RADULA_CERAS_HYDROSKELETON => {}
         constants::RADULA_CERAS_LIBGCC
         | constants::RADULA_CERAS_LIBGOMP
         | constants::RADULA_CERAS_LIBSTDCXX_V3 => {
-            radula_behave_swallow(constants::RADULA_CERAS_GCC)
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_GCC)
         }
         constants::RADULA_CERAS_LINUX_HEADERS => {
-            radula_behave_swallow(constants::RADULA_CERAS_LINUX)
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_LINUX)
         }
-        constants::RADULA_CERAS_LKSH => radula_behave_swallow(constants::RADULA_CERAS_MKSH),
+        constants::RADULA_CERAS_LKSH => {
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_MKSH)
+        }
         constants::RADULA_CERAS_MUSL_HEADERS | constants::RADULA_CERAS_MUSL_UTILS => {
-            radula_behave_swallow(constants::RADULA_CERAS_MUSL)
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_MUSL)
         }
-        _ => radula_behave_swallow(x),
+        _ => swallow::radula_behave_swallow(x),
     }
 
-    println!(":: construct");
+    println!("{} construct", "::".bold());
 
     // The `.wait()` is needed to allow `Ctrl + C` to work...
     Command::new(constants::RADULA_TOOTH_SHELL)
@@ -1289,9 +755,9 @@ fn radula_behave_construct(x: &'static str, y: &'static str) {
                 // current working directory, otherwise we'd have to store it and pass it or `cd`
                 // into it whenever a basic function is called.
                 "nom={} ver={} . {} && prepare {} && configure {3} && build {3} && check {3} && install {3}",
-                z[0],
-                z[1],
-                Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA).unwrap())
+                z.nom,
+                w,
+                Path::new(constants::RADULA_PATH_CLUSTERS)
                     .join(x)
                     .join(y)
                     .to_str()
@@ -1314,38 +780,7 @@ fn radula_behave_construct(x: &'static str, y: &'static str) {
     println!("");
 }
 
-// This will be used whether we're bootstrapping or not so don't add _bootstrap_ to its name
-fn radula_behave_flags_environment() {
-    env::set_var(
-        constants::RADULA_ENVIRONMENT_FLAGS_C_COMPILER,
-        [
-            constants::RADULA_FLAGS_C_COMPILER,
-            " ",
-            &env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS).unwrap(),
-        ]
-        .concat(),
-    );
-    env::set_var(
-        constants::RADULA_ENVIRONMENT_FLAGS_CXX_COMPILER,
-        [
-            &env::var(constants::RADULA_ENVIRONMENT_FLAGS_C_COMPILER).unwrap(),
-            " ",
-            constants::RADULA_FLAGS_CXX_COMPILER,
-        ]
-        .concat(),
-    );
-    env::set_var(
-        constants::RADULA_ENVIRONMENT_FLAGS_LINKER,
-        [
-            constants::RADULA_FLAGS_LINKER,
-            " ",
-            &env::var(constants::RADULA_ENVIRONMENT_FLAGS_C_COMPILER).unwrap(),
-        ]
-        .concat(),
-    );
-}
-
-fn radula_behave_pkg_config_environment() {
+pub fn radula_behave_pkg_config_environment() {
     env::set_var(
         constants::RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR,
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap()).join(
@@ -1397,130 +832,7 @@ fn radula_behave_rsync(x: &str, y: &str) {
         .unwrap();
 }
 
-// Sources the `ceras` file and returns an array of strings representing the
-// variables inside of it
-fn radula_behave_source(x: &str) -> [String; 8] {
-    // We can't have a `"".to_string()` copied 8 times, which is why we're using
-    // a constant beforehand
-    const S: String = String::new();
-    let mut y: [String; 8] = [S; 8];
-
-    // Magic
-    for (i, j) in String::from_utf8_lossy(
-        &Command::new(constants::RADULA_TOOTH_SHELL)
-            .args(&[
-                constants::RADULA_TOOTH_SHELL_FLAGS,
-                &format!(
-                    ". {} && echo $nom~~$ver~~$cmt~~$url~~$sum~~$cys~~$cnt",
-                    Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA).unwrap())
-                        .join(x)
-                        .join(constants::RADULA_CERAS)
-                        .to_str()
-                        .unwrap(),
-                ),
-            ])
-            .output()
-            .unwrap()
-            .stdout,
-    )
-    .trim()
-    .split("~~")
-    .enumerate()
-    {
-        y[i] = j.to_owned();
-    }
-
-    return y;
-}
-
-// Fetch, verify and extract ceras's source
-fn radula_behave_swallow(x: &'static str) {
-    // Receive the variables from the `ceras` file
-    let y: [String; 8] = radula_behave_source(x);
-
-    println!(":: swallow");
-
-    // Get the path of the source directory
-    let z = &String::from(
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES).unwrap())
-            .join(&y[0])
-            .to_str()
-            .unwrap(),
-    );
-
-    let w = String::from(
-        Path::new(z)
-            .join(Path::new(&y[3]).file_name().unwrap())
-            .to_str()
-            .unwrap(),
-    );
-
-    // Verify ceras's source tarball
-    let radula_behave_verify = || {
-        write!(
-            Command::new(constants::RADULA_TOOTH_CHECKSUM)
-                .arg(constants::RADULA_TOOTH_CHECKSUM_FLAGS)
-                .stdin(Stdio::piped())
-                .stdout(Stdio::null())
-                .spawn()
-                .unwrap()
-                .stdin
-                .unwrap(),
-            "{}",
-            [&y[4], " ", &w].concat()
-        )
-        .unwrap();
-    };
-
-    if !Path::is_dir(Path::new(z)) {
-        if y[1] == constants::RADULA_TOOTH_GIT {
-            // Clone ceras's source `git` repository
-            Command::new(constants::RADULA_TOOTH_GIT)
-                .args(&["clone", &y[3], z])
-                .stderr(Stdio::null())
-                .stdout(Stdio::null())
-                .spawn()
-                .unwrap()
-                .wait()
-                .unwrap();
-            // Checkout the freshly cloned `git` repository at the specified commit number
-            Command::new(constants::RADULA_TOOTH_GIT)
-                .args(&["-C", z, "checkout", &y[2]])
-                .stderr(Stdio::null())
-                .stdout(Stdio::null())
-                .spawn()
-                .unwrap()
-                .wait()
-                .unwrap();
-        } else {
-            fs::create_dir(z);
-
-            Command::new(constants::RADULA_TOOTH_CURL)
-                .args(&[constants::RADULA_TOOTH_CURL_FLAGS, &w, &y[3]])
-                .stderr(Stdio::null())
-                .spawn()
-                .unwrap()
-                .wait()
-                .unwrap();
-
-            radula_behave_verify();
-
-            // Extract ceras's source tarball
-            Command::new(constants::RADULA_TOOTH_TAR)
-                .args(&["xpvf", &w, "-C", z])
-                .stdout(Stdio::null())
-                .spawn()
-                .unwrap()
-                .wait()
-                .unwrap();
-        }
-    } else if y[1] != constants::RADULA_TOOTH_GIT {
-        // Only verify existing ceras's source tarballs without extracting them again
-        radula_behave_verify();
-    }
-}
-
-fn radula_behave_teeth_environment() {
+pub fn radula_behave_teeth_environment() {
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_AUTORECONF,
         [
@@ -1599,18 +911,7 @@ fn radula_behave_teeth_environment() {
         constants::RADULA_ENVIRONMENT_TOOTH_MAKEFLAGS,
         [
             "-j",
-            // We need to trim the output or parse won't work...
-            &(String::from_utf8_lossy(
-                &Command::new(constants::RADULA_TOOTH_NPROC)
-                    .output()
-                    .unwrap()
-                    .stdout,
-            )
-            .trim()
-            .parse::<f32>()
-            .unwrap()
-                * 1.5)
-                .to_string(),
+            &(num_cpus::get() as f32 * 1.5).to_string(),
             " ",
             constants::RADULA_TOOTH_MAKEFLAGS,
         ]
@@ -1690,213 +991,6 @@ fn radula_behave_teeth_environment() {
 // Help Functions
 //
 
-fn radula_help(x: &'static str) {
+pub fn radula_help(x: &'static str) {
     println!("{}\n\n{}", constants::RADULA_HELP_VERSION, x);
-}
-
-//
-// Options Functions
-//
-
-pub fn radula_options() {
-    let mut x = env::args().skip(1);
-
-    if x.len() < 1 {
-        radula_help(constants::RADULA_HELP);
-        exit(1);
-    }
-
-    while let Some(y) = x.next().as_deref() {
-        match y {
-            // `.unwrap_or_default()` actually returns an empty string literal which gets matched
-            // to `_` in the below switch (if we had `.unwrap_or("h")` then that'll return the help
-            // message without exiting with an error status of `1`).
-            "-b" | "--behave" => match x.next().as_deref().unwrap_or_default() {
-                "b" | "bootstrap" => {
-                    match x.next().as_deref().unwrap_or_default() {
-                        "c" | "clean" => {
-                            radula_behave_bootstrap_environment();
-
-                            radula_behave_bootstrap_toolchain_environment();
-
-                            radula_behave_bootstrap_cross_environment_directories();
-
-                            radula_behave_bootstrap_clean();
-
-                            println!("clean complete");
-                        }
-                        "d" | "distclean" => {
-                            radula_behave_bootstrap_environment();
-
-                            radula_behave_bootstrap_toolchain_environment();
-
-                            radula_behave_bootstrap_cross_environment_directories();
-
-                            radula_behave_bootstrap_distclean();
-
-                            println!("distclean complete");
-                        }
-                        "h" | "help" => radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP),
-                        "i" | "image" => {
-                            radula_behave_bootstrap_environment();
-
-                            radula_behave_bootstrap_cross_image();
-
-                            println!("image complete");
-                        }
-                        "l" | "list" => radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP_LIST),
-                        "r" | "require" => {
-                            println!("Checking if host has all required packages...")
-                        }
-                        "s" | "release" => {
-                            radula_behave_bootstrap_environment();
-
-                            radula_behave_bootstrap_toolchain_release();
-
-                            println!("release complete");
-                        }
-                        "t" | "toolchain" => {
-                            radula_behave_bootstrap_environment();
-
-                            radula_behave_teeth_environment();
-
-                            radula_behave_ccache_environment();
-
-                            radula_behave_bootstrap_architecture_environment(
-                                constants::RADULA_ARCHITECTURE_X86_64_V3,
-                            );
-
-                            radula_behave_bootstrap_toolchain_environment();
-
-                            // Needed for clean to work...
-                            radula_behave_bootstrap_cross_environment_directories();
-
-                            radula_behave_bootstrap_clean();
-
-                            radula_behave_bootstrap_initialize();
-
-                            radula_behave_bootstrap_toolchain_prepare();
-                            radula_behave_bootstrap_toolchain_construct();
-                            radula_behave_bootstrap_toolchain_backup();
-
-                            println!("toolchain complete");
-                        }
-                        "x" | "cross" => {
-                            radula_behave_bootstrap_environment();
-
-                            radula_behave_teeth_environment();
-
-                            radula_behave_pkg_config_environment();
-
-                            radula_behave_bootstrap_architecture_environment(
-                                constants::RADULA_ARCHITECTURE_X86_64_V3,
-                            );
-
-                            radula_behave_flags_environment();
-
-                            radula_behave_bootstrap_cross_environment_directories();
-                            radula_behave_bootstrap_cross_environment_teeth();
-
-                            radula_behave_bootstrap_cross_prepare();
-                            radula_behave_bootstrap_cross_construct();
-                            //radula_behave_bootstrap_cross_strip();
-
-                            println!("cross complete");
-                        }
-                        _ => {
-                            radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP);
-                            exit(1);
-                        }
-                    }
-                    return;
-                }
-                // `return` should be removed to allow dealing with multiple cerata simultaneously
-                "e" | "envenomate" => {
-                    match x.next().as_deref().unwrap_or_default() {
-                        "h" | "help" => radula_help(constants::RADULA_HELP_BEHAVE_ENVENOMATE),
-                        _ => {
-                            radula_help(constants::RADULA_HELP_BEHAVE_ENVENOMATE);
-                            exit(1);
-                        }
-                    }
-                    return;
-                }
-                // `return` should be removed to allow dealing with multiple cerata simultaneously
-                "i" | "binary" => {
-                    match x.next().as_deref().unwrap_or_default() {
-                        "h" | "help" => radula_help(constants::RADULA_HELP_BEHAVE_BINARY),
-                        _ => {
-                            radula_help(constants::RADULA_HELP_BEHAVE_BINARY);
-                            exit(1);
-                        }
-                    }
-                    return;
-                }
-                "h" | "help" => {
-                    radula_help(constants::RADULA_HELP_BEHAVE);
-                    return;
-                }
-                _ => {
-                    radula_help(constants::RADULA_HELP_BEHAVE);
-                    exit(1);
-                }
-            },
-            "-c" | "--ceras" => {
-                // This needs to be changed to "/var/db/radula/clusters/glaucus" on a glaucus
-                // system as `CERD` is known.
-                env::set_var(
-                    constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA,
-                    fs::canonicalize("..")
-                        .unwrap()
-                        .join(constants::RADULA_DIRECTORY_CERATA),
-                );
-
-                while let Some(z) = x.next().as_deref() {
-                    if Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA).unwrap())
-                        .join(&z)
-                        .join(constants::RADULA_CERAS)
-                        .is_file()
-                    {
-                        for w in radula_behave_source(&z).iter() {
-                            println!("{}", w);
-                        }
-                    } else {
-                        let w: [String; 8] =
-                            radula_behave_source(x.next().as_deref().unwrap_or_default());
-                        match z {
-                            "c" | "cnt" => println!("{}", w[6]),
-                            "h" | "help" => {
-                                radula_help(constants::RADULA_HELP_CERAS);
-                                return;
-                            }
-                            "n" | "nom" => println!("{}", w[0]),
-                            "s" | "sum" => println!("{}", w[4]),
-                            "u" | "url" => println!("{}", w[3]),
-                            "v" | "ver" => {
-                                println!("{}", [&w[1], " ", &w[2]].concat().trim());
-                            }
-                            "y" | "cys" => println!("{}", w[5]),
-                            _ => {
-                                radula_help(constants::RADULA_HELP_CERAS);
-                                exit(1);
-                            }
-                        };
-                    }
-                }
-                return;
-            }
-            "-h" | "--help" => {
-                radula_help(constants::RADULA_HELP);
-                return;
-            }
-            "-v" | "--version" => {
-                println!("{}", constants::RADULA_HELP_VERSION);
-                return;
-            }
-            _ => {
-                radula_help(constants::RADULA_HELP);
-                exit(1);
-            }
-        }
-    }
 }
