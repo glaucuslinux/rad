@@ -1,3 +1,6 @@
+// Copyright (c) 2018-2022, Firas Khalil Khana
+// Distributed under the terms of the ISC License
+
 use std::env;
 use std::process::exit;
 
