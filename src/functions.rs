@@ -698,7 +698,7 @@ pub fn radula_behave_ccache_environment() {
     );
 }
 
-fn radula_behave_construct(x: &'static str, y: &'static str) {
+async fn radula_behave_construct(x: &'static str, y: &'static str) {
     // We only require `nom` and `ver` from the `ceras` file
     let z = ceras::radula_behave_ceras_parse(x);
     let w = z.ver.unwrap_or("".to_string().into());
@@ -714,32 +714,32 @@ fn radula_behave_construct(x: &'static str, y: &'static str) {
     // Perform swallow within construct for now (this may not be the best approach for parallelism)
     match x {
         constants::RADULA_CERAS_LIBELF => {
-            swallow::radula_behave_swallow(constants::RADULA_CERAS_ELFUTILS)
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_ELFUTILS).await;
         }
         // `gcc` will be removed from the list below when dependency resolution is working
         constants::RADULA_CERAS_GCC => {
-            swallow::radula_behave_swallow(constants::RADULA_CERAS_GMP);
-            swallow::radula_behave_swallow(constants::RADULA_CERAS_MPFR);
-            swallow::radula_behave_swallow(constants::RADULA_CERAS_MPC);
-            swallow::radula_behave_swallow(constants::RADULA_CERAS_ISL);
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_GMP).await;
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_MPFR).await;
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_MPC).await;
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_ISL).await;
             swallow::radula_behave_swallow(x);
         }
         constants::RADULA_CERAS_HYDROSKELETON => {}
         constants::RADULA_CERAS_LIBGCC
         | constants::RADULA_CERAS_LIBGOMP
         | constants::RADULA_CERAS_LIBSTDCXX_V3 => {
-            swallow::radula_behave_swallow(constants::RADULA_CERAS_GCC)
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_GCC).await;
         }
         constants::RADULA_CERAS_LINUX_HEADERS => {
-            swallow::radula_behave_swallow(constants::RADULA_CERAS_LINUX)
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_LINUX).await;
         }
         constants::RADULA_CERAS_LKSH => {
-            swallow::radula_behave_swallow(constants::RADULA_CERAS_MKSH)
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_MKSH).await;
         }
         constants::RADULA_CERAS_MUSL_HEADERS | constants::RADULA_CERAS_MUSL_UTILS => {
-            swallow::radula_behave_swallow(constants::RADULA_CERAS_MUSL)
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_MUSL).await;
         }
-        _ => swallow::radula_behave_swallow(x),
+        _ => swallow::radula_behave_swallow(x).await,
     }
 
     println!("{} construct", "::".bold());

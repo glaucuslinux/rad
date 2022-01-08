@@ -11,6 +11,7 @@ mod image;
 mod options;
 mod swallow;
 
-fn main() {
+#[tokio::main]
+async fn main() {
     options::radula_options();
 }
