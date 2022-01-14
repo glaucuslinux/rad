@@ -3,7 +3,7 @@
 
 // * All constants are prefixed with `RADULA_`
 // * All constants are ordered alphabetically
-// * The `'static` is needed: https://doc.rust-lang.org/std/primitive.str.html
+// * The `'static` is needed: https://doc.rust-lang.org/std/keyword.const.html
 
 //
 // Architectures
@@ -473,10 +473,6 @@ pub const RADULA_TOOTH_BASH: &'static str = "bash";
 
 pub const RADULA_TOOTH_BYACC: &'static str = "byacc";
 
-// We're not going to use any hashing crate/library
-pub const RADULA_TOOTH_CHECKSUM: &'static str = "sha512sum";
-pub const RADULA_TOOTH_CHECKSUM_FLAGS: &'static str = "-c";
-
 // Both `chmod` and `chown` use the same flags
 pub const RADULA_TOOTH_CHMOD: &'static str = "chmod";
 pub const RADULA_TOOTH_CHMOD_CHOWN_FLAGS: &'static str = "-Rv";
@@ -540,8 +536,6 @@ pub const RADULA_TOOTH_RSYNC_FLAGS: &'static str = "-vaHAXSx";
 // The main shell used for running shell scripts
 pub const RADULA_TOOTH_SHELL: &'static str = "dash";
 pub const RADULA_TOOTH_SHELL_FLAGS: &'static str = "-c";
-
-pub const RADULA_TOOTH_TAR: &'static str = "tar";
 
 pub const RADULA_TOOTH_UMOUNT: &'static str = "umount";
 pub const RADULA_TOOTH_UMOUNT_FLAGS: &'static str = "-fqRv";

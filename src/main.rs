@@ -12,6 +12,8 @@ mod options;
 mod swallow;
 
 #[tokio::main]
-async fn main() {
-    options::radula_options();
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    options::radula_options().await?;
+
+    Ok(())
 }

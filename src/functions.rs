@@ -2,7 +2,6 @@
 // Distributed under the terms of the ISC License
 
 use std::env;
-use std::fs;
 use std::path::Path;
 use std::process::{Command, Stdio};
 use std::string::String;
@@ -12,6 +11,7 @@ use super::constants;
 use super::swallow;
 
 use colored::Colorize;
+use tokio::fs;
 
 extern crate num_cpus;
 
@@ -264,7 +264,7 @@ pub fn radula_behave_bootstrap_cross_environment_teeth() {
     );
 }
 
-pub fn radula_behave_bootstrap_cross_prepare() {
+pub async fn radula_behave_bootstrap_cross_prepare() -> Result<(), Box<dyn std::error::Error>> {
     radula_behave_rsync(
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap())
             .join(constants::RADULA_DIRECTORY_CROSS)
@@ -282,21 +282,23 @@ pub fn radula_behave_bootstrap_cross_prepare() {
 
     fs::remove_dir_all(
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS).unwrap(),
-    );
+    ).await?;
     fs::create_dir(
         env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS).unwrap(),
-    );
+    ).await?;
 
     // Create the `src` directory if it doesn't exist, but don't remove it if it does exist!
     fs::create_dir(
         env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_SOURCES).unwrap(),
-    );
+    ).await?;
 
     // Create the `log` directory if it doesn't exist, but don't remove it if it does exist!
-    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS).unwrap());
+    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS).unwrap()).await?;
 
     // Remove cross log file if it exists
-    fs::remove_file(env::var(constants::RADULA_ENVIRONMENT_FILE_CROSS_LOG).unwrap());
+    fs::remove_file(env::var(constants::RADULA_ENVIRONMENT_FILE_CROSS_LOG).unwrap()).await?;
+
+    Ok(())
 }
 
 // This function is not a mess anymore but it still breaks some libraries
@@ -385,8 +387,8 @@ fn radula_behave_bootstrap_cross_strip() {
         .unwrap();
 }
 
-pub fn radula_behave_bootstrap_environment() {
-    let x = &fs::canonicalize("..").unwrap();
+pub async fn radula_behave_bootstrap_environment() -> Result<(), Box<dyn std::error::Error>> {
+    let x = &fs::canonicalize("..").await?;
 
     env::set_var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS, x);
 
@@ -438,6 +440,8 @@ pub fn radula_behave_bootstrap_environment() {
                 .unwrap(),
         ),
     );
+
+    Ok(())
 }
 
 pub fn radula_behave_bootstrap_initialize() {
@@ -656,34 +660,35 @@ pub fn radula_behave_bootstrap_toolchain_release() {
             .join(constants::RADULA_PATH_MAN),
     );
 
-    Command::new(constants::RADULA_TOOTH_TAR)
-        .args(&[
-            "cpvf",
-            &format!(
-                "{}-{}.tar.zst",
-                Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS).unwrap())
-                    .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
-                    .to_str()
-                    .unwrap(),
-                String::from_utf8_lossy(
-                    &Command::new(constants::RADULA_TOOTH_DATE)
-                        .arg("+%d%m%Y")
-                        .output()
-                        .unwrap()
-                        .stdout
-                )
-                .trim(),
-            ),
-            "-I",
-            "zstd -22 --ultra --long=31 -T0",
-            ".",
-        ])
-        .current_dir(x)
-        .stdout(Stdio::null())
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
+    // Until we get the tar crate working
+    // Command::new(constants::RADULA_TOOTH_TAR)
+    //     .args(&[
+    //         "cpvf",
+    //         &format!(
+    //             "{}-{}.tar.zst",
+    //             Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS).unwrap())
+    //                 .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
+    //                 .to_str()
+    //                 .unwrap(),
+    //             String::from_utf8_lossy(
+    //                 &Command::new(constants::RADULA_TOOTH_DATE)
+    //                     .arg("+%d%m%Y")
+    //                     .output()
+    //                     .unwrap()
+    //                     .stdout
+    //             )
+    //             .trim(),
+    //         ),
+    //         "-I",
+    //         "zstd -22 --ultra --long=31 -T0",
+    //         ".",
+    //     ])
+    //     .current_dir(x)
+    //     .stdout(Stdio::null())
+    //     .spawn()
+    //     .unwrap()
+    //     .wait()
+    //     .unwrap();
 }
 
 pub fn radula_behave_ccache_environment() {
@@ -698,9 +703,12 @@ pub fn radula_behave_ccache_environment() {
     );
 }
 
-async fn radula_behave_construct(x: &'static str, y: &'static str) {
+async fn radula_behave_construct(
+    x: &'static str,
+    y: &'static str,
+) -> Result<(), Box<dyn std::error::Error>> {
     // We only require `nom` and `ver` from the `ceras` file
-    let z = ceras::radula_behave_ceras_parse(x);
+    let z = ceras::radula_behave_ceras_parse(x).await?;
     let w = z.ver.unwrap_or("".to_string().into());
 
     println!(
@@ -714,32 +722,32 @@ async fn radula_behave_construct(x: &'static str, y: &'static str) {
     // Perform swallow within construct for now (this may not be the best approach for parallelism)
     match x {
         constants::RADULA_CERAS_LIBELF => {
-            swallow::radula_behave_swallow(constants::RADULA_CERAS_ELFUTILS).await;
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_ELFUTILS).await?;
         }
         // `gcc` will be removed from the list below when dependency resolution is working
         constants::RADULA_CERAS_GCC => {
-            swallow::radula_behave_swallow(constants::RADULA_CERAS_GMP).await;
-            swallow::radula_behave_swallow(constants::RADULA_CERAS_MPFR).await;
-            swallow::radula_behave_swallow(constants::RADULA_CERAS_MPC).await;
-            swallow::radula_behave_swallow(constants::RADULA_CERAS_ISL).await;
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_GMP).await?;
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_MPFR).await?;
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_MPC).await?;
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_ISL).await?;
             swallow::radula_behave_swallow(x);
         }
         constants::RADULA_CERAS_HYDROSKELETON => {}
         constants::RADULA_CERAS_LIBGCC
         | constants::RADULA_CERAS_LIBGOMP
         | constants::RADULA_CERAS_LIBSTDCXX_V3 => {
-            swallow::radula_behave_swallow(constants::RADULA_CERAS_GCC).await;
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_GCC).await?;
         }
         constants::RADULA_CERAS_LINUX_HEADERS => {
-            swallow::radula_behave_swallow(constants::RADULA_CERAS_LINUX).await;
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_LINUX).await?;
         }
         constants::RADULA_CERAS_LKSH => {
-            swallow::radula_behave_swallow(constants::RADULA_CERAS_MKSH).await;
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_MKSH).await?;
         }
         constants::RADULA_CERAS_MUSL_HEADERS | constants::RADULA_CERAS_MUSL_UTILS => {
-            swallow::radula_behave_swallow(constants::RADULA_CERAS_MUSL).await;
+            swallow::radula_behave_swallow(constants::RADULA_CERAS_MUSL).await?;
         }
-        _ => swallow::radula_behave_swallow(x).await,
+        _ => swallow::radula_behave_swallow(x).await?,
     }
 
     println!("{} construct", "::".bold());
@@ -778,6 +786,8 @@ async fn radula_behave_construct(x: &'static str, y: &'static str) {
         .unwrap();
 
     println!("");
+
+    Ok(())
 }
 
 pub fn radula_behave_pkg_config_environment() {

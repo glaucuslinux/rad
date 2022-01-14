@@ -2,41 +2,49 @@
 // Distributed under the terms of the ISC License
 
 use std::env;
-use std::fs;
 use std::path::Path;
 
 use super::constants;
 
-pub fn radula_behave_bootstrap_clean() {
-    fs::remove_dir_all(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap());
+use tokio::fs;
 
-    fs::remove_dir_all(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS).unwrap());
+pub async fn radula_behave_bootstrap_clean() -> Result<(), Box<dyn std::error::Error>> {
+    fs::remove_dir_all(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap()).await?;
+
+    fs::remove_dir_all(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS).unwrap()).await?;
 
     fs::remove_dir_all(
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_BUILDS).unwrap(),
-    );
+    )
+    .await?;
 
     fs::remove_dir_all(
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS).unwrap(),
-    );
+    )
+    .await?;
 
-    fs::remove_dir_all(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN).unwrap());
+    fs::remove_dir_all(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN).unwrap())
+        .await?;
+
+    Ok(())
 }
 
-pub fn radula_behave_bootstrap_distclean() {
-    fs::remove_dir_all(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap());
+pub async fn radula_behave_bootstrap_distclean() -> Result<(), Box<dyn std::error::Error>> {
+    fs::remove_dir_all(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap()).await?;
 
     fs::remove_file(
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS).unwrap())
             .join(constants::RADULA_FILE_GLAUCUS_IMAGE),
-    );
+    ).await?;
 
-    fs::remove_dir_all(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES).unwrap());
+    fs::remove_dir_all(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES).unwrap()).await?;
 
-    radula_behave_bootstrap_clean();
+    radula_behave_bootstrap_clean().await?;
 
     // Only remove `RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY` completely after
     // `RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_BUILDS` and
     // `RADULA_ENVIRONMENT_DIRECTORY_CROSS_BUILDS` are removed
-    fs::remove_dir_all(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY).unwrap());
+    fs::remove_dir_all(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY).unwrap()).await?;
+
+    Ok(())
 }

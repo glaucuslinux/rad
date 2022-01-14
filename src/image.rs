@@ -2,13 +2,14 @@
 // Distributed under the terms of the ISC License
 
 use std::env;
-use std::fs;
 use std::path::Path;
-use std::process::{Command, Stdio};
+use std::process::Stdio;
 
 use super::constants;
 
-pub fn radula_behave_bootstrap_cross_image() {
+use tokio::{fs, process::Command};
+
+pub async fn radula_behave_bootstrap_cross_image() -> Result<(), Box<dyn std::error::Error>> {
     // A custom rsync function to prevent permission errors (`-S` is not used)
     let radula_behave_rsync = |x: &str, y: &str| {
         Command::new(constants::RADULA_TOOTH_RSYNC)
@@ -28,7 +29,7 @@ pub fn radula_behave_bootstrap_cross_image() {
     );
 
     // Create a new image
-    fs::remove_file(x);
+    fs::remove_file(x).await?;
     Command::new(constants::RADULA_TOOTH_QEMU_IMAGE)
         .args(&[
             "create",
@@ -161,7 +162,7 @@ pub fn radula_behave_bootstrap_cross_image() {
             .unwrap(),
     );
 
-    fs::create_dir(w);
+    fs::create_dir(w).await?;
 
     Command::new(constants::RADULA_TOOTH_MOUNT)
         .args(&[z, w])
@@ -171,7 +172,7 @@ pub fn radula_behave_bootstrap_cross_image() {
         .unwrap();
 
     // Remove `/lost+found` directory
-    fs::remove_dir_all(Path::new(w).join(constants::RADULA_PATH_LOST_FOUND));
+    fs::remove_dir_all(Path::new(w).join(constants::RADULA_PATH_LOST_FOUND)).await?;
 
     radula_behave_rsync(
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap())
@@ -194,7 +195,7 @@ pub fn radula_behave_bootstrap_cross_image() {
     );
 
     // Install extlinux as the default bootloader
-    fs::create_dir(r);
+    fs::create_dir(r).await?;
     radula_behave_rsync(
         Path::new(constants::RADULA_PATH_CLUSTERS)
             .join(constants::RADULA_FILE_SYSLINUX_EXTLINUX_CONF)
@@ -262,4 +263,6 @@ pub fn radula_behave_bootstrap_cross_image() {
         x,
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap(),
     );
+
+    Ok(())
 }

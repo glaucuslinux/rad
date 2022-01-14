@@ -1,12 +1,12 @@
 // Copyright (c) 2018-2022, Firas Khalil Khana
 // Distributed under the terms of the ISC License
 
-use std::fs;
 use std::path::Path;
 
 use super::constants;
 
 use serde::Deserialize;
+use tokio::fs;
 
 // The variable `nom` is mandatory, and the rest are optional
 #[derive(Deserialize)]
@@ -21,16 +21,17 @@ pub struct Ceras {
 }
 
 // Parses the `ceras` file and returns a Ceras struct holding the variables
-pub fn radula_behave_ceras_parse(x: &str) -> Ceras {
-    return toml::from_str(
+pub async fn radula_behave_ceras_parse(x: &str) -> Result<Ceras, Box<dyn std::error::Error>> {
+    let parse = toml::from_str(
         &fs::read_to_string(
             Path::new(constants::RADULA_PATH_CLUSTERS)
                 .join(&x)
                 .join(constants::RADULA_CERAS),
         )
-        .unwrap(),
-    )
-    .unwrap();
+        .await?,
+    )?;
+
+    Ok(parse)
 }
 
 // Checks if the `ceras` file exists

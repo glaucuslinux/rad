@@ -4,7 +4,7 @@
 use std::env;
 use std::io::Write;
 use std::path::Path;
-use std::process::{Command, Stdio};
+// use std::process::Stdio;
 use std::sync::Arc;
 
 use super::ceras;
@@ -15,7 +15,7 @@ use futures_util::{stream, StreamExt};
 use git2::Repository;
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
 use reqwest::{Client, Url};
-use tokio::{fs, fs::File, io::AsyncWriteExt, task};
+use tokio::{fs, fs::File, io::AsyncWriteExt, process::Command, task};
 
 // Asynchronously clone repos
 pub async fn radula_behave_clone(commit: String, url: String, path: String) {
@@ -66,9 +66,9 @@ pub async fn radula_behave_download(url: &'static str, m: Arc<MultiProgress>) {
 }
 
 // Fetch, verify and extract ceras's source
-pub async fn radula_behave_swallow(name: &'static str) {
+pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn std::error::Error>> {
     // Receive the variables from the `ceras` file
-    let ceras = ceras::radula_behave_ceras_parse(name);
+    let ceras = ceras::radula_behave_ceras_parse(name).await?;
 
     let version = ceras.ver.unwrap();
     let commit = ceras.cmt.unwrap();
@@ -92,21 +92,21 @@ pub async fn radula_behave_swallow(name: &'static str) {
     );
 
     // Verify ceras's source tarball
-    let radula_behave_verify = || {
-        write!(
-            Command::new(constants::RADULA_TOOTH_CHECKSUM)
-                .arg(constants::RADULA_TOOTH_CHECKSUM_FLAGS)
-                .stdin(Stdio::piped())
-                .stdout(Stdio::null())
-                .spawn()
-                .unwrap()
-                .stdin
-                .unwrap(),
-            "{}",
-            [sum, " ".to_string(), file.clone()].concat()
-        )
-        .unwrap();
-    };
+    // let radula_behave_verify = || {
+    //     write!(
+    //         Command::new(constants::RADULA_TOOTH_CHECKSUM)
+    //             .arg(constants::RADULA_TOOTH_CHECKSUM_FLAGS)
+    //             .stdin(Stdio::piped())
+    //             .stdout(Stdio::null())
+    //             .spawn()
+    //             .unwrap()
+    //             .stdin
+    //             .unwrap(),
+    //         "{}",
+    //         [sum, " ".to_string(), file.clone()].concat()
+    //     )
+    //     .unwrap();
+    // };
 
     if !Path::is_dir(Path::new(&path)) {
         if version == constants::RADULA_TOOTH_GIT {
@@ -116,10 +116,9 @@ pub async fn radula_behave_swallow(name: &'static str) {
                     .unwrap();
             };
         } else {
-            let urls = vec![
-                "https://musl.libc.org/releases/musl-1.2.2.tar.gz",
-                "https://github.com/landley/toybox/archive/0.8.6.tar.gz",
-            ];
+            let mut urls = Vec::new();
+            urls.push("https://musl.libc.org/releases/musl-1.2.2.tar.gz");
+            urls.push("https://github.com/landley/toybox/archive/0.8.6.tar.gz");
 
             let m = Arc::new(MultiProgress::new());
 
@@ -144,21 +143,23 @@ pub async fn radula_behave_swallow(name: &'static str) {
 
             pb.finish();
 
-            fs::create_dir(&path).await.unwrap();
+            fs::create_dir(&path).await?;
 
-            radula_behave_verify();
+            // radula_behave_verify();
 
             // Extract ceras's source tarball
-            Command::new(constants::RADULA_TOOTH_TAR)
-                .args(&["xpvf", &file, "-C", &path])
-                .stdout(Stdio::null())
-                .spawn()
-                .unwrap()
-                .wait()
-                .unwrap();
+            // Command::new(constants::RADULA_TOOTH_TAR)
+            //     .args(&["xpvf", &file, "-C", &path])
+            //     .stdout(Stdio::null())
+            //     .spawn()
+            //     .unwrap()
+            //     .wait()
+            //     .unwrap();
         }
     } else if version != constants::RADULA_TOOTH_GIT {
         // Only verify existing ceras's source tarballs without extracting them again
-        radula_behave_verify();
+        // radula_behave_verify();
     }
+
+    Ok(())
 }

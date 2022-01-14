@@ -3,23 +3,34 @@
 
 use std::env;
 use std::path::Path;
-use std::process::Command;
 
 use super::constants;
 
-pub fn radula_behave_bootstrap_architecture_environment(x: &'static str) {
-    env::set_var(
-        constants::RADULA_ENVIRONMENT_TUPLE_BUILD,
+use tokio::process::Command;
+
+// Get canonical system tuple using the `config.guess` file
+async fn radula_behave_bootstrap_architecture_tuple() -> Result<String, Box<dyn std::error::Error>>
+{
+    Ok(String::from(
         String::from_utf8_lossy(
             &Command::new(
                 Path::new(constants::RADULA_PATH_CLUSTERS)
                     .join(constants::RADULA_FILE_CONFIG_GUESS),
             )
             .output()
-            .unwrap()
+            .await?
             .stdout,
         )
         .trim(),
+    ))
+}
+
+pub async fn radula_behave_bootstrap_architecture_environment(
+    x: &'static str,
+) -> Result<(), Box<dyn std::error::Error>> {
+    env::set_var(
+        constants::RADULA_ENVIRONMENT_TUPLE_BUILD,
+        radula_behave_bootstrap_architecture_tuple().await?,
     );
 
     env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE, x);
@@ -264,4 +275,5 @@ pub fn radula_behave_bootstrap_architecture_environment(x: &'static str) {
         }
         _ => {}
     }
+    Ok(())
 }

@@ -14,7 +14,7 @@ use super::image;
 
 use colored::Colorize;
 
-pub fn radula_options() {
+pub async fn radula_options() -> Result<(), Box<dyn std::error::Error>> {
     let mut x = env::args().skip(1);
 
     if x.len() < 1 {
@@ -31,7 +31,7 @@ pub fn radula_options() {
                 "b" | "bootstrap" => {
                     match x.next().as_deref().unwrap_or_default() {
                         "c" | "clean" => {
-                            functions::radula_behave_bootstrap_environment();
+                            functions::radula_behave_bootstrap_environment().await?;
 
                             functions::radula_behave_bootstrap_toolchain_environment();
 
@@ -42,7 +42,7 @@ pub fn radula_options() {
                             println!("clean complete");
                         }
                         "d" | "distclean" => {
-                            functions::radula_behave_bootstrap_environment();
+                            functions::radula_behave_bootstrap_environment().await?;
 
                             functions::radula_behave_bootstrap_toolchain_environment();
 
@@ -56,7 +56,7 @@ pub fn radula_options() {
                             functions::radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP)
                         }
                         "i" | "image" => {
-                            functions::radula_behave_bootstrap_environment();
+                            functions::radula_behave_bootstrap_environment().await?;
 
                             image::radula_behave_bootstrap_cross_image();
 
@@ -69,14 +69,14 @@ pub fn radula_options() {
                             println!("Checking if host has all required packages...")
                         }
                         "s" | "release" => {
-                            functions::radula_behave_bootstrap_environment();
+                            functions::radula_behave_bootstrap_environment().await?;
 
                             functions::radula_behave_bootstrap_toolchain_release();
 
                             println!("release complete");
                         }
                         "t" | "toolchain" => {
-                            functions::radula_behave_bootstrap_environment();
+                            functions::radula_behave_bootstrap_environment().await?;
 
                             functions::radula_behave_teeth_environment();
 
@@ -84,7 +84,8 @@ pub fn radula_options() {
 
                             architecture::radula_behave_bootstrap_architecture_environment(
                                 constants::RADULA_ARCHITECTURE_X86_64_V3,
-                            );
+                            )
+                            .await?;
 
                             functions::radula_behave_bootstrap_toolchain_environment();
 
@@ -102,7 +103,7 @@ pub fn radula_options() {
                             println!("toolchain complete");
                         }
                         "x" | "cross" => {
-                            functions::radula_behave_bootstrap_environment();
+                            functions::radula_behave_bootstrap_environment().await?;
 
                             functions::radula_behave_teeth_environment();
 
@@ -110,7 +111,8 @@ pub fn radula_options() {
 
                             architecture::radula_behave_bootstrap_architecture_environment(
                                 constants::RADULA_ARCHITECTURE_X86_64_V3,
-                            );
+                            )
+                            .await?;
 
                             flags::radula_behave_flags_environment();
 
@@ -128,7 +130,7 @@ pub fn radula_options() {
                             exit(1);
                         }
                     }
-                    return;
+                    exit(0);
                 }
                 // `return` should be removed to allow dealing with multiple cerata simultaneously
                 "e" | "envenomate" => {
@@ -141,7 +143,7 @@ pub fn radula_options() {
                             exit(1);
                         }
                     }
-                    return;
+                    exit(0);
                 }
                 // `return` should be removed to allow dealing with multiple cerata simultaneously
                 "i" | "binary" => {
@@ -154,11 +156,11 @@ pub fn radula_options() {
                             exit(1);
                         }
                     }
-                    return;
+                    exit(0);
                 }
                 "h" | "help" => {
                     functions::radula_help(constants::RADULA_HELP_BEHAVE);
-                    return;
+                    exit(0);
                 }
                 _ => {
                     functions::radula_help(constants::RADULA_HELP_BEHAVE);
@@ -167,7 +169,7 @@ pub fn radula_options() {
             },
             "-c" | "--ceras" => {
                 while let Some(z) = x.next().as_deref() {
-                    let w = ceras::radula_behave_ceras_parse(&z);
+                    let w = ceras::radula_behave_ceras_parse(&z).await?;
 
                     println!("{:13}{:3}{}", "Name".bold(), "::".bold(), w.nom.blue());
                     println!(
@@ -209,15 +211,15 @@ pub fn radula_options() {
 
                     println!("");
                 }
-                return;
+                exit(0);
             }
             "-h" | "--help" => {
                 functions::radula_help(constants::RADULA_HELP);
-                return;
+                exit(0);
             }
             "-v" | "--version" => {
                 println!("{}", constants::RADULA_HELP_VERSION);
-                return;
+                exit(0);
             }
             _ => {
                 functions::radula_help(constants::RADULA_HELP);
@@ -225,4 +227,6 @@ pub fn radula_options() {
             }
         }
     }
+
+    Ok(())
 }

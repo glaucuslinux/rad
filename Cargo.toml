@@ -7,19 +7,24 @@ description = "glaucus's radula"
 readme = "README.md"
 repository = "https://github.com/glaucuslinux/radula"
 license = "ISC"
-keywords = [ "glaucus", "radula" ]
+keywords = ["glaucus", "radula"]
 
 [dependencies]
-anyhow = "1.0.51"
 colored = "2.0.0"
 futures-util = "0.3.19"
 git2 = "0.13.25"
 indicatif = { git = "https://github.com/mitsuhiko/indicatif" }
-num_cpus = "1.13.0"
-reqwest = { version = "0.11.7", features = ["stream"] }
-serde = { version = "1.0.132", features = ["derive"] }
+num_cpus = "1.13.1"
+reqwest = { version = "0.11.8", features = ["stream"] }
+serde = { version = "1.0.133", features = ["derive"] }
 tar = "0.4.38"
-tokio = { version = "1.15.0", features = ["fs", "io-util", "macros", "rt-multi-thread"] }
+tokio = { version = "1.15.0", features = [
+    "fs",
+    "io-util",
+    "macros",
+    "process",
+    "rt-multi-thread",
+] }
 toml = "0.5.8"
 
 [profile.release]
@@ -27,3 +32,4 @@ opt-level = 3
 debug = false
 lto = true
 incremental = false
+codegen-units = 1
