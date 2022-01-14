@@ -135,7 +135,7 @@ pub async fn radula_behave_bootstrap_architecture_environment(
             env::set_var(
                 constants::RADULA_ENVIRONMENT_TUPLE_TARGET,
                 [
-                    &env::var(constants::RADULA_ENVIRONMENT_TUPLE_TARGET).unwrap(),
+                    &env::var(constants::RADULA_ENVIRONMENT_TUPLE_TARGET)?,
                     constants::RADULA_ARCHITECTURE_ARMV6ZK_TUPLE_TARGET,
                 ]
                 .concat(),
@@ -734,7 +734,7 @@ async fn test_radula_behave_bootstrap_architecture_environment_riscv64(
 #[tokio::test]
 async fn test_radula_behave_bootstrap_architecture_environment_x86_64_v3(
 ) -> Result<(), Box<dyn std::error::Error>> {
-    radula_behave_bootstrap_architecture_environment("x86-64-v3").await?;
+    radula_behave_bootstrap_architecture_environment("x86-64").await?;
 
     println!(
         "ARCH   :: {}",
@@ -787,11 +787,11 @@ async fn test_radula_behave_bootstrap_architecture_environment_x86_64_v3(
 
     assert_eq!(
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE)?,
-        "x86-64-v3"
+        "x86-64"
     );
     assert_eq!(
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_CERATA)?,
-        "--with-gcc-arch=x86-64-v3"
+        "--with-gcc-arch=x86-64"
     );
     assert_eq!(
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS)?,
@@ -803,7 +803,7 @@ async fn test_radula_behave_bootstrap_architecture_environment_x86_64_v3(
     );
     assert_eq!(
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT)?,
-        "-x86_64.so.2"
+        "-x86-64.so.2"
     );
     assert_eq!(
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX)?,
