@@ -7,7 +7,7 @@ mod clean;
 mod constants;
 mod flags;
 mod functions;
-mod image;
+// mod image;
 mod options;
 mod swallow;
 

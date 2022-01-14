@@ -10,7 +10,7 @@ use super::clean;
 use super::constants;
 use super::flags;
 use super::functions;
-use super::image;
+// use super::image;
 
 use colored::Colorize;
 
@@ -58,7 +58,7 @@ pub async fn radula_options() -> Result<(), Box<dyn std::error::Error>> {
                         "i" | "image" => {
                             functions::radula_behave_bootstrap_environment().await?;
 
-                            image::radula_behave_bootstrap_cross_image();
+                            // image::radula_behave_bootstrap_cross_image();
 
                             println!("image complete");
                         }
