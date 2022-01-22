@@ -197,7 +197,7 @@
 //     // Install extlinux as the default bootloader
 //     fs::create_dir(r).await?;
 //     radula_behave_rsync(
-//         Path::new(constants::RADULA_PATH_CLUSTERS)
+//         Path::new(constants::RADULA_PATH_RADULA_CLUSTERS)
 //             .join(constants::RADULA_FILE_SYSLINUX_EXTLINUX_CONF)
 //             .to_str()
 //             .unwrap(),

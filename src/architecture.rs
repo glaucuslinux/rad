@@ -15,7 +15,7 @@ async fn radula_behave_bootstrap_architecture_tuple() -> Result<String, Box<dyn 
     let tuple = String::from(
         String::from_utf8_lossy(
             &Command::new(
-                Path::new(constants::RADULA_PATH_CLUSTERS)
+                Path::new(constants::RADULA_PATH_RADULA_CLUSTERS)
                     .join(constants::RADULA_FILE_CONFIG_GUESS),
             )
             .output()

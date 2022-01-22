@@ -431,8 +431,6 @@ pub const RADULA_PATH_BOOT: &'static str = "boot";
 // Default `ccache` directories on both Arch and Fedora
 pub const RADULA_PATH_CCACHE: &'static str = "/usr/lib/ccache/bin:/usr/lib64/ccache";
 
-pub const RADULA_PATH_CLUSTERS: &'static str = "/var/db/radula/clusters/glaucus";
-
 pub const RADULA_PATH_ETC: &'static str = "etc";
 
 pub const RADULA_PATH_INFO: &'static str = "info";
@@ -454,6 +452,9 @@ pub const RADULA_PATH_PKG_CONFIG_SYSTEM_INCLUDE_PATH: &'static str = "/usr/inclu
 pub const RADULA_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH: &'static str = "/usr/lib";
 
 pub const RADULA_PATH_SHARE: &'static str = "share";
+
+pub const RADULA_PATH_RADULA_CLUSTERS: &'static str = "/var/db/radula/clusters";
+pub const RADULA_PATH_RADULA_SOURCES: &'static str = "/var/cache/radula/src";
 
 pub const RADULA_PATH_USR: &'static str = "usr";
 

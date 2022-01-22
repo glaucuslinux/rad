@@ -770,7 +770,7 @@ async fn radula_behave_construct(
                 "nom={} ver={} . {} && prepare {} && configure {3} && build {3} && check {3} && install {3}",
                 z.nom,
                 w,
-                Path::new(constants::RADULA_PATH_CLUSTERS)
+                Path::new(constants::RADULA_PATH_RADULA_CLUSTERS)
                     .join(x)
                     .join(y)
                     .to_str()

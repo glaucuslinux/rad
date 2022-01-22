@@ -2,7 +2,7 @@
 // Distributed under the terms of the ISC License
 
 use std::env;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
 use super::ceras;
@@ -18,12 +18,12 @@ use tokio::{fs, fs::File, io::AsyncReadExt, io::AsyncWriteExt, task};
 // Asynchronously clone repos
 pub async fn radula_behave_clone(
     commit: String,
-    url: String,
-    path: String,
+    url: Url,
+    path: PathBuf,
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     // Clone ceras's source `git` repository and checkout the freshly cloned `git`
     // repository at the specified commit number
-    let repo = Repository::clone(&url, path).unwrap();
+    let repo = Repository::clone(url.as_str(), path).unwrap();
     repo.checkout_tree(&repo.revparse_ext(&commit).unwrap().0, None)
         .unwrap();
 
@@ -32,15 +32,13 @@ pub async fn radula_behave_clone(
 
 // Asynchronously download tarballs
 pub async fn radula_behave_download(
-    url: &'static str,
+    url: Url,
     m: Arc<MultiProgress>,
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let client = Client::new();
 
-    let mut res = client.get(url).send().await?;
+    let mut res = client.get(url.as_str()).send().await?;
     let size = res.content_length().unwrap_or(0);
-
-    let url = Url::parse(url)?;
 
     let file = String::from(
         url.path_segments()
@@ -87,12 +85,7 @@ pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn std
     println!("{} swallow", "::".bold());
 
     // Get the path of the source directory
-    let path = String::from(
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES)?)
-            .join(name)
-            .to_str()
-            .unwrap(),
-    );
+    let path = Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES)?).join(name);
 
     let file = String::from(
         url.path_segments()
@@ -102,11 +95,8 @@ pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn std
 
     if !Path::is_dir(Path::new(&path)) {
         if version == constants::RADULA_TOOTH_GIT {
-            async move {
-                task::spawn(radula_behave_clone(commit, url.to_string(), path))
-                    .await
-                    .unwrap();
-            };
+            task::spawn(async move { radula_behave_clone(commit, url, path).await.unwrap() })
+                .await?;
         } else {
             let mut urls = Vec::new();
             urls.push("https://musl.libc.org/releases/musl-1.2.2.tar.gz");
@@ -127,7 +117,9 @@ pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn std
                     let pb = pb.clone();
 
                     async move {
-                        task::spawn(radula_behave_download(url, m)).await.unwrap();
+                        task::spawn(radula_behave_download(Url::parse(url).unwrap(), m))
+                            .await
+                            .unwrap();
                         pb.inc(1);
                     }
                 })
@@ -137,7 +129,7 @@ pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn std
 
             fs::create_dir(&path).await?;
 
-            // radula_behave_verify();
+            radula_behave_verify(name, file.to_string(), checksum.to_string()).await?;
 
             // Extract ceras's source tarball
             // Command::new(constants::RADULA_TOOTH_TAR)
@@ -156,9 +148,11 @@ pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn std
 
 pub async fn radula_behave_verify(
     name: &'static str,
-    checksum: &'static str,
+    file: String,
+    checksum: String,
 ) -> Result<bool, Box<dyn std::error::Error>> {
-    let mut file = fs::File::open("").await?;
+    let mut file =
+        fs::File::open(ceras::radula_behave_ceras_source(&name).await?.join(file)).await?;
     let mut buffer = Vec::new();
 
     file.read_to_end(&mut buffer).await?;
