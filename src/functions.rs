@@ -282,15 +282,18 @@ pub async fn radula_behave_bootstrap_cross_prepare() -> Result<(), Box<dyn std::
 
     fs::remove_dir_all(
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS).unwrap(),
-    ).await?;
+    )
+    .await?;
     fs::create_dir(
         env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS).unwrap(),
-    ).await?;
+    )
+    .await?;
 
     // Create the `src` directory if it doesn't exist, but don't remove it if it does exist!
     fs::create_dir(
         env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_SOURCES).unwrap(),
-    ).await?;
+    )
+    .await?;
 
     // Create the `log` directory if it doesn't exist, but don't remove it if it does exist!
     fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS).unwrap()).await?;
@@ -444,11 +447,13 @@ pub async fn radula_behave_bootstrap_environment() -> Result<(), Box<dyn std::er
     Ok(())
 }
 
-pub fn radula_behave_bootstrap_initialize() {
-    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap());
-    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS).unwrap());
-    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES).unwrap());
-    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY).unwrap());
+pub async fn radula_behave_bootstrap_initialize() -> Result<(), Box<dyn std::error::Error>> {
+    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap()).await?;
+    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS).unwrap()).await?;
+    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES).unwrap()).await?;
+    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY).unwrap()).await?;
+
+    Ok(())
 }
 
 pub fn radula_behave_bootstrap_toolchain_backup() {

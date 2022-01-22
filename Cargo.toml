@@ -1,6 +1,6 @@
 [package]
 name = "radula"
-version = "1.1.0"
+version = "1.1.1"
 authors = ["Firas Khalil Khana <firasuke@glaucuslinux.org>"]
 edition = "2021"
 description = "glaucus's radula"
@@ -15,8 +15,8 @@ futures-util = "0.3.19"
 git2 = "0.13.25"
 indicatif = { git = "https://github.com/mitsuhiko/indicatif" }
 num_cpus = "1.13.1"
-reqwest = { version = "0.11.8", features = ["stream"] }
-serde = { version = "1.0.133", features = ["derive"] }
+reqwest = { version = "0.11.9", features = ["stream"] }
+serde = { version = "1.0.134", features = ["derive"] }
 tar = "0.4.38"
 tokio = { version = "1.15.0", features = [
     "fs",
@@ -26,6 +26,7 @@ tokio = { version = "1.15.0", features = [
     "rt-multi-thread",
 ] }
 toml = "0.5.8"
+xxhash-rust = { version = "0.8.2", features = ["xxh3"] }
 
 [profile.release]
 opt-level = 3

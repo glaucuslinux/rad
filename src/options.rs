@@ -37,7 +37,7 @@ pub async fn radula_options() -> Result<(), Box<dyn std::error::Error>> {
 
                             functions::radula_behave_bootstrap_cross_environment_directories();
 
-                            clean::radula_behave_bootstrap_clean();
+                            clean::radula_behave_bootstrap_clean().await?;
 
                             println!("clean complete");
                         }
@@ -48,7 +48,7 @@ pub async fn radula_options() -> Result<(), Box<dyn std::error::Error>> {
 
                             functions::radula_behave_bootstrap_cross_environment_directories();
 
-                            clean::radula_behave_bootstrap_distclean();
+                            clean::radula_behave_bootstrap_distclean().await?;
 
                             println!("distclean complete");
                         }
@@ -92,9 +92,9 @@ pub async fn radula_options() -> Result<(), Box<dyn std::error::Error>> {
                             // Needed for clean to work...
                             functions::radula_behave_bootstrap_cross_environment_directories();
 
-                            clean::radula_behave_bootstrap_clean();
+                            clean::radula_behave_bootstrap_clean().await?;
 
-                            functions::radula_behave_bootstrap_initialize();
+                            functions::radula_behave_bootstrap_initialize().await?;
 
                             functions::radula_behave_bootstrap_toolchain_prepare();
                             functions::radula_behave_bootstrap_toolchain_construct();
@@ -119,7 +119,7 @@ pub async fn radula_options() -> Result<(), Box<dyn std::error::Error>> {
                             functions::radula_behave_bootstrap_cross_environment_directories();
                             functions::radula_behave_bootstrap_cross_environment_teeth();
 
-                            functions::radula_behave_bootstrap_cross_prepare();
+                            functions::radula_behave_bootstrap_cross_prepare().await?;
                             functions::radula_behave_bootstrap_cross_construct();
                             //radula_behave_bootstrap_cross_strip();
 
