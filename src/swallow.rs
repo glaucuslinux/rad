@@ -15,7 +15,7 @@ use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
 use reqwest::{Client, Url};
 use tokio::{fs, fs::File, io::AsyncReadExt, io::AsyncWriteExt, task};
 
-// Asynchronously clone repos
+// Asynchronously clone source repos
 pub async fn radula_behave_clone(
     commit: String,
     url: Url,
@@ -30,7 +30,7 @@ pub async fn radula_behave_clone(
     Ok(())
 }
 
-// Asynchronously download tarballs
+// Asynchronously download source tarballs
 pub async fn radula_behave_download(
     url: Url,
     m: Arc<MultiProgress>,
@@ -146,6 +146,7 @@ pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn std
     Ok(())
 }
 
+// Verify `XXH3_128bits` checksum of source tarballs
 pub async fn radula_behave_verify(
     name: &'static str,
     file: String,
