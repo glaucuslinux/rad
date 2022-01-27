@@ -9,6 +9,10 @@ use super::constants;
 
 use tokio::process::Command;
 
+//
+// Architecture Functions
+//
+
 // Get canonical system tuple using the `config.guess` file
 async fn radula_behave_bootstrap_architecture_tuple() -> Result<String, Box<dyn Error>> {
     let tuple = String::from(
@@ -29,24 +33,24 @@ async fn radula_behave_bootstrap_architecture_tuple() -> Result<String, Box<dyn 
 }
 
 pub async fn radula_behave_bootstrap_architecture_environment(
-    x: &'static str,
+    architecture: &'static str,
 ) -> Result<(), Box<dyn Error>> {
     env::set_var(
         constants::RADULA_ENVIRONMENT_TUPLE_BUILD,
         radula_behave_bootstrap_architecture_tuple().await?,
     );
 
-    env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE, x);
+    env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE, architecture);
     env::set_var(
         constants::RADULA_ENVIRONMENT_ARCHITECTURE_CERATA,
-        [constants::RADULA_ARCHITECTURE_CERATA, x].concat(),
+        [constants::RADULA_ARCHITECTURE_CERATA, architecture].concat(),
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_TUPLE_TARGET,
-        [x, constants::RADULA_ARCHITECTURE_TUPLE_TARGET].concat(),
+        [architecture, constants::RADULA_ARCHITECTURE_TUPLE_TARGET].concat(),
     );
 
-    match x {
+    match architecture {
         constants::RADULA_ARCHITECTURE_AARCH64 => {
             env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_CERATA,
@@ -85,9 +89,18 @@ pub async fn radula_behave_bootstrap_architecture_environment(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE,
                 constants::RADULA_ARCHITECTURE_AARCH64_LINUX_IMAGE,
             );
-            env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL, x);
-            env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER, x);
-            env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT, x);
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL,
+                architecture,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER,
+                architecture,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT,
+                architecture,
+            );
         }
         constants::RADULA_ARCHITECTURE_ARMV6ZK => {
             env::set_var(
@@ -221,9 +234,18 @@ pub async fn radula_behave_bootstrap_architecture_environment(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE,
                 constants::RADULA_ARCHITECTURE_RISCV64_LINUX_IMAGE,
             );
-            env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL, x);
-            env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER, x);
-            env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT, x);
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL,
+                architecture,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER,
+                architecture,
+            );
+            env::set_var(
+                constants::RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT,
+                architecture,
+            );
         }
         constants::RADULA_ARCHITECTURE_X86_64_V3 => {
             env::set_var(
@@ -281,6 +303,7 @@ pub async fn radula_behave_bootstrap_architecture_environment(
     Ok(())
 }
 
+// To prevent a race condition between tests use `cargo test -- --test-threads 1`
 #[tokio::test]
 async fn test_radula_behave_bootstrap_architecture_tuple() -> Result<(), Box<dyn Error>> {
     assert_eq!(

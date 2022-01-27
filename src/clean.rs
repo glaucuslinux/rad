@@ -9,6 +9,10 @@ use super::constants;
 
 use tokio::fs;
 
+//
+// Clean Functions
+//
+
 pub async fn radula_behave_bootstrap_clean() -> Result<(), Box<dyn Error>> {
     fs::remove_dir_all(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS)?).await?;
 

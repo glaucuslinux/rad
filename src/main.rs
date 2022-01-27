@@ -4,11 +4,14 @@
 use std::error::Error;
 
 mod architecture;
+mod ccache;
 mod ceras;
 mod clean;
 mod constants;
+mod construct;
 mod flags;
 mod functions;
+mod help;
 // mod image;
 mod options;
 mod swallow;

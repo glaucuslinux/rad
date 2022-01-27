@@ -38,9 +38,9 @@ impl fmt::Display for Ceras {
             "Version".bold(),
             "::".bold(),
             [
-                &self.ver.as_ref().unwrap_or(&"None".red().to_string()),
+                self.ver.as_ref().unwrap_or(&"None".red().to_string()),
                 " ",
-                &self.cmt.as_ref().unwrap_or(&" ".to_string())
+                self.cmt.as_ref().unwrap_or(&" ".to_string())
             ]
             .concat()
             .trim(),

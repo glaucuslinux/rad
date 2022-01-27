@@ -6,18 +6,20 @@ use std::error::Error;
 use std::process::exit;
 
 use super::architecture;
+use super::ccache;
 use super::ceras;
 use super::clean;
 use super::constants;
 use super::flags;
 use super::functions;
+use super::help;
 // use super::image;
 
 pub async fn radula_options() -> Result<(), Box<dyn Error>> {
     let mut x = env::args().skip(1);
 
     if x.len() < 1 {
-        functions::radula_help(constants::RADULA_HELP);
+        help::radula_help(constants::RADULA_HELP);
         exit(1);
     }
 
@@ -51,9 +53,7 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
 
                             println!("distclean complete");
                         }
-                        "h" | "help" => {
-                            functions::radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP)
-                        }
+                        "h" | "help" => help::radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP),
                         "i" | "image" => {
                             functions::radula_behave_bootstrap_environment().await?;
 
@@ -62,7 +62,7 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                             println!("image complete");
                         }
                         "l" | "list" => {
-                            functions::radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP_LIST)
+                            help::radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP_LIST)
                         }
                         "r" | "require" => {
                             println!("Checking if host has all required packages...")
@@ -79,7 +79,7 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
 
                             functions::radula_behave_teeth_environment();
 
-                            functions::radula_behave_ccache_environment();
+                            ccache::radula_behave_ccache_environment();
 
                             architecture::radula_behave_bootstrap_architecture_environment(
                                 constants::RADULA_ARCHITECTURE_X86_64_V3,
@@ -125,7 +125,7 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                             println!("cross complete");
                         }
                         _ => {
-                            functions::radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP);
+                            help::radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP);
                             exit(1);
                         }
                     }
@@ -134,11 +134,9 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                 // `exit` should be removed to allow dealing with multiple cerata simultaneously
                 "e" | "envenomate" => {
                     match x.next().as_deref().unwrap_or_default() {
-                        "h" | "help" => {
-                            functions::radula_help(constants::RADULA_HELP_BEHAVE_ENVENOMATE)
-                        }
+                        "h" | "help" => help::radula_help(constants::RADULA_HELP_BEHAVE_ENVENOMATE),
                         _ => {
-                            functions::radula_help(constants::RADULA_HELP_BEHAVE_ENVENOMATE);
+                            help::radula_help(constants::RADULA_HELP_BEHAVE_ENVENOMATE);
                             exit(1);
                         }
                     }
@@ -147,22 +145,20 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                 // `exit` should be removed to allow dealing with multiple cerata simultaneously
                 "i" | "binary" => {
                     match x.next().as_deref().unwrap_or_default() {
-                        "h" | "help" => {
-                            functions::radula_help(constants::RADULA_HELP_BEHAVE_BINARY)
-                        }
+                        "h" | "help" => help::radula_help(constants::RADULA_HELP_BEHAVE_BINARY),
                         _ => {
-                            functions::radula_help(constants::RADULA_HELP_BEHAVE_BINARY);
+                            help::radula_help(constants::RADULA_HELP_BEHAVE_BINARY);
                             exit(1);
                         }
                     }
                     exit(0);
                 }
                 "h" | "help" => {
-                    functions::radula_help(constants::RADULA_HELP_BEHAVE);
+                    help::radula_help(constants::RADULA_HELP_BEHAVE);
                     exit(0);
                 }
                 _ => {
-                    functions::radula_help(constants::RADULA_HELP_BEHAVE);
+                    help::radula_help(constants::RADULA_HELP_BEHAVE);
                     exit(1);
                 }
             },
@@ -173,7 +169,7 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                 exit(0);
             }
             "-h" | "--help" => {
-                functions::radula_help(constants::RADULA_HELP);
+                help::radula_help(constants::RADULA_HELP);
                 exit(0);
             }
             "-v" | "--version" => {
@@ -181,7 +177,7 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                 exit(0);
             }
             _ => {
-                functions::radula_help(constants::RADULA_HELP);
+                help::radula_help(constants::RADULA_HELP);
                 exit(1);
             }
         }
