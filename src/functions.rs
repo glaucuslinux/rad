@@ -2,6 +2,7 @@
 // Distributed under the terms of the ISC License
 
 use std::env;
+use std::error::Error;
 use std::path::Path;
 use std::process::{Command, Stdio};
 use std::string::String;
@@ -264,7 +265,7 @@ pub fn radula_behave_bootstrap_cross_environment_teeth() {
     );
 }
 
-pub async fn radula_behave_bootstrap_cross_prepare() -> Result<(), Box<dyn std::error::Error>> {
+pub async fn radula_behave_bootstrap_cross_prepare() -> Result<(), Box<dyn Error>> {
     radula_behave_rsync(
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap())
             .join(constants::RADULA_DIRECTORY_CROSS)
@@ -390,7 +391,7 @@ fn radula_behave_bootstrap_cross_strip() {
         .unwrap();
 }
 
-pub async fn radula_behave_bootstrap_environment() -> Result<(), Box<dyn std::error::Error>> {
+pub async fn radula_behave_bootstrap_environment() -> Result<(), Box<dyn Error>> {
     let x = &fs::canonicalize("..").await?;
 
     env::set_var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS, x);
@@ -447,7 +448,7 @@ pub async fn radula_behave_bootstrap_environment() -> Result<(), Box<dyn std::er
     Ok(())
 }
 
-pub async fn radula_behave_bootstrap_initialize() -> Result<(), Box<dyn std::error::Error>> {
+pub async fn radula_behave_bootstrap_initialize() -> Result<(), Box<dyn Error>> {
     fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap()).await?;
     fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS).unwrap()).await?;
     fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES).unwrap()).await?;
@@ -708,10 +709,7 @@ pub fn radula_behave_ccache_environment() {
     );
 }
 
-async fn radula_behave_construct(
-    x: &'static str,
-    y: &'static str,
-) -> Result<(), Box<dyn std::error::Error>> {
+async fn radula_behave_construct(x: &'static str, y: &'static str) -> Result<(), Box<dyn Error>> {
     // We only require `nom` and `ver` from the `ceras` file
     let z = ceras::radula_behave_ceras_parse(x).await?;
     let w = z.ver.unwrap_or("".to_string().into());

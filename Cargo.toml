@@ -1,6 +1,6 @@
 [package]
 name = "radula"
-version = "1.1.1"
+version = "1.1.2"
 authors = ["Firas Khalil Khana <firasuke@glaucuslinux.org>"]
 edition = "2021"
 description = "glaucus's radula"
@@ -34,7 +34,8 @@ tokio = { version = "1.15.0", features = [
 ] }
 toml = { version = "0.5.8", features = ["preserve_order"] }
 xxhash-rust = { version = "0.8.2", features = ["xxh3"] }
-zstd = { version = "0.10.0", default-features = false }
+xz2 = { git = "https://github.com/alexcrichton/xz2-rs", features = ["tokio"] }
+zstd = { version = "0.10.0", default-features = false, features = ["zstdmt"] }
 
 [profile.release]
 opt-level = 3

@@ -320,9 +320,9 @@ dependencies = [
 
 [[package]]
 name = "h2"
-version = "0.3.10"
+version = "0.3.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0c9de88456263e249e241fcd211d3954e2c9b0ef7ccfc235a444eb367cae3689"
+checksum = "d9f1f717ddc7b2ba36df7e871fd88db79326551d3d6f1fc406fbfd28b582ff8e"
 dependencies = [
  "bytes 1.1.0",
  "fnv",
@@ -447,7 +447,7 @@ dependencies = [
 [[package]]
 name = "indicatif"
 version = "0.17.0-beta.1"
-source = "git+https://github.com/mitsuhiko/indicatif#af3bd3154b5f06d3baece6a91eda5dcf48b1e4c0"
+source = "git+https://github.com/mitsuhiko/indicatif#8ff5e6fe659658cef67f8db02826c753b2713653"
 dependencies = [
  "console",
  "number_prefix",
@@ -569,6 +569,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "51b9bbe6c47d51fc3e1a9b945965946b4c44142ab8792c50835a980d362c2710"
 dependencies = [
  "cfg-if",
+]
+
+[[package]]
+name = "lzma-sys"
+version = "0.1.17"
+source = "git+https://github.com/alexcrichton/xz2-rs#3a7406e4067ed8bec75359243da112169cb05a1e"
+dependencies = [
+ "cc",
+ "libc",
+ "pkg-config",
 ]
 
 [[package]]
@@ -747,7 +757,7 @@ dependencies = [
 
 [[package]]
 name = "radula"
-version = "1.1.1"
+version = "1.1.2"
 dependencies = [
  "bzip2",
  "colored",
@@ -762,6 +772,7 @@ dependencies = [
  "tokio",
  "toml",
  "xxhash-rust",
+ "xz2",
  "zstd",
 ]
 
@@ -1291,6 +1302,16 @@ name = "xxhash-rust"
 version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e575e15bedf6e57b5c2d763ffc6c3c760143466cbd09d762d539680ab5992ded"
+
+[[package]]
+name = "xz2"
+version = "0.1.6"
+source = "git+https://github.com/alexcrichton/xz2-rs#3a7406e4067ed8bec75359243da112169cb05a1e"
+dependencies = [
+ "futures",
+ "lzma-sys",
+ "tokio-io",
+]
 
 [[package]]
 name = "zstd"

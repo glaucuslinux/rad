@@ -2,6 +2,7 @@
 // Distributed under the terms of the ISC License
 
 use std::env;
+use std::error::Error;
 use std::process::exit;
 
 use super::architecture;
@@ -14,7 +15,7 @@ use super::functions;
 
 use colored::Colorize;
 
-pub async fn radula_options() -> Result<(), Box<dyn std::error::Error>> {
+pub async fn radula_options() -> Result<(), Box<dyn Error>> {
     let mut x = env::args().skip(1);
 
     if x.len() < 1 {

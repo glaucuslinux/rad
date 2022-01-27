@@ -2,11 +2,12 @@
 // Distributed under the terms of the ISC License
 
 use std::env;
+use std::error::Error;
 
 use super::constants;
 
 // This will be used whether we're bootstrapping or not so don't add _bootstrap_ to its name
-pub fn radula_behave_flags_environment() -> Result<(), Box<dyn std::error::Error>> {
+pub fn radula_behave_flags_environment() -> Result<(), Box<dyn Error>> {
     env::set_var(
         constants::RADULA_ENVIRONMENT_FLAGS_C_COMPILER,
         [

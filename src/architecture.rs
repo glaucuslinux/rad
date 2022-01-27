@@ -2,6 +2,7 @@
 // Distributed under the terms of the ISC License
 
 use std::env;
+use std::error::Error;
 use std::path::Path;
 
 use super::constants;
@@ -10,8 +11,7 @@ use colored::Colorize;
 use tokio::process::Command;
 
 // Get canonical system tuple using the `config.guess` file
-async fn radula_behave_bootstrap_architecture_tuple() -> Result<String, Box<dyn std::error::Error>>
-{
+async fn radula_behave_bootstrap_architecture_tuple() -> Result<String, Box<dyn Error>> {
     let tuple = String::from(
         String::from_utf8_lossy(
             &Command::new(
@@ -30,7 +30,7 @@ async fn radula_behave_bootstrap_architecture_tuple() -> Result<String, Box<dyn 
 
 pub async fn radula_behave_bootstrap_architecture_environment(
     x: &'static str,
-) -> Result<(), Box<dyn std::error::Error>> {
+) -> Result<(), Box<dyn Error>> {
     env::set_var(
         constants::RADULA_ENVIRONMENT_TUPLE_BUILD,
         radula_behave_bootstrap_architecture_tuple().await?,
@@ -282,8 +282,7 @@ pub async fn radula_behave_bootstrap_architecture_environment(
 }
 
 #[tokio::test]
-async fn test_radula_behave_bootstrap_architecture_tuple() -> Result<(), Box<dyn std::error::Error>>
-{
+async fn test_radula_behave_bootstrap_architecture_tuple() -> Result<(), Box<dyn Error>> {
     assert_eq!(
         radula_behave_bootstrap_architecture_tuple().await?,
         "x86_64-pc-linux-gnu"
@@ -294,7 +293,7 @@ async fn test_radula_behave_bootstrap_architecture_tuple() -> Result<(), Box<dyn
 
 #[tokio::test]
 async fn test_radula_behave_bootstrap_architecture_environment_aarch64(
-) -> Result<(), Box<dyn std::error::Error>> {
+) -> Result<(), Box<dyn Error>> {
     radula_behave_bootstrap_architecture_environment("aarch64").await?;
 
     // BLD
@@ -415,7 +414,7 @@ async fn test_radula_behave_bootstrap_architecture_environment_aarch64(
 
 #[tokio::test]
 async fn test_radula_behave_bootstrap_architecture_environment_armv6zk(
-) -> Result<(), Box<dyn std::error::Error>> {
+) -> Result<(), Box<dyn Error>> {
     radula_behave_bootstrap_architecture_environment("armv6zk").await?;
 
     println!(
@@ -520,8 +519,8 @@ async fn test_radula_behave_bootstrap_architecture_environment_armv6zk(
 }
 
 #[tokio::test]
-async fn test_radula_behave_bootstrap_architecture_environment_i686(
-) -> Result<(), Box<dyn std::error::Error>> {
+async fn test_radula_behave_bootstrap_architecture_environment_i686() -> Result<(), Box<dyn Error>>
+{
     radula_behave_bootstrap_architecture_environment("i686").await?;
 
     println!(
@@ -627,7 +626,7 @@ async fn test_radula_behave_bootstrap_architecture_environment_i686(
 
 #[tokio::test]
 async fn test_radula_behave_bootstrap_architecture_environment_riscv64(
-) -> Result<(), Box<dyn std::error::Error>> {
+) -> Result<(), Box<dyn Error>> {
     radula_behave_bootstrap_architecture_environment("riscv64").await?;
 
     println!(
@@ -733,7 +732,7 @@ async fn test_radula_behave_bootstrap_architecture_environment_riscv64(
 
 #[tokio::test]
 async fn test_radula_behave_bootstrap_architecture_environment_x86_64_v3(
-) -> Result<(), Box<dyn std::error::Error>> {
+) -> Result<(), Box<dyn Error>> {
     radula_behave_bootstrap_architecture_environment("x86-64").await?;
 
     println!(

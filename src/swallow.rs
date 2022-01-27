@@ -2,25 +2,33 @@
 // Distributed under the terms of the ISC License
 
 use std::env;
+use std::error::Error;
+use std::ffi::OsStr;
+use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
 use super::ceras;
 use super::constants;
 
+use bzip2::read::BzDecoder;
 use colored::Colorize;
+use flate2::read::GzDecoder;
 use futures_util::{stream, StreamExt};
 use git2::Repository;
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
 use reqwest::{Client, Url};
+use tar::Archive;
 use tokio::{fs, fs::File, io::AsyncReadExt, io::AsyncWriteExt, task};
+use xz2::read::XzDecoder;
+use zstd::stream::read::Decoder;
 
 // Asynchronously clone source repos
 pub async fn radula_behave_clone(
     commit: String,
     url: Url,
     path: PathBuf,
-) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+) -> Result<(), Box<dyn Error + Send + Sync>> {
     // Clone ceras's source `git` repository and checkout the freshly cloned `git`
     // repository at the specified commit number
     let repo = Repository::clone(url.as_str(), path).unwrap();
@@ -34,7 +42,7 @@ pub async fn radula_behave_clone(
 pub async fn radula_behave_download(
     url: Url,
     m: Arc<MultiProgress>,
-) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+) -> Result<(), Box<dyn Error + Send + Sync>> {
     let client = Client::new();
 
     let mut res = client.get(url.as_str()).send().await?;
@@ -72,8 +80,22 @@ pub async fn radula_behave_download(
     Ok(())
 }
 
+// Extract source tarballs
+pub async fn radula_behave_extract(file: PathBuf, path: PathBuf) -> Result<(), Box<dyn Error>> {
+    let decoder: Box<dyn Read> = match file.extension().and_then(OsStr::to_str).unwrap() {
+        "gz" | "tgz" => Box::new(GzDecoder::new(std::fs::File::open(file)?)),
+        "bz2" => Box::new(BzDecoder::new(std::fs::File::open(file)?)),
+        "xz" => Box::new(XzDecoder::new_multi_decoder(std::fs::File::open(file)?)),
+        "zst" => Box::new(Decoder::new(std::fs::File::open(file)?)?),
+        _ => unreachable!(),
+    };
+    Archive::new(decoder).unpack(path)?;
+
+    Ok(())
+}
+
 // Fetch, verify and extract ceras's source
-pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn Error>> {
     // Receive the variables from the `ceras` file
     let ceras = ceras::radula_behave_ceras_parse(name).await?;
 
@@ -132,11 +154,7 @@ pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn std
             radula_behave_verify(name, file.to_string(), checksum.to_string()).await?;
 
             // Extract ceras's source tarball
-            // Command::new(constants::RADULA_TOOTH_TAR)
-            //     .args(&["xpvf", &file, "-C", &path])
-            //     .stdout(Stdio::null())
-            //     .spawn()?
-            //     .wait()?;
+            // radula_behave_extract(&file, &path);
         }
     } else if version != constants::RADULA_TOOTH_GIT {
         // Only verify existing ceras's source tarballs without extracting them again
@@ -151,7 +169,7 @@ pub async fn radula_behave_verify(
     name: &'static str,
     file: String,
     checksum: String,
-) -> Result<bool, Box<dyn std::error::Error>> {
+) -> Result<bool, Box<dyn Error>> {
     let mut file =
         fs::File::open(ceras::radula_behave_ceras_source(&name).await?.join(file)).await?;
     let mut buffer = Vec::new();
