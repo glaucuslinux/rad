@@ -7,7 +7,6 @@ use std::path::Path;
 
 use super::constants;
 
-use colored::Colorize;
 use tokio::process::Command;
 
 // Get canonical system tuple using the `config.guess` file
@@ -16,6 +15,7 @@ async fn radula_behave_bootstrap_architecture_tuple() -> Result<String, Box<dyn 
         String::from_utf8_lossy(
             &Command::new(
                 Path::new(constants::RADULA_PATH_RADULA_CLUSTERS)
+                    .join(constants::RADULA_DIRECTORY_GLAUCUS)
                     .join(constants::RADULA_FILE_CONFIG_GUESS),
             )
             .output()
@@ -303,12 +303,12 @@ async fn test_radula_behave_bootstrap_architecture_environment_aarch64(
     // bootstrap_architecture_environment
     println!(
         "\nBLD    :: {}\n",
-        env::var(constants::RADULA_ENVIRONMENT_TUPLE_BUILD)?.blue()
+        env::var(constants::RADULA_ENVIRONMENT_TUPLE_BUILD)?
     );
 
     println!(
         "ARCH   :: {}",
-        env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE)?.red()
+        env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE)?
     );
     println!(
         "CARCH  :: {}",
@@ -348,7 +348,7 @@ async fn test_radula_behave_bootstrap_architecture_environment_aarch64(
     );
     println!(
         "TGT    :: {}",
-        env::var(constants::RADULA_ENVIRONMENT_TUPLE_TARGET)?.green()
+        env::var(constants::RADULA_ENVIRONMENT_TUPLE_TARGET)?
     );
     println!(
         "UARCH  :: {}\n",
@@ -419,7 +419,7 @@ async fn test_radula_behave_bootstrap_architecture_environment_armv6zk(
 
     println!(
         "ARCH   :: {}",
-        env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE)?.red()
+        env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE)?
     );
     println!(
         "CARCH  :: {}",
@@ -459,7 +459,7 @@ async fn test_radula_behave_bootstrap_architecture_environment_armv6zk(
     );
     println!(
         "TGT    :: {}",
-        env::var(constants::RADULA_ENVIRONMENT_TUPLE_TARGET)?.green()
+        env::var(constants::RADULA_ENVIRONMENT_TUPLE_TARGET)?
     );
     println!(
         "UARCH  :: {}\n",
@@ -525,7 +525,7 @@ async fn test_radula_behave_bootstrap_architecture_environment_i686() -> Result<
 
     println!(
         "ARCH   :: {}",
-        env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE)?.red()
+        env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE)?
     );
     println!(
         "CARCH  :: {}",
@@ -565,7 +565,7 @@ async fn test_radula_behave_bootstrap_architecture_environment_i686() -> Result<
     );
     println!(
         "TGT    :: {}",
-        env::var(constants::RADULA_ENVIRONMENT_TUPLE_TARGET)?.green()
+        env::var(constants::RADULA_ENVIRONMENT_TUPLE_TARGET)?
     );
     println!(
         "UARCH  :: {}\n",
@@ -631,7 +631,7 @@ async fn test_radula_behave_bootstrap_architecture_environment_riscv64(
 
     println!(
         "ARCH   :: {}",
-        env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE)?.red()
+        env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE)?
     );
     println!(
         "CARCH  :: {}",
@@ -671,7 +671,7 @@ async fn test_radula_behave_bootstrap_architecture_environment_riscv64(
     );
     println!(
         "TGT    :: {}",
-        env::var(constants::RADULA_ENVIRONMENT_TUPLE_TARGET)?.green()
+        env::var(constants::RADULA_ENVIRONMENT_TUPLE_TARGET)?
     );
     println!(
         "UARCH  :: {}\n",
@@ -737,7 +737,7 @@ async fn test_radula_behave_bootstrap_architecture_environment_x86_64_v3(
 
     println!(
         "ARCH   :: {}",
-        env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE)?.red()
+        env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE)?
     );
     println!(
         "CARCH  :: {}",
@@ -777,7 +777,7 @@ async fn test_radula_behave_bootstrap_architecture_environment_x86_64_v3(
     );
     println!(
         "TGT    :: {}",
-        env::var(constants::RADULA_ENVIRONMENT_TUPLE_TARGET)?.green()
+        env::var(constants::RADULA_ENVIRONMENT_TUPLE_TARGET)?
     );
     println!(
         "UARCH  :: {}\n",

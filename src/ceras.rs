@@ -2,10 +2,12 @@
 // Distributed under the terms of the ISC License
 
 use std::error::Error;
+use std::fmt;
 use std::path::{Path, PathBuf};
 
 use super::constants;
 
+use colored::Colorize;
 use serde::Deserialize;
 use tokio::fs;
 
@@ -19,6 +21,59 @@ pub struct Ceras {
     pub sum: Option<String>,
     pub cnt: Option<String>,
     pub cys: Option<String>,
+}
+
+impl fmt::Display for Ceras {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(
+            f,
+            "{:13}{:3}{}",
+            "Name".bold(),
+            "::".bold(),
+            self.nom.blue()
+        );
+        writeln!(
+            f,
+            "{:13}{:3}{}",
+            "Version".bold(),
+            "::".bold(),
+            [
+                &self.ver.as_ref().unwrap_or(&"None".red().to_string()),
+                " ",
+                &self.cmt.as_ref().unwrap_or(&" ".to_string())
+            ]
+            .concat()
+            .trim(),
+        );
+        writeln!(
+            f,
+            "{:13}{:3}{}",
+            "URL".bold(),
+            "::".bold(),
+            self.url.as_ref().unwrap_or(&"None".red().to_string())
+        );
+        writeln!(
+            f,
+            "{:13}{:3}{}",
+            "Checksum".bold(),
+            "::".bold(),
+            self.sum.as_ref().unwrap_or(&"None".red().to_string())
+        );
+        writeln!(
+            f,
+            "{:13}{:3}{}",
+            "Concentrates".bold(),
+            "::".bold(),
+            self.cnt.as_ref().unwrap_or(&"None".red().to_string())
+        );
+        writeln!(
+            f,
+            "{:13}{:3}{}",
+            "Cysts".bold(),
+            "::".bold(),
+            self.cys.as_ref().unwrap_or(&"None".red().to_string())
+        )
+    }
 }
 
 // Checks if the `ceras` file exists

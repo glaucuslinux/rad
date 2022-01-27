@@ -13,8 +13,6 @@ use super::flags;
 use super::functions;
 // use super::image;
 
-use colored::Colorize;
-
 pub async fn radula_options() -> Result<(), Box<dyn Error>> {
     let mut x = env::args().skip(1);
 
@@ -133,7 +131,7 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                     }
                     exit(0);
                 }
-                // `return` should be removed to allow dealing with multiple cerata simultaneously
+                // `exit` should be removed to allow dealing with multiple cerata simultaneously
                 "e" | "envenomate" => {
                     match x.next().as_deref().unwrap_or_default() {
                         "h" | "help" => {
@@ -146,7 +144,7 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                     }
                     exit(0);
                 }
-                // `return` should be removed to allow dealing with multiple cerata simultaneously
+                // `exit` should be removed to allow dealing with multiple cerata simultaneously
                 "i" | "binary" => {
                     match x.next().as_deref().unwrap_or_default() {
                         "h" | "help" => {
@@ -170,47 +168,7 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
             },
             "-c" | "--ceras" => {
                 while let Some(z) = x.next().as_deref() {
-                    let w = ceras::radula_behave_ceras_parse(&z).await?;
-
-                    println!("{:13}{:3}{}", "Name".bold(), "::".bold(), w.nom.blue());
-                    println!(
-                        "{:13}{:3}{}",
-                        "Version".bold(),
-                        "::".bold(),
-                        [
-                            &w.ver.unwrap_or("None".red().to_string().into()),
-                            " ",
-                            &w.cmt.unwrap_or_default()
-                        ]
-                        .concat()
-                        .trim()
-                    );
-                    println!(
-                        "{:13}{:3}{}",
-                        "URL".bold(),
-                        "::".bold(),
-                        w.url.unwrap_or("None".red().to_string().into())
-                    );
-                    println!(
-                        "{:13}{:3}{}",
-                        "Checksum".bold(),
-                        "::".bold(),
-                        w.sum.unwrap_or("None".red().to_string().into())
-                    );
-                    println!(
-                        "{:13}{:3}{}",
-                        "Concentrates".bold(),
-                        "::".bold(),
-                        w.cnt.unwrap_or("None".red().to_string().into())
-                    );
-                    println!(
-                        "{:13}{:3}{}",
-                        "Cysts".bold(),
-                        "::".bold(),
-                        w.cys.unwrap_or("None".red().to_string().into())
-                    );
-
-                    println!("");
+                    println!("{}", ceras::radula_behave_ceras_parse(&z).await?);
                 }
                 exit(0);
             }
