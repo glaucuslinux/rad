@@ -3,7 +3,6 @@
 
 use std::env;
 use std::error::Error;
-use std::path::Path;
 
 use super::constants;
 
@@ -14,11 +13,28 @@ use super::constants;
 pub fn radula_behave_ccache_environment() -> Result<(), Box<dyn Error>> {
     env::set_var(
         constants::RADULA_ENVIRONMENT_PATH,
-        Path::new(&[constants::RADULA_PATH_CCACHE, ":"].concat()).join(
-            env::var(constants::RADULA_ENVIRONMENT_PATH)?
-                .strip_prefix(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
-                .unwrap(),
-        ),
+        env::join_paths(
+            env::split_paths(constants::RADULA_PATH_CCACHE).chain(env::split_paths(&env::var(
+                constants::RADULA_ENVIRONMENT_PATH,
+            )?)),
+        )
+        .unwrap(),
+    );
+
+    Ok(())
+}
+
+#[test]
+fn test_radula_behave_ccache_environment() -> Result<(), Box<dyn Error>> {
+    radula_behave_ccache_environment();
+
+    println!(
+        "\nPATH   :: {}\n",
+        env::var(constants::RADULA_ENVIRONMENT_PATH)?
+    );
+
+    assert!(
+        env::var(constants::RADULA_ENVIRONMENT_PATH)?.starts_with(constants::RADULA_PATH_CCACHE)
     );
 
     Ok(())
