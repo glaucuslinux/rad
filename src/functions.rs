@@ -12,7 +12,6 @@ use super::constants;
 use super::construct;
 use super::swallow;
 
-use colored::Colorize;
 use tokio::fs;
 
 extern crate num_cpus;
@@ -435,23 +434,17 @@ pub async fn radula_behave_bootstrap_environment() -> Result<(), Box<dyn Error>>
 
     env::set_var(
         constants::RADULA_ENVIRONMENT_PATH,
-        Path::new(
-            &[
-                Path::new(&env::var(
-                    constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN,
-                )?)
-                .join(constants::RADULA_PATH_BIN)
-                .to_str()
-                .unwrap(),
-                ":",
-            ]
-            .concat(),
+        env::join_paths(
+            [Path::new(&env::var(
+                constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN,
+            )?)
+            .join(constants::RADULA_PATH_BIN)]
+            .into_iter()
+            .chain(env::split_paths(&env::var(
+                constants::RADULA_ENVIRONMENT_PATH,
+            )?)),
         )
-        .join(
-            env::var(constants::RADULA_ENVIRONMENT_PATH)?
-                .strip_prefix(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
-                .unwrap(),
-        ),
+        .unwrap(),
     );
 
     Ok(())
@@ -708,48 +701,6 @@ pub fn radula_behave_bootstrap_toolchain_release() {
     //     .unwrap()
     //     .wait()
     //     .unwrap();
-}
-
-pub fn radula_behave_pkg_config_environment() {
-    env::set_var(
-        constants::RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR,
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap()).join(
-            constants::RADULA_PATH_PKG_CONFIG_LIBDIR_PATH
-                .strip_prefix(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
-                .unwrap(),
-        ),
-    );
-    env::set_var(
-        constants::RADULA_ENVIRONMENT_PKG_CONFIG_PATH,
-        env::var(constants::RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR).unwrap(),
-    );
-    env::set_var(
-        constants::RADULA_ENVIRONMENT_PKG_CONFIG_SYSROOT_DIR,
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap()).join(
-            constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR
-                .strip_prefix(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
-                .unwrap(),
-        ),
-    );
-
-    // These environment variables are only `pkgconf` specific, but setting them
-    // won't do any harm...
-    env::set_var(
-        constants::RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_INCLUDE_PATH,
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap()).join(
-            constants::RADULA_PATH_PKG_CONFIG_SYSTEM_INCLUDE_PATH
-                .strip_prefix(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
-                .unwrap(),
-        ),
-    );
-    env::set_var(
-        constants::RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_LIBRARY_PATH,
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap()).join(
-            constants::RADULA_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH
-                .strip_prefix(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
-                .unwrap(),
-        ),
-    );
 }
 
 fn radula_behave_rsync(x: &str, y: &str) {

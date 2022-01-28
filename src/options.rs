@@ -13,24 +13,25 @@ use super::constants;
 use super::flags;
 use super::functions;
 use super::help;
+use super::pkg_config;
 // use super::image;
 
 pub async fn radula_options() -> Result<(), Box<dyn Error>> {
-    let mut x = env::args().skip(1);
+    let mut args = env::args().skip(1);
 
-    if x.len() < 1 {
-        help::radula_help(constants::RADULA_HELP);
+    if args.len() < 1 {
+        help::radula_help(constants::RADULA_HELP)?;
         exit(1);
     }
 
-    while let Some(y) = x.next().as_deref() {
+    while let Some(y) = args.next().as_deref() {
         match y {
             // `.unwrap_or_default()` actually returns an empty string literal which gets matched
             // to `_` in the below switch (if we had `.unwrap_or("h")` then that'll return the help
             // message without exiting with an error status of `1`).
-            "-b" | "--behave" => match x.next().as_deref().unwrap_or_default() {
+            "-b" | "--behave" => match args.next().as_deref().unwrap_or_default() {
                 "b" | "bootstrap" => {
-                    match x.next().as_deref().unwrap_or_default() {
+                    match args.next().as_deref().unwrap_or_default() {
                         "c" | "clean" => {
                             functions::radula_behave_bootstrap_environment().await?;
 
@@ -53,7 +54,7 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
 
                             println!("distclean complete");
                         }
-                        "h" | "help" => help::radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP),
+                        "h" | "help" => help::radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP)?,
                         "i" | "image" => {
                             functions::radula_behave_bootstrap_environment().await?;
 
@@ -62,7 +63,7 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                             println!("image complete");
                         }
                         "l" | "list" => {
-                            help::radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP_LIST)
+                            help::radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP_LIST)?
                         }
                         "r" | "require" => {
                             println!("Checking if host has all required packages...")
@@ -106,7 +107,7 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
 
                             functions::radula_behave_teeth_environment();
 
-                            functions::radula_behave_pkg_config_environment();
+                            pkg_config::radula_behave_pkg_config_environment()?;
 
                             architecture::radula_behave_bootstrap_architecture_environment(
                                 constants::RADULA_ARCHITECTURE_X86_64_V3,
@@ -125,7 +126,7 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                             println!("cross complete");
                         }
                         _ => {
-                            help::radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP);
+                            help::radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP)?;
                             exit(1);
                         }
                     }
@@ -133,10 +134,12 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                 }
                 // `exit` should be removed to allow dealing with multiple cerata simultaneously
                 "e" | "envenomate" => {
-                    match x.next().as_deref().unwrap_or_default() {
-                        "h" | "help" => help::radula_help(constants::RADULA_HELP_BEHAVE_ENVENOMATE),
+                    match args.next().as_deref().unwrap_or_default() {
+                        "h" | "help" => {
+                            help::radula_help(constants::RADULA_HELP_BEHAVE_ENVENOMATE)?
+                        }
                         _ => {
-                            help::radula_help(constants::RADULA_HELP_BEHAVE_ENVENOMATE);
+                            help::radula_help(constants::RADULA_HELP_BEHAVE_ENVENOMATE)?;
                             exit(1);
                         }
                     }
@@ -144,32 +147,32 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                 }
                 // `exit` should be removed to allow dealing with multiple cerata simultaneously
                 "i" | "binary" => {
-                    match x.next().as_deref().unwrap_or_default() {
-                        "h" | "help" => help::radula_help(constants::RADULA_HELP_BEHAVE_BINARY),
+                    match args.next().as_deref().unwrap_or_default() {
+                        "h" | "help" => help::radula_help(constants::RADULA_HELP_BEHAVE_BINARY)?,
                         _ => {
-                            help::radula_help(constants::RADULA_HELP_BEHAVE_BINARY);
+                            help::radula_help(constants::RADULA_HELP_BEHAVE_BINARY)?;
                             exit(1);
                         }
                     }
                     exit(0);
                 }
                 "h" | "help" => {
-                    help::radula_help(constants::RADULA_HELP_BEHAVE);
+                    help::radula_help(constants::RADULA_HELP_BEHAVE)?;
                     exit(0);
                 }
                 _ => {
-                    help::radula_help(constants::RADULA_HELP_BEHAVE);
+                    help::radula_help(constants::RADULA_HELP_BEHAVE)?;
                     exit(1);
                 }
             },
             "-c" | "--ceras" => {
-                while let Some(z) = x.next().as_deref() {
+                while let Some(z) = args.next().as_deref() {
                     println!("{}", ceras::radula_behave_ceras_parse(&z).await?);
                 }
                 exit(0);
             }
             "-h" | "--help" => {
-                help::radula_help(constants::RADULA_HELP);
+                help::radula_help(constants::RADULA_HELP)?;
                 exit(0);
             }
             "-v" | "--version" => {
@@ -177,7 +180,7 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                 exit(0);
             }
             _ => {
-                help::radula_help(constants::RADULA_HELP);
+                help::radula_help(constants::RADULA_HELP)?;
                 exit(1);
             }
         }

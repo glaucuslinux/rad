@@ -441,7 +441,7 @@ async fn test_radula_behave_bootstrap_architecture_environment_armv6zk(
     radula_behave_bootstrap_architecture_environment("armv6zk").await?;
 
     println!(
-        "ARCH   :: {}",
+        "\nARCH   :: {}",
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE)?
     );
     println!(
@@ -547,7 +547,7 @@ async fn test_radula_behave_bootstrap_architecture_environment_i686() -> Result<
     radula_behave_bootstrap_architecture_environment("i686").await?;
 
     println!(
-        "ARCH   :: {}",
+        "\nARCH   :: {}",
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE)?
     );
     println!(
@@ -653,7 +653,7 @@ async fn test_radula_behave_bootstrap_architecture_environment_riscv64(
     radula_behave_bootstrap_architecture_environment("riscv64").await?;
 
     println!(
-        "ARCH   :: {}",
+        "\nARCH   :: {}",
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE)?
     );
     println!(
@@ -759,7 +759,7 @@ async fn test_radula_behave_bootstrap_architecture_environment_x86_64_v3(
     radula_behave_bootstrap_architecture_environment("x86-64").await?;
 
     println!(
-        "ARCH   :: {}",
+        "\nARCH   :: {}",
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE)?
     );
     println!(

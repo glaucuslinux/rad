@@ -12,6 +12,7 @@ mod construct;
 mod flags;
 mod functions;
 mod help;
+mod pkg_config;
 // mod image;
 mod options;
 mod swallow;

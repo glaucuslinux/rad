@@ -29,7 +29,7 @@ fn test_radula_behave_ccache_environment() -> Result<(), Box<dyn Error>> {
     radula_behave_ccache_environment();
 
     println!(
-        "\nPATH   :: {}\n",
+        "\nPATH :: {}\n",
         env::var(constants::RADULA_ENVIRONMENT_PATH)?
     );
 
