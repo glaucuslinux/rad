@@ -82,14 +82,22 @@ pub async fn test_radula_behave_pkg_config_environment() -> Result<(), Box<dyn E
         env::var(constants::RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_LIBRARY_PATH)?
     );
 
-    // assert_eq!(
-    //     env::var(constants::RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR)?,
-    //     ""
-    // );
-    // assert_eq!(
-    //     env::var(constants::RADULA_ENVIRONMENT_PKG_CONFIG_PATH)?,
-    //     ""
-    // );
+    assert!(env::var(constants::RADULA_ENVIRONMENT_PKG_CONFIG_LIBDIR)?
+        .ends_with(constants::RADULA_PATH_PKG_CONFIG_LIBDIR_PATH));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_PKG_CONFIG_PATH)?
+        .ends_with(constants::RADULA_PATH_PKG_CONFIG_LIBDIR_PATH));
+    assert!(
+        env::var(constants::RADULA_ENVIRONMENT_PKG_CONFIG_SYSROOT_DIR)?
+            .ends_with(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
+    );
+    assert!(
+        env::var(constants::RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_INCLUDE_PATH)?
+            .ends_with(constants::RADULA_PATH_PKG_CONFIG_SYSTEM_INCLUDE_PATH)
+    );
+    assert!(
+        env::var(constants::RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_LIBRARY_PATH)?
+            .ends_with(constants::RADULA_PATH_PKG_CONFIG_SYSTEM_LIBRARY_PATH)
+    );
 
     Ok(())
 }
