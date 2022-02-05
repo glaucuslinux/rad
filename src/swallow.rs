@@ -67,9 +67,11 @@ pub async fn radula_behave_download(
 
     let mut out = File::create(file.clone()).await?;
 
+    // Use `write_all` instead of `write`:
+    // https://rust-lang.github.io/rust-clippy/master/index.html#unused_io_amount
     while let Some(chunk) = res.chunk().await? {
         pb.inc(chunk.len() as u64);
-        out.write(&chunk).await?;
+        out.write_all(&chunk).await?;
     }
 
     pb.finish();
