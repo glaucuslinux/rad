@@ -6,14 +6,17 @@ use std::error::Error;
 use std::process::exit;
 
 use super::architecture;
+use super::bootstrap;
 use super::ccache;
 use super::ceras;
 use super::clean;
 use super::constants;
+use super::cross;
 use super::flags;
-use super::functions;
 use super::help;
 use super::pkg_config;
+use super::teeth;
+use super::toolchain;
 // use super::image;
 
 pub async fn radula_options() -> Result<(), Box<dyn Error>> {
@@ -33,22 +36,22 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                 "b" | "bootstrap" => {
                     match args.next().as_deref().unwrap_or_default() {
                         "c" | "clean" => {
-                            functions::radula_behave_bootstrap_environment().await?;
+                            bootstrap::radula_behave_bootstrap_environment().await?;
 
-                            functions::radula_behave_bootstrap_toolchain_environment();
+                            toolchain::radula_behave_bootstrap_toolchain_environment();
 
-                            functions::radula_behave_bootstrap_cross_environment_directories();
+                            cross::radula_behave_bootstrap_cross_environment_directories();
 
                             clean::radula_behave_bootstrap_clean().await?;
 
                             println!("clean complete");
                         }
                         "d" | "distclean" => {
-                            functions::radula_behave_bootstrap_environment().await?;
+                            bootstrap::radula_behave_bootstrap_environment().await?;
 
-                            functions::radula_behave_bootstrap_toolchain_environment();
+                            toolchain::radula_behave_bootstrap_toolchain_environment();
 
-                            functions::radula_behave_bootstrap_cross_environment_directories();
+                            cross::radula_behave_bootstrap_cross_environment_directories();
 
                             clean::radula_behave_bootstrap_distclean().await?;
 
@@ -56,7 +59,7 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                         }
                         "h" | "help" => help::radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP)?,
                         "i" | "image" => {
-                            functions::radula_behave_bootstrap_environment().await?;
+                            bootstrap::radula_behave_bootstrap_environment().await?;
 
                             // image::radula_behave_bootstrap_cross_image();
 
@@ -69,16 +72,16 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                             println!("Checking if host has all required packages...")
                         }
                         "s" | "release" => {
-                            functions::radula_behave_bootstrap_environment().await?;
+                            bootstrap::radula_behave_bootstrap_environment().await?;
 
-                            functions::radula_behave_bootstrap_toolchain_release();
+                            toolchain::radula_behave_bootstrap_toolchain_release();
 
                             println!("release complete");
                         }
                         "t" | "toolchain" => {
-                            functions::radula_behave_bootstrap_environment().await?;
+                            bootstrap::radula_behave_bootstrap_environment().await?;
 
-                            functions::radula_behave_teeth_environment();
+                            teeth::radula_behave_teeth_environment();
 
                             ccache::radula_behave_ccache_environment();
 
@@ -87,25 +90,25 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                             )
                             .await?;
 
-                            functions::radula_behave_bootstrap_toolchain_environment();
+                            toolchain::radula_behave_bootstrap_toolchain_environment();
 
                             // Needed for clean to work...
-                            functions::radula_behave_bootstrap_cross_environment_directories();
+                            cross::radula_behave_bootstrap_cross_environment_directories();
 
                             clean::radula_behave_bootstrap_clean().await?;
 
-                            functions::radula_behave_bootstrap_initialize().await?;
+                            bootstrap::radula_behave_bootstrap_initialize().await?;
 
-                            functions::radula_behave_bootstrap_toolchain_prepare();
-                            functions::radula_behave_bootstrap_toolchain_construct();
-                            functions::radula_behave_bootstrap_toolchain_backup();
+                            toolchain::radula_behave_bootstrap_toolchain_prepare();
+                            toolchain::radula_behave_bootstrap_toolchain_construct();
+                            toolchain::radula_behave_bootstrap_toolchain_backup();
 
                             println!("toolchain complete");
                         }
                         "x" | "cross" => {
-                            functions::radula_behave_bootstrap_environment().await?;
+                            bootstrap::radula_behave_bootstrap_environment().await?;
 
-                            functions::radula_behave_teeth_environment();
+                            teeth::radula_behave_teeth_environment();
 
                             pkg_config::radula_behave_pkg_config_environment()?;
 
@@ -116,12 +119,12 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
 
                             flags::radula_behave_flags_environment();
 
-                            functions::radula_behave_bootstrap_cross_environment_directories();
-                            functions::radula_behave_bootstrap_cross_environment_teeth();
+                            cross::radula_behave_bootstrap_cross_environment_directories();
+                            cross::radula_behave_bootstrap_cross_environment_teeth();
 
-                            functions::radula_behave_bootstrap_cross_prepare().await?;
-                            functions::radula_behave_bootstrap_cross_construct();
-                            //radula_behave_bootstrap_cross_strip();
+                            cross::radula_behave_bootstrap_cross_prepare().await?;
+                            cross::radula_behave_bootstrap_cross_construct();
+                            //cross::radula_behave_bootstrap_cross_strip();
 
                             println!("cross complete");
                         }

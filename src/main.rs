@@ -4,15 +4,19 @@
 use std::error::Error;
 
 mod architecture;
+mod bootstrap;
 mod ccache;
 mod ceras;
 mod clean;
 mod constants;
 mod construct;
+mod cross;
 mod flags;
-mod functions;
 mod help;
 mod pkg_config;
+mod rsync;
+mod teeth;
+mod toolchain;
 // mod image;
 mod options;
 mod swallow;

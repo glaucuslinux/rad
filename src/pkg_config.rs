@@ -6,7 +6,7 @@ use std::error::Error;
 use std::path::Path;
 
 use super::constants;
-use super::functions;
+use super::bootstrap;
 
 //
 // pkg-config Function
@@ -58,7 +58,7 @@ pub fn radula_behave_pkg_config_environment() -> Result<(), Box<dyn Error>> {
 
 #[tokio::test]
 pub async fn test_radula_behave_pkg_config_environment() -> Result<(), Box<dyn Error>> {
-    functions::radula_behave_bootstrap_environment().await?;
+    bootstrap::radula_behave_bootstrap_environment().await?;
     radula_behave_pkg_config_environment();
 
     println!(
