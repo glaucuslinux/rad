@@ -13,13 +13,13 @@ mod construct;
 mod cross;
 mod flags;
 mod help;
-mod pkg_config;
-mod rsync;
-mod teeth;
-mod toolchain;
 // mod image;
 mod options;
+mod pkg_config;
+mod rsync;
 mod swallow;
+mod teeth;
+mod toolchain;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {

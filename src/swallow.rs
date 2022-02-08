@@ -173,7 +173,7 @@ pub async fn radula_behave_verify(
     checksum: String,
 ) -> Result<bool, Box<dyn Error>> {
     let mut file =
-        fs::File::open(ceras::radula_behave_ceras_source(&name).await?.join(file)).await?;
+        File::open(ceras::radula_behave_ceras_source(&name).await?.join(file)).await?;
     let mut buffer = Vec::new();
 
     file.read_to_end(&mut buffer).await?;

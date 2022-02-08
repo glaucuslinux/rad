@@ -7,15 +7,11 @@ use std::path::Path;
 use std::process::{Command, Stdio};
 use std::string::String;
 
-use super::ceras;
 use super::constants;
 use super::construct;
 use super::rsync;
-use super::swallow;
 
 use tokio::fs;
-
-extern crate num_cpus;
 
 //
 // Cross Functions

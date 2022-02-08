@@ -14,10 +14,10 @@ use super::constants;
 use super::cross;
 use super::flags;
 use super::help;
+// use super::image;
 use super::pkg_config;
 use super::teeth;
 use super::toolchain;
-// use super::image;
 
 pub async fn radula_options() -> Result<(), Box<dyn Error>> {
     let mut args = env::args().skip(1);
