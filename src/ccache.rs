@@ -17,8 +17,7 @@ pub fn radula_behave_ccache_environment() -> Result<(), Box<dyn Error>> {
             env::split_paths(constants::RADULA_PATH_CCACHE).chain(env::split_paths(&env::var(
                 constants::RADULA_ENVIRONMENT_PATH,
             )?)),
-        )
-        .unwrap(),
+        )?,
     );
 
     Ok(())

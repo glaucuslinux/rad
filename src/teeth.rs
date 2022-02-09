@@ -2,6 +2,7 @@
 // Distributed under the terms of the ISC License
 
 use std::env;
+use std::error::Error;
 
 use super::constants;
 
@@ -11,7 +12,7 @@ extern crate num_cpus;
 // Teeth Function
 //
 
-pub fn radula_behave_teeth_environment() {
+pub fn radula_behave_teeth_environment() -> Result<(), Box<dyn Error>> {
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_AUTORECONF,
         [
@@ -164,4 +165,6 @@ pub fn radula_behave_teeth_environment() {
         constants::RADULA_ENVIRONMENT_TOOTH_YACC,
         constants::RADULA_TOOTH_BYACC,
     );
+
+    Ok(())
 }

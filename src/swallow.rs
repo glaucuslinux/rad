@@ -31,9 +31,8 @@ pub async fn radula_behave_clone(
 ) -> Result<(), Box<dyn Error + Send + Sync>> {
     // Clone ceras's source `git` repository and checkout the freshly cloned `git`
     // repository at the specified commit number
-    let repo = Repository::clone(url.as_str(), path).unwrap();
-    repo.checkout_tree(&repo.revparse_ext(&commit).unwrap().0, None)
-        .unwrap();
+    let repo = Repository::clone(url.as_str(), path)?;
+    repo.checkout_tree(&repo.revparse_ext(&commit)?.0, None)?;
 
     Ok(())
 }
@@ -172,8 +171,7 @@ pub async fn radula_behave_verify(
     file: String,
     checksum: String,
 ) -> Result<bool, Box<dyn Error>> {
-    let mut file =
-        File::open(ceras::radula_behave_ceras_source(&name).await?.join(file)).await?;
+    let mut file = File::open(ceras::radula_behave_ceras_source(&name).await?.join(file)).await?;
     let mut buffer = Vec::new();
 
     file.read_to_end(&mut buffer).await?;

@@ -22,7 +22,7 @@
 //     };
 
 //     let x = &String::from(
-//         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS).unwrap())
+//         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS)?)
 //             .join(constants::RADULA_FILE_GLAUCUS_IMAGE)
 //             .to_str()
 //             .unwrap(),

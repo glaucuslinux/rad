@@ -17,24 +17,26 @@ use tokio::fs;
 // Toolchain Functions
 //
 
-pub fn radula_behave_bootstrap_toolchain_backup() {
+pub fn radula_behave_bootstrap_toolchain_backup() -> Result<(), Box<dyn Error>> {
     rsync::radula_behave_rsync(
-        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap(),
-        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap(),
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS)?,
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?,
     );
     rsync::radula_behave_rsync(
-        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN).unwrap(),
-        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap(),
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN)?,
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?,
     );
 
     // Backup toolchain log file
     rsync::radula_behave_rsync(
-        &env::var(constants::RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG).unwrap(),
-        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap(),
+        &env::var(constants::RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG)?,
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?,
     );
+
+    Ok(())
 }
 
-pub fn radula_behave_bootstrap_toolchain_construct() {
+pub fn radula_behave_bootstrap_toolchain_construct() -> Result<(), Box<dyn Error>> {
     let radula_behave_construct_toolchain = |x: &'static str| {
         construct::radula_behave_construct(x, constants::RADULA_DIRECTORY_TOOLCHAIN);
     };
@@ -46,6 +48,8 @@ pub fn radula_behave_bootstrap_toolchain_construct() {
     radula_behave_construct_toolchain(constants::RADULA_CERAS_LIBGCC);
     radula_behave_construct_toolchain(constants::RADULA_CERAS_LIBSTDCXX_V3);
     radula_behave_construct_toolchain(constants::RADULA_CERAS_LIBGOMP);
+
+    Ok(())
 }
 
 pub fn radula_behave_bootstrap_toolchain_environment() -> Result<(), Box<dyn Error>> {
@@ -85,22 +89,26 @@ pub fn radula_behave_bootstrap_toolchain_environment() -> Result<(), Box<dyn Err
     Ok(())
 }
 
-pub fn radula_behave_bootstrap_toolchain_prepare() {
-    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap());
+pub fn radula_behave_bootstrap_toolchain_prepare() -> Result<(), Box<dyn Error>> {
+    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS)?);
 
-    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN).unwrap());
+    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN)?);
 
-    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY).unwrap());
-    fs::create_dir(
-        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_BUILDS).unwrap(),
-    );
+    fs::create_dir(env::var(
+        constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY,
+    )?);
+    fs::create_dir(env::var(
+        constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_BUILDS,
+    )?);
     // Create the `src` directory if it doesn't exist, but don't remove it if it does exist!
-    fs::create_dir(
-        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_SOURCES).unwrap(),
-    );
+    fs::create_dir(env::var(
+        constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_SOURCES,
+    )?);
+
+    Ok(())
 }
 
-pub fn radula_behave_bootstrap_toolchain_release() {
+pub fn radula_behave_bootstrap_toolchain_release() -> Result<(), Box<dyn Error>> {
     let x = &String::from(
         Path::new(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
             .join(constants::RADULA_DIRECTORY_TEMPORARY)
@@ -113,14 +121,14 @@ pub fn radula_behave_bootstrap_toolchain_release() {
     fs::create_dir(x);
 
     rsync::radula_behave_rsync(
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap())
+        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?)
             .join(constants::RADULA_DIRECTORY_CROSS)
             .to_str()
             .unwrap(),
         x,
     );
     rsync::radula_behave_rsync(
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap())
+        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?)
             .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
             .to_str()
             .unwrap(),
@@ -147,10 +155,8 @@ pub fn radula_behave_bootstrap_toolchain_release() {
 
     Command::new(constants::RADULA_TOOTH_FIND)
         .args(&[x, "-name", "*.la", "-delete"])
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
+        .spawn()?
+        .wait()?;
 
     let radula_behave_bootstrap_toolchain_strip_libraries = |x: &str| {
         Command::new(constants::RADULA_TOOTH_SHELL)
@@ -160,10 +166,8 @@ pub fn radula_behave_bootstrap_toolchain_release() {
             ])
             .stderr(Stdio::null())
             .stdout(Stdio::null())
-            .spawn()
-            .unwrap()
-            .wait()
-            .unwrap();
+            .spawn()?
+            .wait()?;
     };
 
     radula_behave_bootstrap_toolchain_strip_libraries(
@@ -194,10 +198,8 @@ pub fn radula_behave_bootstrap_toolchain_release() {
             ])
             .stderr(Stdio::null())
             .stdout(Stdio::null())
-            .spawn()
-            .unwrap()
-            .wait()
-            .unwrap();
+            .spawn()?
+            .wait()?;
     };
 
     radula_behave_bootstrap_toolchain_strip_binaries(
@@ -236,7 +238,7 @@ pub fn radula_behave_bootstrap_toolchain_release() {
     //         "cpvf",
     //         &format!(
     //             "{}-{}.tar.zst",
-    //             Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS).unwrap())
+    //             Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS)?)
     //                 .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
     //                 .to_str()
     //                 .unwrap(),
@@ -255,8 +257,8 @@ pub fn radula_behave_bootstrap_toolchain_release() {
     //     ])
     //     .current_dir(x)
     //     .stdout(Stdio::null())
-    //     .spawn()
-    //     .unwrap()
-    //     .wait()
-    //     .unwrap();
+    //     .spawn()?
+    //     .wait()?;
+
+    Ok(())
 }

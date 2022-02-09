@@ -17,7 +17,7 @@ use tokio::fs;
 // Cross Functions
 //
 
-pub fn radula_behave_bootstrap_cross_construct() {
+pub fn radula_behave_bootstrap_cross_construct() -> Result<(), Box<dyn Error>> {
     let radula_behave_construct_cross = |x: &'static str| {
         construct::radula_behave_construct(x, constants::RADULA_DIRECTORY_CROSS);
     };
@@ -130,6 +130,8 @@ pub fn radula_behave_bootstrap_cross_construct() {
     radula_behave_construct_cross(constants::RADULA_CERAS_LIBUARGP);
     radula_behave_construct_cross(constants::RADULA_CERAS_LIBELF);
     radula_behave_construct_cross(constants::RADULA_CERAS_LINUX);
+
+    Ok(())
 }
 
 pub fn radula_behave_bootstrap_cross_environment_directories() -> Result<(), Box<dyn Error>> {
@@ -169,12 +171,8 @@ pub fn radula_behave_bootstrap_cross_environment_directories() -> Result<(), Box
     Ok(())
 }
 
-pub fn radula_behave_bootstrap_cross_environment_teeth() {
-    let x = &[
-        &env::var(constants::RADULA_ENVIRONMENT_TUPLE_TARGET).unwrap(),
-        "-",
-    ]
-    .concat();
+pub fn radula_behave_bootstrap_cross_environment_teeth() -> Result<(), Box<dyn Error>> {
+    let x = &[&env::var(constants::RADULA_ENVIRONMENT_TUPLE_TARGET)?, "-"].concat();
 
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_ARCHIVER,
@@ -267,53 +265,55 @@ pub fn radula_behave_bootstrap_cross_environment_teeth() {
         constants::RADULA_ENVIRONMENT_CROSS_STRIP,
         [x, constants::RADULA_CROSS_STRIP].concat(),
     );
+
+    Ok(())
 }
 
 pub async fn radula_behave_bootstrap_cross_prepare() -> Result<(), Box<dyn Error>> {
     rsync::radula_behave_rsync(
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap())
+        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?)
             .join(constants::RADULA_DIRECTORY_CROSS)
             .to_str()
             .unwrap(),
-        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS).unwrap(),
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS)?,
     );
     rsync::radula_behave_rsync(
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap())
+        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?)
             .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
             .to_str()
             .unwrap(),
-        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS).unwrap(),
+        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS)?,
     );
 
-    fs::remove_dir_all(
-        &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS).unwrap(),
-    )
+    fs::remove_dir_all(&env::var(
+        constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS,
+    )?)
     .await?;
-    fs::create_dir(
-        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS).unwrap(),
-    )
+    fs::create_dir(env::var(
+        constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS,
+    )?)
     .await?;
 
     // Create the `src` directory if it doesn't exist, but don't remove it if it does exist!
-    fs::create_dir(
-        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_SOURCES).unwrap(),
-    )
+    fs::create_dir(env::var(
+        constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_SOURCES,
+    )?)
     .await?;
 
     // Create the `log` directory if it doesn't exist, but don't remove it if it does exist!
-    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS).unwrap()).await?;
+    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS)?).await?;
 
     // Remove cross log file if it exists
-    fs::remove_file(env::var(constants::RADULA_ENVIRONMENT_FILE_CROSS_LOG).unwrap()).await?;
+    fs::remove_file(env::var(constants::RADULA_ENVIRONMENT_FILE_CROSS_LOG)?).await?;
 
     Ok(())
 }
 
 // This function is not a mess anymore but it still breaks some libraries
-fn radula_behave_bootstrap_cross_strip() {
+fn radula_behave_bootstrap_cross_strip() -> Result<(), Box<dyn Error>> {
     Command::new(constants::RADULA_TOOTH_FIND)
         .args(&[
-            Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap())
+            Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS)?)
                 .join(constants::RADULA_PATH_ETC)
                 .to_str()
                 .unwrap(),
@@ -322,13 +322,11 @@ fn radula_behave_bootstrap_cross_strip() {
             "-empty",
             "-delete",
         ])
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
+        .spawn()?
+        .wait()?;
 
     let x = &String::from(
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap())
+        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS)?)
             .join(constants::RADULA_PATH_USR)
             .to_str()
             .unwrap(),
@@ -347,10 +345,8 @@ fn radula_behave_bootstrap_cross_strip() {
             .concat(),
         ])
         .stdout(Stdio::null())
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
+        .spawn()?
+        .wait()?;
     Command::new(constants::RADULA_TOOTH_SHELL)
         .args(&[
             constants::RADULA_TOOTH_SHELL_FLAGS,
@@ -365,10 +361,8 @@ fn radula_behave_bootstrap_cross_strip() {
         ])
         .stderr(Stdio::null())
         .stdout(Stdio::null())
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
+        .spawn()?
+        .wait()?;
     Command::new(constants::RADULA_TOOTH_SHELL)
         .args(&[
             constants::RADULA_TOOTH_SHELL_FLAGS,
@@ -383,14 +377,12 @@ fn radula_behave_bootstrap_cross_strip() {
         ])
         .stderr(Stdio::null())
         .stdout(Stdio::null())
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
+        .spawn()?
+        .wait()?;
     Command::new(constants::RADULA_TOOTH_FIND)
         .args(&[x, "-name", "*.la", "-delete"])
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
+        .spawn()?
+        .wait()?;
+
+    Ok(())
 }
