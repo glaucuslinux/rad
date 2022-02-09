@@ -5,8 +5,8 @@ use std::env;
 use std::error::Error;
 use std::path::Path;
 
-use super::constants;
 use super::bootstrap;
+use super::constants;
 
 //
 // pkg-config Function

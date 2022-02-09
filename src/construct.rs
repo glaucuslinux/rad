@@ -39,7 +39,7 @@ pub async fn radula_behave_construct(
             swallow::radula_behave_swallow(constants::RADULA_CERAS_MPFR).await?;
             swallow::radula_behave_swallow(constants::RADULA_CERAS_MPC).await?;
             swallow::radula_behave_swallow(constants::RADULA_CERAS_ISL).await?;
-            swallow::radula_behave_swallow(name);
+            swallow::radula_behave_swallow(name).await?;
         }
         constants::RADULA_CERAS_HYDROSKELETON => {}
         constants::RADULA_CERAS_LIBGCC

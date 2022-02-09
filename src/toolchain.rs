@@ -21,17 +21,17 @@ pub fn radula_behave_bootstrap_toolchain_backup() -> Result<(), Box<dyn Error>> 
     rsync::radula_behave_rsync(
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS)?,
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?,
-    );
+    )?;
     rsync::radula_behave_rsync(
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN)?,
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?,
-    );
+    )?;
 
     // Backup toolchain log file
     rsync::radula_behave_rsync(
         &env::var(constants::RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG)?,
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?,
-    );
+    )?;
 
     Ok(())
 }
@@ -89,26 +89,29 @@ pub fn radula_behave_bootstrap_toolchain_environment() -> Result<(), Box<dyn Err
     Ok(())
 }
 
-pub fn radula_behave_bootstrap_toolchain_prepare() -> Result<(), Box<dyn Error>> {
-    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS)?);
+pub async fn radula_behave_bootstrap_toolchain_prepare() -> Result<(), Box<dyn Error>> {
+    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS)?).await?;
 
-    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN)?);
+    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN)?).await?;
 
     fs::create_dir(env::var(
         constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY,
-    )?);
+    )?)
+    .await?;
     fs::create_dir(env::var(
         constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_BUILDS,
-    )?);
+    )?)
+    .await?;
     // Create the `src` directory if it doesn't exist, but don't remove it if it does exist!
     fs::create_dir(env::var(
         constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_SOURCES,
-    )?);
+    )?)
+    .await?;
 
     Ok(())
 }
 
-pub fn radula_behave_bootstrap_toolchain_release() -> Result<(), Box<dyn Error>> {
+pub async fn radula_behave_bootstrap_toolchain_release() -> Result<(), Box<dyn Error>> {
     let x = &String::from(
         Path::new(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
             .join(constants::RADULA_DIRECTORY_TEMPORARY)
@@ -117,8 +120,8 @@ pub fn radula_behave_bootstrap_toolchain_release() -> Result<(), Box<dyn Error>>
             .unwrap(),
     );
 
-    fs::remove_dir_all(x);
-    fs::create_dir(x);
+    fs::remove_dir_all(x).await?;
+    fs::create_dir(x).await?;
 
     rsync::radula_behave_rsync(
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?)
@@ -126,32 +129,35 @@ pub fn radula_behave_bootstrap_toolchain_release() -> Result<(), Box<dyn Error>>
             .to_str()
             .unwrap(),
         x,
-    );
+    )?;
     rsync::radula_behave_rsync(
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?)
             .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
             .to_str()
             .unwrap(),
         x,
-    );
+    )?;
 
     // Remove all `lib64` directories because glaucus is a pure 64-bit system
     fs::remove_dir_all(
         Path::new(x)
             .join(constants::RADULA_DIRECTORY_CROSS)
             .join(constants::RADULA_PATH_LIB64),
-    );
+    )
+    .await?;
     fs::remove_dir_all(
         Path::new(x)
             .join(constants::RADULA_DIRECTORY_CROSS)
             .join(constants::RADULA_PATH_USR)
             .join(constants::RADULA_PATH_LIB64),
-    );
+    )
+    .await?;
     fs::remove_dir_all(
         Path::new(x)
             .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
             .join(constants::RADULA_PATH_LIB64),
-    );
+    )
+    .await?;
 
     Command::new(constants::RADULA_TOOTH_FIND)
         .args(&[x, "-name", "*.la", "-delete"])
@@ -166,8 +172,10 @@ pub fn radula_behave_bootstrap_toolchain_release() -> Result<(), Box<dyn Error>>
             ])
             .stderr(Stdio::null())
             .stdout(Stdio::null())
-            .spawn()?
-            .wait()?;
+            .spawn()
+            .unwrap()
+            .wait()
+            .unwrap();
     };
 
     radula_behave_bootstrap_toolchain_strip_libraries(
@@ -198,8 +206,10 @@ pub fn radula_behave_bootstrap_toolchain_release() -> Result<(), Box<dyn Error>>
             ])
             .stderr(Stdio::null())
             .stdout(Stdio::null())
-            .spawn()?
-            .wait()?;
+            .spawn()
+            .unwrap()
+            .wait()
+            .unwrap();
     };
 
     radula_behave_bootstrap_toolchain_strip_binaries(
@@ -224,13 +234,15 @@ pub fn radula_behave_bootstrap_toolchain_release() -> Result<(), Box<dyn Error>>
             .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
             .join(constants::RADULA_PATH_SHARE)
             .join(constants::RADULA_PATH_INFO),
-    );
+    )
+    .await?;
     fs::remove_dir_all(
         Path::new(x)
             .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
             .join(constants::RADULA_PATH_SHARE)
             .join(constants::RADULA_PATH_MAN),
-    );
+    )
+    .await?;
 
     // Until we get the tar crate working
     // Command::new(constants::RADULA_TOOTH_TAR)

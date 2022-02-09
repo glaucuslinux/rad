@@ -276,14 +276,14 @@ pub async fn radula_behave_bootstrap_cross_prepare() -> Result<(), Box<dyn Error
             .to_str()
             .unwrap(),
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS)?,
-    );
+    )?;
     rsync::radula_behave_rsync(
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?)
             .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
             .to_str()
             .unwrap(),
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS)?,
-    );
+    )?;
 
     fs::remove_dir_all(&env::var(
         constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS,

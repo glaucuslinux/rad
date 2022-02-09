@@ -38,9 +38,9 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                         "c" | "clean" => {
                             bootstrap::radula_behave_bootstrap_environment().await?;
 
-                            toolchain::radula_behave_bootstrap_toolchain_environment();
+                            toolchain::radula_behave_bootstrap_toolchain_environment()?;
 
-                            cross::radula_behave_bootstrap_cross_environment_directories();
+                            cross::radula_behave_bootstrap_cross_environment_directories()?;
 
                             clean::radula_behave_bootstrap_clean().await?;
 
@@ -49,9 +49,9 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                         "d" | "distclean" => {
                             bootstrap::radula_behave_bootstrap_environment().await?;
 
-                            toolchain::radula_behave_bootstrap_toolchain_environment();
+                            toolchain::radula_behave_bootstrap_toolchain_environment()?;
 
-                            cross::radula_behave_bootstrap_cross_environment_directories();
+                            cross::radula_behave_bootstrap_cross_environment_directories()?;
 
                             clean::radula_behave_bootstrap_distclean().await?;
 
@@ -74,41 +74,41 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                         "s" | "release" => {
                             bootstrap::radula_behave_bootstrap_environment().await?;
 
-                            toolchain::radula_behave_bootstrap_toolchain_release();
+                            toolchain::radula_behave_bootstrap_toolchain_release().await?;
 
                             println!("release complete");
                         }
                         "t" | "toolchain" => {
                             bootstrap::radula_behave_bootstrap_environment().await?;
 
-                            teeth::radula_behave_teeth_environment();
+                            teeth::radula_behave_teeth_environment()?;
 
-                            ccache::radula_behave_ccache_environment();
+                            ccache::radula_behave_ccache_environment()?;
 
                             architecture::radula_behave_bootstrap_architecture_environment(
                                 constants::RADULA_ARCHITECTURE_X86_64_V3,
                             )
                             .await?;
 
-                            toolchain::radula_behave_bootstrap_toolchain_environment();
+                            toolchain::radula_behave_bootstrap_toolchain_environment()?;
 
                             // Needed for clean to work...
-                            cross::radula_behave_bootstrap_cross_environment_directories();
+                            cross::radula_behave_bootstrap_cross_environment_directories()?;
 
                             clean::radula_behave_bootstrap_clean().await?;
 
                             bootstrap::radula_behave_bootstrap_initialize().await?;
 
-                            toolchain::radula_behave_bootstrap_toolchain_prepare();
-                            toolchain::radula_behave_bootstrap_toolchain_construct();
-                            toolchain::radula_behave_bootstrap_toolchain_backup();
+                            toolchain::radula_behave_bootstrap_toolchain_prepare().await?;
+                            toolchain::radula_behave_bootstrap_toolchain_construct()?;
+                            toolchain::radula_behave_bootstrap_toolchain_backup()?;
 
                             println!("toolchain complete");
                         }
                         "x" | "cross" => {
                             bootstrap::radula_behave_bootstrap_environment().await?;
 
-                            teeth::radula_behave_teeth_environment();
+                            teeth::radula_behave_teeth_environment()?;
 
                             pkg_config::radula_behave_pkg_config_environment()?;
 
@@ -117,14 +117,14 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                             )
                             .await?;
 
-                            flags::radula_behave_flags_environment();
+                            flags::radula_behave_flags_environment()?;
 
-                            cross::radula_behave_bootstrap_cross_environment_directories();
-                            cross::radula_behave_bootstrap_cross_environment_teeth();
+                            cross::radula_behave_bootstrap_cross_environment_directories()?;
+                            cross::radula_behave_bootstrap_cross_environment_teeth()?;
 
                             cross::radula_behave_bootstrap_cross_prepare().await?;
-                            cross::radula_behave_bootstrap_cross_construct();
-                            //cross::radula_behave_bootstrap_cross_strip();
+                            cross::radula_behave_bootstrap_cross_construct()?;
+                            //cross::radula_behave_bootstrap_cross_strip()?;
 
                             println!("cross complete");
                         }

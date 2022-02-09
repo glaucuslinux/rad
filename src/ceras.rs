@@ -31,7 +31,7 @@ impl fmt::Display for Ceras {
             "Name".bold(),
             "::".bold(),
             self.nom.blue()
-        );
+        )?;
         writeln!(
             f,
             "{:13}{:3}{}",
@@ -44,28 +44,28 @@ impl fmt::Display for Ceras {
             ]
             .concat()
             .trim(),
-        );
+        )?;
         writeln!(
             f,
             "{:13}{:3}{}",
             "URL".bold(),
             "::".bold(),
             self.url.as_ref().unwrap_or(&"None".red().to_string())
-        );
+        )?;
         writeln!(
             f,
             "{:13}{:3}{}",
             "Checksum".bold(),
             "::".bold(),
             self.sum.as_ref().unwrap_or(&"None".red().to_string())
-        );
+        )?;
         writeln!(
             f,
             "{:13}{:3}{}",
             "Concentrates".bold(),
             "::".bold(),
             self.cnt.as_ref().unwrap_or(&"None".red().to_string())
-        );
+        )?;
         writeln!(
             f,
             "{:13}{:3}{}",
