@@ -7,6 +7,7 @@ use std::path::Path;
 use std::process::{Command, Stdio};
 use std::string::String;
 
+use super::clean;
 use super::constants;
 use super::construct;
 use super::rsync;
@@ -277,7 +278,7 @@ pub async fn radula_behave_bootstrap_cross_prepare() -> Result<(), Box<dyn Error
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS)?,
     )?;
 
-    fs::remove_dir_all(&env::var(
+    clean::radula_behave_remove_dir_all_force(&env::var(
         constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS,
     )?)
     .await?;
@@ -296,7 +297,8 @@ pub async fn radula_behave_bootstrap_cross_prepare() -> Result<(), Box<dyn Error
     fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS)?).await?;
 
     // Remove cross log file if it exists
-    fs::remove_file(env::var(constants::RADULA_ENVIRONMENT_FILE_CROSS_LOG)?).await?;
+    clean::radula_behave_remove_file_force(&env::var(constants::RADULA_ENVIRONMENT_FILE_CROSS_LOG)?)
+        .await?;
 
     Ok(())
 }
@@ -522,7 +524,10 @@ fn test_radula_behave_bootstrap_cross_environment() -> Result<(), Box<dyn Error>
     assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_NAMES)?.ends_with("gcc-nm"));
     assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_OBJECT_COPY)?.ends_with("objcopy"));
     assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_OBJECT_DUMP)?.ends_with("objdump"));
-    assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_RANDOM_ACCESS_LIBRARY)?.ends_with("gcc-ranlib"));
+    assert!(
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_RANDOM_ACCESS_LIBRARY)?
+            .ends_with("gcc-ranlib")
+    );
     assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_READ_ELF)?.ends_with("readelf"));
     assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_SIZE)?.ends_with("size"));
     assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_STRINGS)?.ends_with("strings"));

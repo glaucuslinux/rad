@@ -5,6 +5,7 @@
 // use std::path::Path;
 // use std::process::Stdio;
 
+// use super::clean;
 // use super::constants;
 
 // use tokio::{fs, process::Command};
@@ -29,7 +30,7 @@
 //     );
 
 //     // Create a new image
-//     fs::remove_file(x).await?;
+//     clean::radula_behave_remove_file_force(x).await?;
 //     Command::new(constants::RADULA_TOOTH_QEMU_IMAGE)
 //         .args(&[
 //             "create",
@@ -172,7 +173,7 @@
 //         .unwrap();
 
 //     // Remove `/lost+found` directory
-//     fs::remove_dir_all(Path::new(w).join(constants::RADULA_PATH_LOST_FOUND)).await?;
+//     clean::radula_behave_remove_dir_all_force(Path::new(w).join(constants::RADULA_PATH_LOST_FOUND)).await?;
 
 //     radula_behave_rsync(
 //         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap())

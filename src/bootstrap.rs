@@ -65,10 +65,10 @@ pub async fn radula_behave_bootstrap_environment() -> Result<(), Box<dyn Error>>
 }
 
 pub async fn radula_behave_bootstrap_initialize() -> Result<(), Box<dyn Error>> {
-    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?).await?;
-    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS)?).await?;
-    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES)?).await?;
-    fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY)?).await?;
+    fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?).await?;
+    fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS)?).await?;
+    fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES)?).await?;
+    fs::create_dir_all(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY)?).await?;
 
     Ok(())
 }
