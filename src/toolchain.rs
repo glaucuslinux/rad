@@ -274,3 +274,37 @@ pub async fn radula_behave_bootstrap_toolchain_release() -> Result<(), Box<dyn E
 
     Ok(())
 }
+
+#[test]
+fn test_radula_behave_bootstrap_toolchain_environment() -> Result<(), Box<dyn Error>> {
+    radula_behave_bootstrap_toolchain_environment()?;
+
+    println!(
+        "\nTLCD :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN)?
+    );
+    println!(
+        "TTMP :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY)?
+    );
+    println!(
+        "TBLD :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_BUILDS)?
+    );
+    println!(
+        "TSRC :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_SOURCES)?
+    );
+    println!(
+        "TLOG :: {}\n",
+        env::var(constants::RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG)?
+    );
+
+    assert!(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS)?.ends_with("log"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES)?.ends_with("src"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY)?.ends_with("tmp"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN)?.ends_with("toolchain"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG)?.ends_with("toolchain.log"));
+
+    Ok(())
+}

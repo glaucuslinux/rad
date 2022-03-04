@@ -59,7 +59,7 @@ pub async fn radula_behave_download(
             .template(
                 " {wide_msg} {bytes:>} {bytes_per_sec:>12} {elapsed_precise} [{bar:40}]
                 {percent:>3}%",
-            )
+            )?
             .progress_chars("##-"),
     );
     pb.set_message(file.clone());
@@ -129,7 +129,7 @@ pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn Err
 
             // Total progress bar
             let pb = Arc::new(m.add(ProgressBar::new(urls.len() as u64)));
-            pb.set_style(ProgressStyle::default_bar().template("{msg} ({pos}/{len})"));
+            pb.set_style(ProgressStyle::default_bar().template("{msg} ({pos}/{len})")?);
             pb.set_message(" Total");
             pb.tick();
 

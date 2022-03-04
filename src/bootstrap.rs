@@ -72,3 +72,66 @@ pub async fn radula_behave_bootstrap_initialize() -> Result<(), Box<dyn Error>> 
 
     Ok(())
 }
+
+#[tokio::test]
+async fn test_radula_behave_bootstrap_environment() -> Result<(), Box<dyn Error>> {
+    radula_behave_bootstrap_environment().await?;
+
+    println!(
+        "\nGLAD :: {}\n",
+        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS)?
+    );
+
+    println!(
+        "BAKD :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?
+    );
+    println!(
+        "CERD :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA)?
+    );
+    println!(
+        "CRSD :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS)?
+    );
+    println!(
+        "LOGD :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS)?
+    );
+    println!(
+        "SRCD :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES)?
+    );
+    println!(
+        "TMPD :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY)?
+    );
+    println!(
+        "TLCD :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN)?
+    );
+
+    println!(
+        "\nPATH :: {}\n",
+        env::var(constants::RADULA_ENVIRONMENT_PATH)?
+    );
+
+    assert!(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS)?.ends_with("glaucus"));
+
+    assert!(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?.ends_with("bak"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA)?.ends_with("cerata"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS)?.ends_with("cross"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS)?.ends_with("log"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES)?.ends_with("src"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY)?.ends_with("tmp"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN)?.ends_with("toolchain"));
+
+    assert!(
+        env::split_paths(&env::var(constants::RADULA_ENVIRONMENT_PATH)?)
+            .next()
+            .unwrap_or_default()
+            .ends_with("toolchain/bin")
+    );
+
+    Ok(())
+}

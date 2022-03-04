@@ -498,7 +498,7 @@ pub const RADULA_TOOTH_LN_FLAGS: &'static str = "-fnsv";
 pub const RADULA_TOOTH_LOSETUP: &'static str = "losetup";
 
 pub const RADULA_TOOTH_MAKE: &'static str = "make";
-pub const RADULA_TOOTH_MAKEFLAGS: &'static str = "V=1";
+pub const RADULA_TOOTH_MAKEFLAGS: &'static str = "-O V=1";
 
 pub const RADULA_TOOTH_MAWK: &'static str = "mawk";
 

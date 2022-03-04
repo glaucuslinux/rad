@@ -13,8 +13,9 @@ use tokio::process::Command;
 // Architecture Functions
 //
 
+// These will be used whether we're bootstrapping or not so don't add _bootstrap_ to its name
 // Get canonical system tuple using the `config.guess` file
-async fn radula_behave_bootstrap_architecture_tuple() -> Result<String, Box<dyn Error>> {
+async fn radula_behave_architecture_tuple() -> Result<String, Box<dyn Error>> {
     let tuple = String::from(
         String::from_utf8_lossy(
             &Command::new(
@@ -32,12 +33,12 @@ async fn radula_behave_bootstrap_architecture_tuple() -> Result<String, Box<dyn 
     Ok(tuple)
 }
 
-pub async fn radula_behave_bootstrap_architecture_environment(
+pub async fn radula_behave_architecture_environment(
     architecture: &'static str,
 ) -> Result<(), Box<dyn Error>> {
     env::set_var(
         constants::RADULA_ENVIRONMENT_TUPLE_BUILD,
-        radula_behave_bootstrap_architecture_tuple().await?,
+        radula_behave_architecture_tuple().await?,
     );
 
     env::set_var(constants::RADULA_ENVIRONMENT_ARCHITECTURE, architecture);
@@ -305,9 +306,11 @@ pub async fn radula_behave_bootstrap_architecture_environment(
 
 // To prevent a race condition between tests use `cargo test -- --test-threads 1`
 #[tokio::test]
-async fn test_radula_behave_bootstrap_architecture_tuple() -> Result<(), Box<dyn Error>> {
+async fn test_radula_behave_architecture_tuple() -> Result<(), Box<dyn Error>> {
+    println!("\n");
+
     assert_eq!(
-        radula_behave_bootstrap_architecture_tuple().await?,
+        radula_behave_architecture_tuple().await?,
         "x86_64-pc-linux-gnu"
     );
 
@@ -315,15 +318,14 @@ async fn test_radula_behave_bootstrap_architecture_tuple() -> Result<(), Box<dyn
 }
 
 #[tokio::test]
-async fn test_radula_behave_bootstrap_architecture_environment_aarch64(
-) -> Result<(), Box<dyn Error>> {
-    radula_behave_bootstrap_architecture_environment("aarch64").await?;
+async fn test_radula_behave_architecture_environment_aarch64() -> Result<(), Box<dyn Error>> {
+    radula_behave_architecture_environment("aarch64").await?;
 
     // BLD
     //
     // Should be evaluated once and doesn't matter if it's first or last because
     // the build machine won't change, but should be after a call to
-    // bootstrap_architecture_environment
+    // architecture_environment
     println!(
         "\nBLD    :: {}\n",
         env::var(constants::RADULA_ENVIRONMENT_TUPLE_BUILD)?
@@ -380,7 +382,7 @@ async fn test_radula_behave_bootstrap_architecture_environment_aarch64(
 
     assert_eq!(
         env::var(constants::RADULA_ENVIRONMENT_TUPLE_BUILD)?,
-        radula_behave_bootstrap_architecture_tuple().await?
+        radula_behave_architecture_tuple().await?
     );
 
     assert_eq!(
@@ -436,9 +438,8 @@ async fn test_radula_behave_bootstrap_architecture_environment_aarch64(
 }
 
 #[tokio::test]
-async fn test_radula_behave_bootstrap_architecture_environment_armv6zk(
-) -> Result<(), Box<dyn Error>> {
-    radula_behave_bootstrap_architecture_environment("armv6zk").await?;
+async fn test_radula_behave_architecture_environment_armv6zk() -> Result<(), Box<dyn Error>> {
+    radula_behave_architecture_environment("armv6zk").await?;
 
     println!(
         "\nARCH   :: {}",
@@ -542,9 +543,8 @@ async fn test_radula_behave_bootstrap_architecture_environment_armv6zk(
 }
 
 #[tokio::test]
-async fn test_radula_behave_bootstrap_architecture_environment_i686() -> Result<(), Box<dyn Error>>
-{
-    radula_behave_bootstrap_architecture_environment("i686").await?;
+async fn test_radula_behave_architecture_environment_i686() -> Result<(), Box<dyn Error>> {
+    radula_behave_architecture_environment("i686").await?;
 
     println!(
         "\nARCH   :: {}",
@@ -648,9 +648,8 @@ async fn test_radula_behave_bootstrap_architecture_environment_i686() -> Result<
 }
 
 #[tokio::test]
-async fn test_radula_behave_bootstrap_architecture_environment_riscv64(
-) -> Result<(), Box<dyn Error>> {
-    radula_behave_bootstrap_architecture_environment("riscv64").await?;
+async fn test_radula_behave_architecture_environment_riscv64() -> Result<(), Box<dyn Error>> {
+    radula_behave_architecture_environment("riscv64").await?;
 
     println!(
         "\nARCH   :: {}",
@@ -754,9 +753,8 @@ async fn test_radula_behave_bootstrap_architecture_environment_riscv64(
 }
 
 #[tokio::test]
-async fn test_radula_behave_bootstrap_architecture_environment_x86_64_v3(
-) -> Result<(), Box<dyn Error>> {
-    radula_behave_bootstrap_architecture_environment("x86-64").await?;
+async fn test_radula_behave_architecture_environment_x86_64_v3() -> Result<(), Box<dyn Error>> {
+    radula_behave_architecture_environment("x86-64").await?;
 
     println!(
         "\nARCH   :: {}",

@@ -85,7 +85,7 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
 
                             ccache::radula_behave_ccache_environment()?;
 
-                            architecture::radula_behave_bootstrap_architecture_environment(
+                            architecture::radula_behave_architecture_environment(
                                 constants::RADULA_ARCHITECTURE_X86_64_V3,
                             )
                             .await?;
@@ -112,7 +112,7 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
 
                             pkg_config::radula_behave_pkg_config_environment()?;
 
-                            architecture::radula_behave_bootstrap_architecture_environment(
+                            architecture::radula_behave_architecture_environment(
                                 constants::RADULA_ARCHITECTURE_X86_64_V3,
                             )
                             .await?;

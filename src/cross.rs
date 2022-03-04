@@ -182,22 +182,18 @@ pub fn radula_behave_bootstrap_cross_environment_teeth() -> Result<(), Box<dyn E
         constants::RADULA_ENVIRONMENT_CROSS_ASSEMBLER,
         [x, constants::RADULA_CROSS_ASSEMBLER].concat(),
     );
-
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_BUILD_C_COMPILER,
         constants::RADULA_CROSS_C_COMPILER,
     );
-
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_C_COMPILER,
         [x, constants::RADULA_CROSS_C_COMPILER].concat(),
     );
-
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_C_COMPILER_LINKER,
         constants::RADULA_CROSS_C_CXX_COMPILER_LINKER,
     );
-
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_C_PREPROCESSOR,
         [
@@ -208,9 +204,7 @@ pub fn radula_behave_bootstrap_cross_environment_teeth() -> Result<(), Box<dyn E
         ]
         .concat(),
     );
-
     env::set_var(constants::RADULA_ENVIRONMENT_CROSS_COMPILE, x);
-
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_CXX_COMPILER,
         [x, constants::RADULA_CROSS_CXX_COMPILER].concat(),
@@ -219,7 +213,6 @@ pub fn radula_behave_bootstrap_cross_environment_teeth() -> Result<(), Box<dyn E
         constants::RADULA_ENVIRONMENT_CROSS_CXX_COMPILER_LINKER,
         constants::RADULA_CROSS_C_CXX_COMPILER_LINKER,
     );
-
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_HOST_C_COMPILER,
         constants::RADULA_CROSS_C_COMPILER,
@@ -228,7 +221,6 @@ pub fn radula_behave_bootstrap_cross_environment_teeth() -> Result<(), Box<dyn E
         constants::RADULA_ENVIRONMENT_CROSS_HOST_CXX_COMPILER,
         constants::RADULA_CROSS_CXX_COMPILER,
     );
-
     env::set_var(
         constants::RADULA_ENVIRONMENT_CROSS_LINKER,
         [x, constants::RADULA_CROSS_LINKER].concat(),
@@ -383,6 +375,158 @@ fn radula_behave_bootstrap_cross_strip() -> Result<(), Box<dyn Error>> {
         .args(&[x, "-name", "*.la", "-delete"])
         .spawn()?
         .wait()?;
+
+    Ok(())
+}
+
+#[test]
+fn test_radula_behave_bootstrap_cross_environment() -> Result<(), Box<dyn Error>> {
+    radula_behave_bootstrap_cross_environment_directories()?;
+    radula_behave_bootstrap_cross_environment_teeth()?;
+
+    println!(
+        "\nCRSD :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS)?
+    );
+    println!(
+        "XTMP :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY)?
+    );
+    println!(
+        "XBLD :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS)?
+    );
+    println!(
+        "XSRC :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_SOURCES)?
+    );
+    println!(
+        "XLOG :: {}\n",
+        env::var(constants::RADULA_ENVIRONMENT_FILE_CROSS_LOG)?
+    );
+
+    println!(
+        "AR            :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_ARCHIVER)?
+    );
+    println!(
+        "AS            :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_ASSEMBLER)?
+    );
+    println!(
+        "BUILD_CC      :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_BUILD_C_COMPILER)?
+    );
+    println!(
+        "CROSS_COMPILE :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_COMPILE)?
+    );
+    println!(
+        "CC            :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_C_COMPILER)?
+    );
+    println!(
+        "CC_LD         :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_C_COMPILER_LINKER)?
+    );
+    println!(
+        "CPP           :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_C_PREPROCESSOR)?
+    );
+    println!(
+        "CXX           :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_CXX_COMPILER)?
+    );
+    println!(
+        "CXX_LD        :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_CXX_COMPILER_LINKER)?
+    );
+    println!(
+        "HOSTCC        :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_HOST_C_COMPILER)?
+    );
+    println!(
+        "HOSTCXX       :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_HOST_CXX_COMPILER)?
+    );
+    println!(
+        "LD            :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_LINKER)?
+    );
+    println!(
+        "NM            :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_NAMES)?
+    );
+    println!(
+        "OBJCOPY       :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_OBJECT_COPY)?
+    );
+    println!(
+        "OBJDUMP       :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_OBJECT_DUMP)?
+    );
+    println!(
+        "RANLIB        :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_RANDOM_ACCESS_LIBRARY)?
+    );
+    println!(
+        "READELF       :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_READ_ELF)?
+    );
+    println!(
+        "SIZE          :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_SIZE)?
+    );
+    println!(
+        "STRINGS       :: {}",
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_STRINGS)?
+    );
+    println!(
+        "STRIP         :: {}\n",
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_STRIP)?
+    );
+
+    assert!(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS)?.ends_with("log"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES)?.ends_with("src"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY)?.ends_with("tmp"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN)?.ends_with("toolchain"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_FILE_CROSS_LOG)?.ends_with("cross.log"));
+
+    assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_ARCHIVER)?.ends_with("gcc-ar"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_ASSEMBLER)?.ends_with("as"));
+    assert_eq!(
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_BUILD_C_COMPILER)?,
+        "gcc"
+    );
+    assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_COMPILE)?.ends_with("-"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_C_COMPILER)?.ends_with("gcc"));
+    assert_eq!(
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_C_COMPILER_LINKER)?,
+        "bfd"
+    );
+    assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_C_PREPROCESSOR)?.ends_with("gcc -E"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_CXX_COMPILER)?.ends_with("g++"));
+    assert_eq!(
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_CXX_COMPILER_LINKER)?,
+        "bfd"
+    );
+    assert_eq!(
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_HOST_C_COMPILER)?,
+        "gcc"
+    );
+    assert_eq!(
+        env::var(constants::RADULA_ENVIRONMENT_CROSS_HOST_CXX_COMPILER)?,
+        "g++"
+    );
+    assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_LINKER)?.ends_with("ld.bfd"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_NAMES)?.ends_with("gcc-nm"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_OBJECT_COPY)?.ends_with("objcopy"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_OBJECT_DUMP)?.ends_with("objdump"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_RANDOM_ACCESS_LIBRARY)?.ends_with("gcc-ranlib"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_READ_ELF)?.ends_with("readelf"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_SIZE)?.ends_with("size"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_STRINGS)?.ends_with("strings"));
+    assert!(env::var(constants::RADULA_ENVIRONMENT_CROSS_STRIP)?.ends_with("strip"));
 
     Ok(())
 }

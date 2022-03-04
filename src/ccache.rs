@@ -33,7 +33,7 @@ fn test_radula_behave_ccache_environment() -> Result<(), Box<dyn Error>> {
     );
 
     assert!(
-        env::var(constants::RADULA_ENVIRONMENT_PATH)?.starts_with(constants::RADULA_PATH_CCACHE)
+        env::var(constants::RADULA_ENVIRONMENT_PATH)?.starts_with("/usr/lib/ccache/bin:/usr/lib64/ccache")
     );
 
     Ok(())

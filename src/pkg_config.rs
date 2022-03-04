@@ -78,7 +78,7 @@ pub async fn test_radula_behave_pkg_config_environment() -> Result<(), Box<dyn E
         env::var(constants::RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_INCLUDE_PATH)?
     );
     println!(
-        "PKG_CONFIG_SYSTEM_LIBRARY_PATH :: {}",
+        "PKG_CONFIG_SYSTEM_LIBRARY_PATH :: {}\n",
         env::var(constants::RADULA_ENVIRONMENT_PKG_CONFIG_SYSTEM_LIBRARY_PATH)?
     );
 
