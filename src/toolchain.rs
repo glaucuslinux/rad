@@ -38,7 +38,7 @@ pub fn radula_behave_bootstrap_toolchain_backup() -> Result<(), Box<dyn Error>> 
 }
 
 pub fn radula_behave_bootstrap_toolchain_construct() -> Result<(), Box<dyn Error>> {
-    let radula_behave_construct_toolchain = |x: &'static str| {
+    let radula_behave_construct_toolchain = |x: &'static str| async move {
         construct::radula_behave_construct(x, constants::RADULA_DIRECTORY_TOOLCHAIN);
     };
 

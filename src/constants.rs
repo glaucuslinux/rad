@@ -403,18 +403,6 @@ OPTIONS:
 \ts, search    \tSearch for cerata within the cerata directory
 \tu, upgrade   \tUpgrade cerata";
 
-pub const RADULA_HELP_CERAS: &'static str = "USAGE:
-\tradula [ -c | --ceras ] [ OPTIONS ] [ cerata ]
-
-OPTIONS:
-\tc, cnt       \tDisplay cerata concentrate(s)
-\th, help      \tDisplay this help message
-\tn, nom       \tDisplay cerata name(s)
-\ts, sum       \tDisplay cerata sha512sum(s)
-\tu, url       \tDisplay cerata source(s)
-\tv, ver       \tDisplay cerata version(s)
-\ty, cys       \tDisplay cerata cyst(s)";
-
 pub const RADULA_HELP_VERSION: &'static str = "radula version 1.1.2
 
 Copyright (c) 2018-2022, Firas Khalil Khana

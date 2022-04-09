@@ -17,6 +17,7 @@ use flate2::read::GzDecoder;
 use futures_util::{stream, StreamExt};
 use git2::Repository;
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
+use lzip::read::LzDecoder;
 use reqwest::{Client, Url};
 use tar::Archive;
 use tokio::{fs, fs::File, io::AsyncReadExt, io::AsyncWriteExt, task};
@@ -142,6 +143,7 @@ pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn Err
                     async move {
                         task::spawn(radula_behave_download(Url::parse(url).unwrap(), m))
                             .await
+                            .unwrap()
                             .unwrap();
                         pb.inc(1);
                     }

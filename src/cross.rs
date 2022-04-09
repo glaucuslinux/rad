@@ -19,8 +19,8 @@ use tokio::fs;
 //
 
 pub fn radula_behave_bootstrap_cross_construct() -> Result<(), Box<dyn Error>> {
-    let radula_behave_construct_cross = |x: &'static str| {
-        construct::radula_behave_construct(x, constants::RADULA_DIRECTORY_CROSS);
+    let radula_behave_construct_cross = |x: &'static str| async move {
+        construct::radula_behave_construct(x, constants::RADULA_DIRECTORY_CROSS).await;
     };
 
     // Filesystem & Package Management
@@ -297,8 +297,10 @@ pub async fn radula_behave_bootstrap_cross_prepare() -> Result<(), Box<dyn Error
     fs::create_dir(env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS)?).await?;
 
     // Remove cross log file if it exists
-    clean::radula_behave_remove_file_force(&env::var(constants::RADULA_ENVIRONMENT_FILE_CROSS_LOG)?)
-        .await?;
+    clean::radula_behave_remove_file_force(&env::var(
+        constants::RADULA_ENVIRONMENT_FILE_CROSS_LOG,
+    )?)
+    .await?;
 
     Ok(())
 }
