@@ -17,7 +17,6 @@ use flate2::read::GzDecoder;
 use futures_util::{stream, StreamExt};
 use git2::Repository;
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
-use lzip::read::LzDecoder;
 use reqwest::{Client, Url};
 use tar::Archive;
 use tokio::{fs, fs::File, io::AsyncReadExt, io::AsyncWriteExt, task};
