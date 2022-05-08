@@ -84,8 +84,8 @@ pub async fn radula_behave_download(
 // Extract source tarballs
 pub async fn radula_behave_extract(file: PathBuf, path: PathBuf) -> Result<(), Box<dyn Error>> {
     let decoder: Box<dyn Read> = match file.extension().and_then(OsStr::to_str).unwrap() {
-        "gz" | "tgz" => Box::new(GzDecoder::new(std::fs::File::open(file)?)),
         "bz2" => Box::new(BzDecoder::new(std::fs::File::open(file)?)),
+        "gz" | "tgz" => Box::new(GzDecoder::new(std::fs::File::open(file)?)),
         "xz" => Box::new(XzDecoder::new_multi_decoder(std::fs::File::open(file)?)),
         "zst" => Box::new(Decoder::new(std::fs::File::open(file)?)?),
         _ => unreachable!(),
@@ -100,10 +100,10 @@ pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn Err
     // Receive the variables from the `ceras` file
     let ceras = ceras::radula_behave_ceras_parse(name).await?;
 
-    let version = ceras.ver.unwrap();
-    let commit = ceras.cmt.unwrap();
+    let version = ceras.ver.unwrap_or_default();
+    let commit = ceras.cmt.unwrap_or_default();
     let url = Url::parse(&ceras.url.unwrap())?;
-    let checksum = ceras.sum.unwrap();
+    let checksum = ceras.sum.unwrap_or_default();
 
     println!("{} swallow", "::".bold());
 
@@ -156,7 +156,7 @@ pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn Err
             radula_behave_verify(name, file.to_string(), checksum.to_string()).await?;
 
             // Extract ceras's source tarball
-            // radula_behave_extract(&file, &path);
+            radula_behave_extract(PathBuf::from(file), path);
         }
     } else if version != constants::RADULA_TOOTH_GIT {
         // Only verify existing ceras's source tarballs without extracting them again

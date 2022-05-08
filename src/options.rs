@@ -100,7 +100,7 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                             bootstrap::radula_behave_bootstrap_initialize().await?;
 
                             toolchain::radula_behave_bootstrap_toolchain_prepare().await?;
-                            toolchain::radula_behave_bootstrap_toolchain_construct()?;
+                            toolchain::radula_behave_bootstrap_toolchain_construct().await?;
                             toolchain::radula_behave_bootstrap_toolchain_backup()?;
 
                             println!("toolchain complete");
@@ -123,7 +123,7 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                             cross::radula_behave_bootstrap_cross_environment_teeth()?;
 
                             cross::radula_behave_bootstrap_cross_prepare().await?;
-                            cross::radula_behave_bootstrap_cross_construct()?;
+                            cross::radula_behave_bootstrap_cross_construct().await?;
                             //cross::radula_behave_bootstrap_cross_strip()?;
 
                             println!("cross complete");

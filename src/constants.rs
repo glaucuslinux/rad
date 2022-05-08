@@ -130,6 +130,7 @@ pub const RADULA_CERAS_LZLIB: &'static str = "lzlib";
 
 pub const RADULA_CERAS_MANDOC: &'static str = "mandoc";
 pub const RADULA_CERAS_MKSH: &'static str = "mksh";
+pub const RADULA_CERAS_MOLD: &'static str = "mold";
 pub const RADULA_CERAS_MPC: &'static str = "mpc";
 pub const RADULA_CERAS_MPFR: &'static str = "mpfr";
 pub const RADULA_CERAS_MUSL: &'static str = "musl";
@@ -165,6 +166,8 @@ pub const RADULA_CERAS_SHADOW: &'static str = "shadow";
 pub const RADULA_CERAS_SKALIBS: &'static str = "skalibs";
 
 pub const RADULA_CERAS_TOYBOX: &'static str = "toybox";
+pub const RADULA_CERAS_TZCODE: &'static str = "tzcode";
+pub const RADULA_CERAS_TZDATA: &'static str = "tzdata";
 
 pub const RADULA_CERAS_UTIL_LINUX: &'static str = "util-linux";
 pub const RADULA_CERAS_UTMPS: &'static str = "utmps";
@@ -174,6 +177,7 @@ pub const RADULA_CERAS_VIM: &'static str = "vim";
 pub const RADULA_CERAS_WGET2: &'static str = "wget2";
 pub const RADULA_CERAS_WHICH: &'static str = "which";
 
+pub const RADULA_CERAS_XXHASH: &'static str = "xxhash";
 pub const RADULA_CERAS_XZ: &'static str = "xz";
 
 pub const RADULA_CERAS_ZLIB_NG: &'static str = "zlib-ng";
@@ -403,7 +407,7 @@ OPTIONS:
 \ts, search    \tSearch for cerata within the cerata directory
 \tu, upgrade   \tUpgrade cerata";
 
-pub const RADULA_HELP_VERSION: &'static str = "radula version 1.1.2
+pub const RADULA_HELP_VERSION: &'static str = "radula version 1.1.3
 
 Copyright (c) 2018-2022, Firas Khalil Khana
 Distributed under the terms of the ISC License";

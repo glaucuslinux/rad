@@ -37,18 +37,18 @@ pub fn radula_behave_bootstrap_toolchain_backup() -> Result<(), Box<dyn Error>> 
     Ok(())
 }
 
-pub fn radula_behave_bootstrap_toolchain_construct() -> Result<(), Box<dyn Error>> {
+pub async fn radula_behave_bootstrap_toolchain_construct() -> Result<(), Box<dyn Error>> {
     let radula_behave_construct_toolchain = |x: &'static str| async move {
-        construct::radula_behave_construct(x, constants::RADULA_DIRECTORY_TOOLCHAIN);
+        construct::radula_behave_construct(x, constants::RADULA_DIRECTORY_TOOLCHAIN).await.unwrap();
     };
 
-    radula_behave_construct_toolchain(constants::RADULA_CERAS_MUSL_HEADERS);
-    radula_behave_construct_toolchain(constants::RADULA_CERAS_BINUTILS);
-    radula_behave_construct_toolchain(constants::RADULA_CERAS_GCC);
-    radula_behave_construct_toolchain(constants::RADULA_CERAS_MUSL);
-    radula_behave_construct_toolchain(constants::RADULA_CERAS_LIBGCC);
-    radula_behave_construct_toolchain(constants::RADULA_CERAS_LIBSTDCXX_V3);
-    radula_behave_construct_toolchain(constants::RADULA_CERAS_LIBGOMP);
+    radula_behave_construct_toolchain(constants::RADULA_CERAS_MUSL_HEADERS).await;
+    radula_behave_construct_toolchain(constants::RADULA_CERAS_BINUTILS).await;
+    radula_behave_construct_toolchain(constants::RADULA_CERAS_GCC).await;
+    radula_behave_construct_toolchain(constants::RADULA_CERAS_MUSL).await;
+    radula_behave_construct_toolchain(constants::RADULA_CERAS_LIBGCC).await;
+    radula_behave_construct_toolchain(constants::RADULA_CERAS_LIBSTDCXX_V3).await;
+    radula_behave_construct_toolchain(constants::RADULA_CERAS_LIBGOMP).await;
 
     Ok(())
 }

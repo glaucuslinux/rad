@@ -19,8 +19,8 @@ pub async fn radula_behave_construct(
     // We only require `nom` and `ver` from the `ceras` file
     let ceras = ceras::radula_behave_ceras_parse(name).await?;
 
-    let version = ceras.ver.unwrap();
-    let commit = ceras.cmt.unwrap();
+    let version = ceras.ver.unwrap_or_default();
+    let commit = ceras.cmt.unwrap_or_default();
 
     println!(
         "{}{}",
