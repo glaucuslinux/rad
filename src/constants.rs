@@ -142,6 +142,7 @@ pub const RADULA_CERAS_MUSL_RPMATCH: &'static str = "musl-rpmatch";
 pub const RADULA_CERAS_MUSL_UTILS: &'static str = "musl-utils";
 
 pub const RADULA_CERAS_NETBSD_CURSES: &'static str = "netbsd-curses";
+pub const RADULA_CERAS_NSSS: &'static str = "nsss";
 
 pub const RADULA_CERAS_OKSH: &'static str = "oksh";
 

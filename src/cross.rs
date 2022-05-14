@@ -37,6 +37,7 @@ pub async fn radula_behave_bootstrap_cross_construct() -> Result<(), Box<dyn Err
 
     // Init
     radula_behave_construct_cross(constants::RADULA_CERAS_SKALIBS).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_NSSS).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_EXECLINE).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_S6).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_UTMPS).await;
