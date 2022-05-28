@@ -78,6 +78,7 @@ pub const RADULA_CERAS_BC: &'static str = "bc";
 pub const RADULA_CERAS_BINUTILS: &'static str = "binutils";
 pub const RADULA_CERAS_BZIP2: &'static str = "bzip2";
 
+pub const RADULA_CERAS_CCACHE: &'static str = "ccache";
 pub const RADULA_CERAS_CERATA: &'static str = "cerata";
 
 pub const RADULA_CERAS_DASH: &'static str = "dash";
@@ -235,6 +236,10 @@ pub const RADULA_ENVIRONMENT_ARCHITECTURE_MUSL: &'static str = "MARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_MUSL_LINKER: &'static str = "MLARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_UCONTEXT: &'static str = "UARCH";
 
+// Ccache
+pub const RADULA_ENVIRONMENT_CCACHE_CONFIGURATION: &'static str = "CCACHE_CONFIGPATH";
+pub const RADULA_ENVIRONMENT_CCACHE_DIRECTORY: &'static str = "CCACHE_DIR";
+
 // Cross
 pub const RADULA_ENVIRONMENT_CROSS_ARCHIVER: &'static str = "AR";
 pub const RADULA_ENVIRONMENT_CROSS_ASSEMBLER: &'static str = "AS";
@@ -326,7 +331,8 @@ pub const RADULA_ENVIRONMENT_TUPLE_TARGET: &'static str = "TGT";
 // Files
 //
 
-pub const RADULA_FILE_CONFIG_GUESS: &'static str = "binutils/config.guess";
+pub const RADULA_FILE_CCACHE_CONFIGURATION: &'static str = "ccache.conf";
+pub const RADULA_FILE_CONFIG_GUESS: &'static str = "config.guess";
 
 pub const RADULA_FILE_GLAUCUS_IMAGE: &'static str = "glaucus.img";
 pub const RADULA_FILE_GLAUCUS_IMAGE_SIZE: &'static str = "1024M";
@@ -408,7 +414,7 @@ OPTIONS:
 \ts, search    \tSearch for cerata within the cerata directory
 \tu, upgrade   \tUpgrade cerata";
 
-pub const RADULA_HELP_VERSION: &'static str = "radula version 1.1.3
+pub const RADULA_HELP_VERSION: &'static str = "radula version 1.1.4
 
 Copyright (c) 2018-2022, Firas Khalil Khana
 Distributed under the terms of the ISC License";
@@ -421,8 +427,9 @@ pub const RADULA_PATH_BIN: &'static str = "bin";
 
 pub const RADULA_PATH_BOOT: &'static str = "boot";
 
-// Default `ccache` directories on both Arch and Fedora
-pub const RADULA_PATH_CCACHE: &'static str = "/usr/lib/ccache/bin:/usr/lib64/ccache";
+// Default `ccache` directories on glaucus, Arch and Fedora
+pub const RADULA_PATH_CCACHE: &'static str =
+    "/usr/lib/ccache:/usr/lib/ccache/bin:/usr/lib64/ccache";
 
 pub const RADULA_PATH_ETC: &'static str = "etc";
 

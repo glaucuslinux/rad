@@ -151,7 +151,7 @@ pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn Err
 
             pb.finish();
 
-            fs::create_dir(&path).await?;
+            fs::create_dir_all(&path).await?;
 
             radula_behave_verify(name, file.to_string(), checksum.to_string()).await?;
 

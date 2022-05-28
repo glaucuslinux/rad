@@ -21,6 +21,7 @@ async fn radula_behave_architecture_tuple() -> Result<String, Box<dyn Error>> {
             &Command::new(
                 Path::new(constants::RADULA_PATH_RADULA_CLUSTERS)
                     .join(constants::RADULA_DIRECTORY_GLAUCUS)
+                    .join(constants::RADULA_CERAS_BINUTILS)
                     .join(constants::RADULA_FILE_CONFIG_GUESS),
             )
             .output()

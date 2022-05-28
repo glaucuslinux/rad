@@ -163,7 +163,7 @@
 //             .unwrap(),
 //     );
 
-//     fs::create_dir(w).await?;
+//     fs::create_dir_all(w).await?;
 
 //     Command::new(constants::RADULA_TOOTH_MOUNT)
 //         .args(&[z, w])
@@ -196,7 +196,7 @@
 //     );
 
 //     // Install extlinux as the default bootloader
-//     fs::create_dir(r).await?;
+//     fs::create_dir_all(r).await?;
 //     radula_behave_rsync(
 //         Path::new(constants::RADULA_PATH_RADULA_CLUSTERS)
 //             .join(constants::RADULA_FILE_SYSLINUX_EXTLINUX_CONF)

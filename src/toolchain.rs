@@ -39,7 +39,9 @@ pub fn radula_behave_bootstrap_toolchain_backup() -> Result<(), Box<dyn Error>> 
 
 pub async fn radula_behave_bootstrap_toolchain_construct() -> Result<(), Box<dyn Error>> {
     let radula_behave_construct_toolchain = |x: &'static str| async move {
-        construct::radula_behave_construct(x, constants::RADULA_DIRECTORY_TOOLCHAIN).await.unwrap();
+        construct::radula_behave_construct(x, constants::RADULA_DIRECTORY_TOOLCHAIN)
+            .await
+            .unwrap();
     };
 
     radula_behave_construct_toolchain(constants::RADULA_CERAS_MUSL_HEADERS).await;
@@ -49,28 +51,29 @@ pub async fn radula_behave_bootstrap_toolchain_construct() -> Result<(), Box<dyn
     radula_behave_construct_toolchain(constants::RADULA_CERAS_LIBGCC).await;
     radula_behave_construct_toolchain(constants::RADULA_CERAS_LIBSTDCXX_V3).await;
     radula_behave_construct_toolchain(constants::RADULA_CERAS_LIBGOMP).await;
+    radula_behave_construct_toolchain(constants::RADULA_CERAS_CCACHE).await;
 
     Ok(())
 }
 
 pub fn radula_behave_bootstrap_toolchain_environment() -> Result<(), Box<dyn Error>> {
-    let x = &Path::new(&env::var(
+    let path = &Path::new(&env::var(
         constants::RADULA_ENVIRONMENT_DIRECTORY_TEMPORARY,
     )?)
     .join(constants::RADULA_DIRECTORY_TOOLCHAIN);
 
     env::set_var(
         constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY,
-        x,
+        path,
     );
 
     env::set_var(
         constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_BUILDS,
-        x.join(constants::RADULA_DIRECTORY_BUILDS),
+        path.join(constants::RADULA_DIRECTORY_BUILDS),
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_SOURCES,
-        x.join(constants::RADULA_DIRECTORY_SOURCES),
+        path.join(constants::RADULA_DIRECTORY_SOURCES),
     );
 
     // toolchain log file

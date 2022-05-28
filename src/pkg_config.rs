@@ -5,6 +5,7 @@ use std::env;
 use std::error::Error;
 use std::path::Path;
 
+#[cfg(test)]
 use super::bootstrap;
 use super::constants;
 
@@ -59,7 +60,8 @@ pub fn radula_behave_pkg_config_environment() -> Result<(), Box<dyn Error>> {
 #[tokio::test]
 pub async fn test_radula_behave_pkg_config_environment() -> Result<(), Box<dyn Error>> {
     bootstrap::radula_behave_bootstrap_environment().await?;
-    radula_behave_pkg_config_environment();
+
+    radula_behave_pkg_config_environment()?;
 
     println!(
         "\nPKG_CONFIG_LIBDIR              :: {}",

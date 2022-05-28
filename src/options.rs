@@ -83,8 +83,6 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
 
                             teeth::radula_behave_teeth_environment()?;
 
-                            ccache::radula_behave_ccache_environment()?;
-
                             architecture::radula_behave_architecture_environment(
                                 constants::RADULA_ARCHITECTURE_X86_64_V3,
                             )
@@ -94,6 +92,8 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
 
                             // Needed for clean to work...
                             cross::radula_behave_bootstrap_cross_environment_directories()?;
+
+                            ccache::radula_behave_bootstrap_toolchain_ccache().await?;
 
                             clean::radula_behave_bootstrap_clean().await?;
 
@@ -110,8 +110,6 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
 
                             teeth::radula_behave_teeth_environment()?;
 
-                            pkg_config::radula_behave_pkg_config_environment()?;
-
                             architecture::radula_behave_architecture_environment(
                                 constants::RADULA_ARCHITECTURE_X86_64_V3,
                             )
@@ -121,6 +119,10 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
 
                             cross::radula_behave_bootstrap_cross_environment_directories()?;
                             cross::radula_behave_bootstrap_cross_environment_teeth()?;
+
+                            ccache::radula_behave_bootstrap_cross_ccache().await?;
+
+                            pkg_config::radula_behave_pkg_config_environment()?;
 
                             cross::radula_behave_bootstrap_cross_prepare().await?;
                             cross::radula_behave_bootstrap_cross_construct().await?;

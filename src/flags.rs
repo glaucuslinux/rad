@@ -4,6 +4,7 @@
 use std::env;
 use std::error::Error;
 
+#[cfg(test)]
 use super::architecture;
 use super::constants;
 
@@ -45,7 +46,7 @@ pub fn radula_behave_flags_environment() -> Result<(), Box<dyn Error>> {
 async fn test_radula_behave_flags_environment_aarch64() -> Result<(), Box<dyn Error>> {
     architecture::radula_behave_architecture_environment("aarch64").await?;
 
-    radula_behave_flags_environment();
+    radula_behave_flags_environment()?;
 
     println!(
         "\nCFLAGS   :: {}",
@@ -71,7 +72,7 @@ async fn test_radula_behave_flags_environment_aarch64() -> Result<(), Box<dyn Er
 async fn test_radula_behave_flags_environment_armv6zk() -> Result<(), Box<dyn Error>> {
     architecture::radula_behave_architecture_environment("armv6zk").await?;
 
-    radula_behave_flags_environment();
+    radula_behave_flags_environment()?;
 
     println!(
         "\nCFLAGS   :: {}",
@@ -97,7 +98,7 @@ async fn test_radula_behave_flags_environment_armv6zk() -> Result<(), Box<dyn Er
 async fn test_radula_behave_flags_environment_i686() -> Result<(), Box<dyn Error>> {
     architecture::radula_behave_architecture_environment("i686").await?;
 
-    radula_behave_flags_environment();
+    radula_behave_flags_environment()?;
 
     println!(
         "\nCFLAGS   :: {}",
@@ -123,7 +124,7 @@ async fn test_radula_behave_flags_environment_i686() -> Result<(), Box<dyn Error
 async fn test_radula_behave_flags_environment_riscv64() -> Result<(), Box<dyn Error>> {
     architecture::radula_behave_architecture_environment("riscv64").await?;
 
-    radula_behave_flags_environment();
+    radula_behave_flags_environment()?;
 
     println!(
         "\nCFLAGS   :: {}",
@@ -149,7 +150,7 @@ async fn test_radula_behave_flags_environment_riscv64() -> Result<(), Box<dyn Er
 async fn test_radula_behave_flags_environment_x86_64_v3() -> Result<(), Box<dyn Error>> {
     architecture::radula_behave_architecture_environment("x86-64").await?;
 
-    radula_behave_flags_environment();
+    radula_behave_flags_environment()?;
 
     println!(
         "\nCFLAGS   :: {}",
