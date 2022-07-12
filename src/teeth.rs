@@ -159,7 +159,7 @@ pub fn radula_behave_teeth_environment() -> Result<(), Box<dyn Error>> {
 
 #[test]
 fn test_radula_behave_teeth_environment() -> Result<(), Box<dyn Error>> {
-    radula_behave_teeth_environment();
+    radula_behave_teeth_environment()?;
 
     println!(
         "\nAUTORECONF :: {}",
@@ -274,10 +274,19 @@ fn test_radula_behave_teeth_environment() -> Result<(), Box<dyn Error>> {
         "/usr/bin/install -dv"
     );
     assert_eq!(env::var(constants::RADULA_ENVIRONMENT_TOOTH_MV)?, "mv -v");
-    assert_eq!(env::var(constants::RADULA_ENVIRONMENT_TOOTH_PATCH)?, "patch --verbose");
-    assert_eq!(env::var(constants::RADULA_ENVIRONMENT_TOOTH_PKG_CONFIG)?, "pkgconf");
+    assert_eq!(
+        env::var(constants::RADULA_ENVIRONMENT_TOOTH_PATCH)?,
+        "patch --verbose"
+    );
+    assert_eq!(
+        env::var(constants::RADULA_ENVIRONMENT_TOOTH_PKG_CONFIG)?,
+        "pkgconf"
+    );
     assert_eq!(env::var(constants::RADULA_ENVIRONMENT_TOOTH_RM)?, "rm -frv");
-    assert_eq!(env::var(constants::RADULA_ENVIRONMENT_TOOTH_RSYNC)?, "rsync -vaHAXSx");
+    assert_eq!(
+        env::var(constants::RADULA_ENVIRONMENT_TOOTH_RSYNC)?,
+        "rsync -vaHAXSx"
+    );
     assert_eq!(env::var(constants::RADULA_ENVIRONMENT_TOOTH_YACC)?, "byacc");
 
     Ok(())

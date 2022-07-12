@@ -79,7 +79,7 @@ pub async fn radula_behave_construct(
                     .join(name)
                     .join(stage)
                     .to_str()
-                    .unwrap(),
+                    .unwrap_or_default(),
                 &format!(
                     ">> {} 2>&1",
                     env::var(if stage == constants::RADULA_DIRECTORY_CROSS {

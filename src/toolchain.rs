@@ -3,36 +3,42 @@
 
 use std::env;
 use std::error::Error;
-use std::path::Path;
-use std::process::{Command, Stdio};
+use std::path::{Path, PathBuf};
+use std::process::Stdio;
 use std::string::String;
 
 use super::clean;
+use super::compress;
 use super::constants;
 use super::construct;
 use super::rsync;
 
-use tokio::fs;
+use chrono::Utc;
+use tokio::{fs, process::Command};
+use walkdir::WalkDir;
 
 //
 // Toolchain Functions
 //
 
-pub fn radula_behave_bootstrap_toolchain_backup() -> Result<(), Box<dyn Error>> {
+pub async fn radula_behave_bootstrap_toolchain_backup() -> Result<(), Box<dyn Error>> {
     rsync::radula_behave_rsync(
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS)?,
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?,
-    )?;
+    )
+    .await?;
     rsync::radula_behave_rsync(
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN)?,
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?,
-    )?;
+    )
+    .await?;
 
     // Backup toolchain log file
     rsync::radula_behave_rsync(
         &env::var(constants::RADULA_ENVIRONMENT_FILE_TOOLCHAIN_LOG)?,
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?,
-    )?;
+    )
+    .await?;
 
     Ok(())
 }
@@ -83,7 +89,7 @@ pub fn radula_behave_bootstrap_toolchain_environment() -> Result<(), Box<dyn Err
             Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS)?)
                 .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
                 .to_str()
-                .unwrap(),
+                .unwrap_or_default(),
             ".",
             constants::RADULA_DIRECTORY_LOGS,
         ]
@@ -116,35 +122,37 @@ pub async fn radula_behave_bootstrap_toolchain_prepare() -> Result<(), Box<dyn E
 }
 
 pub async fn radula_behave_bootstrap_toolchain_release() -> Result<(), Box<dyn Error>> {
-    let x = &String::from(
+    let path = &String::from(
         Path::new(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
             .join(constants::RADULA_DIRECTORY_TEMPORARY)
             .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
             .to_str()
-            .unwrap(),
+            .unwrap_or_default(),
     );
 
-    clean::radula_behave_remove_dir_all_force(x).await?;
-    fs::create_dir_all(x).await?;
+    clean::radula_behave_remove_dir_all_force(path).await?;
+    fs::create_dir_all(path).await?;
 
     rsync::radula_behave_rsync(
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?)
             .join(constants::RADULA_DIRECTORY_CROSS)
             .to_str()
-            .unwrap(),
-        x,
-    )?;
+            .unwrap_or_default(),
+        path,
+    )
+    .await?;
     rsync::radula_behave_rsync(
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?)
             .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
             .to_str()
-            .unwrap(),
-        x,
-    )?;
+            .unwrap_or_default(),
+        path,
+    )
+    .await?;
 
     // Remove all `lib64` directories because glaucus is a pure 64-bit system
     clean::radula_behave_remove_dir_all_force(
-        Path::new(x)
+        Path::new(path)
             .join(constants::RADULA_DIRECTORY_CROSS)
             .join(constants::RADULA_PATH_LIB64)
             .to_str()
@@ -152,7 +160,7 @@ pub async fn radula_behave_bootstrap_toolchain_release() -> Result<(), Box<dyn E
     )
     .await?;
     clean::radula_behave_remove_dir_all_force(
-        Path::new(x)
+        Path::new(path)
             .join(constants::RADULA_DIRECTORY_CROSS)
             .join(constants::RADULA_PATH_USR)
             .join(constants::RADULA_PATH_LIB64)
@@ -161,7 +169,7 @@ pub async fn radula_behave_bootstrap_toolchain_release() -> Result<(), Box<dyn E
     )
     .await?;
     clean::radula_behave_remove_dir_all_force(
-        Path::new(x)
+        Path::new(path)
             .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
             .join(constants::RADULA_PATH_LIB64)
             .to_str()
@@ -169,48 +177,26 @@ pub async fn radula_behave_bootstrap_toolchain_release() -> Result<(), Box<dyn E
     )
     .await?;
 
-    Command::new(constants::RADULA_TOOTH_FIND)
-        .args(&[x, "-name", "*.la", "-delete"])
-        .spawn()?
-        .wait()?;
+    // Remove libtool archive (.la) files
+    WalkDir::new(path)
+        .follow_links(true)
+        .into_iter()
+        .filter_map(|e| e.ok())
+        .filter(|e| {
+            e.file_name()
+                .to_str()
+                .map(|s| s.ends_with(".la"))
+                .unwrap_or_default()
+        })
+        .for_each(|e| std::fs::remove_file(e.path()).unwrap());
 
-    let radula_behave_bootstrap_toolchain_strip_libraries = |x: &str| {
-        Command::new(constants::RADULA_TOOTH_SHELL)
-            .args(&[
-                constants::RADULA_TOOTH_SHELL_FLAGS,
-                &[constants::RADULA_CROSS_STRIP, &format!(" -gv {}/*", x)].concat(),
-            ])
-            .stderr(Stdio::null())
-            .stdout(Stdio::null())
-            .spawn()
-            .unwrap()
-            .wait()
-            .unwrap();
-    };
-
-    radula_behave_bootstrap_toolchain_strip_libraries(
-        Path::new(x)
-            .join(constants::RADULA_DIRECTORY_CROSS)
-            .join(constants::RADULA_PATH_USR)
-            .join(constants::RADULA_PATH_LIB)
-            .to_str()
-            .unwrap(),
-    );
-    radula_behave_bootstrap_toolchain_strip_libraries(
-        Path::new(x)
-            .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
-            .join(constants::RADULA_PATH_LIB)
-            .to_str()
-            .unwrap(),
-    );
-
-    let radula_behave_bootstrap_toolchain_strip_binaries = |x: &str| {
+    let radula_behave_bootstrap_toolchain_strip_libraries = |path: PathBuf| async move {
         Command::new(constants::RADULA_TOOTH_SHELL)
             .args(&[
                 constants::RADULA_TOOTH_SHELL_FLAGS,
                 &[
                     constants::RADULA_CROSS_STRIP,
-                    &format!(" --strip-unneeded -v {}/*", x),
+                    &format!(" -gv {}/*", path.display()),
                 ]
                 .concat(),
             ])
@@ -219,28 +205,60 @@ pub async fn radula_behave_bootstrap_toolchain_release() -> Result<(), Box<dyn E
             .spawn()
             .unwrap()
             .wait()
+            .await
+            .unwrap();
+    };
+
+    radula_behave_bootstrap_toolchain_strip_libraries(
+        Path::new(path)
+            .join(constants::RADULA_DIRECTORY_CROSS)
+            .join(constants::RADULA_PATH_USR)
+            .join(constants::RADULA_PATH_LIB),
+    )
+    .await;
+    radula_behave_bootstrap_toolchain_strip_libraries(
+        Path::new(path)
+            .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
+            .join(constants::RADULA_PATH_LIB),
+    )
+    .await;
+
+    let radula_behave_bootstrap_toolchain_strip_binaries = |path: PathBuf| async move {
+        Command::new(constants::RADULA_TOOTH_SHELL)
+            .args(&[
+                constants::RADULA_TOOTH_SHELL_FLAGS,
+                &[
+                    constants::RADULA_CROSS_STRIP,
+                    &format!(" --strip-unneeded -v {}/*", path.display()),
+                ]
+                .concat(),
+            ])
+            .stderr(Stdio::null())
+            .stdout(Stdio::null())
+            .spawn()
+            .unwrap()
+            .wait()
+            .await
             .unwrap();
     };
 
     radula_behave_bootstrap_toolchain_strip_binaries(
-        Path::new(x)
+        Path::new(path)
             .join(constants::RADULA_DIRECTORY_CROSS)
             .join(constants::RADULA_PATH_USR)
-            .join(constants::RADULA_PATH_BIN)
-            .to_str()
-            .unwrap(),
-    );
+            .join(constants::RADULA_PATH_BIN),
+    )
+    .await;
     radula_behave_bootstrap_toolchain_strip_binaries(
-        Path::new(x)
+        Path::new(path)
             .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
-            .join(constants::RADULA_PATH_BIN)
-            .to_str()
-            .unwrap(),
-    );
+            .join(constants::RADULA_PATH_BIN),
+    )
+    .await;
 
     // Remove toolchain manual pages
     clean::radula_behave_remove_dir_all_force(
-        Path::new(x)
+        Path::new(path)
             .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
             .join(constants::RADULA_PATH_SHARE)
             .join(constants::RADULA_PATH_INFO)
@@ -249,7 +267,7 @@ pub async fn radula_behave_bootstrap_toolchain_release() -> Result<(), Box<dyn E
     )
     .await?;
     clean::radula_behave_remove_dir_all_force(
-        Path::new(x)
+        Path::new(path)
             .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
             .join(constants::RADULA_PATH_SHARE)
             .join(constants::RADULA_PATH_MAN)
@@ -258,33 +276,17 @@ pub async fn radula_behave_bootstrap_toolchain_release() -> Result<(), Box<dyn E
     )
     .await?;
 
-    // Until we get the tar crate working
-    // Command::new(constants::RADULA_TOOTH_TAR)
-    //     .args(&[
-    //         "cpvf",
-    //         &format!(
-    //             "{}-{}.tar.zst",
-    //             Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS)?)
-    //                 .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
-    //                 .to_str()
-    //                 .unwrap(),
-    //             String::from_utf8_lossy(
-    //                 &Command::new(constants::RADULA_TOOTH_DATE)
-    //                     .arg("+%d%m%Y")
-    //                     .output()
-    //                     .unwrap()
-    //                     .stdout
-    //             )
-    //             .trim(),
-    //         ),
-    //         "-I",
-    //         "zstd -22 --ultra --long=31 -T0",
-    //         ".",
-    //     ])
-    //     .current_dir(x)
-    //     .stdout(Stdio::null())
-    //     .spawn()?
-    //     .wait()?;
+    compress::radula_behave_compress(
+        &format!(
+            "{}-{}",
+            Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS)?)
+                .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
+                .to_str()
+                .unwrap_or_default(),
+            Utc::now().format("%d%m%Y")
+        ),
+        path,
+    )?;
 
     Ok(())
 }

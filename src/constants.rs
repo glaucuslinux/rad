@@ -100,7 +100,7 @@ pub const RADULA_CERAS_GMP: &'static str = "gmp";
 pub const RADULA_CERAS_GREP: &'static str = "grep";
 
 pub const RADULA_CERAS_HOSTNAME: &'static str = "hostname";
-pub const RADULA_CERAS_HWIDS: &'static str = "hwids";
+pub const RADULA_CERAS_HWDATA: &'static str = "hwdata";
 pub const RADULA_CERAS_HYDROSKELETON: &'static str = "hydroskeleton";
 
 pub const RADULA_CERAS_IANA_ETC: &'static str = "iana-etc";
@@ -115,6 +115,7 @@ pub const RADULA_CERAS_LBZIP2_UTILS: &'static str = "lbzip2-utils";
 pub const RADULA_CERAS_LESS: &'static str = "less";
 pub const RADULA_CERAS_LIBARCHIVE: &'static str = "libarchive";
 pub const RADULA_CERAS_LIBCAP: &'static str = "libcap";
+pub const RADULA_CERAS_LIBCAP_NG: &'static str = "libcap-ng";
 pub const RADULA_CERAS_LIBEDIT: &'static str = "libedit";
 pub const RADULA_CERAS_LIBELF: &'static str = "libelf";
 pub const RADULA_CERAS_LIBGCC: &'static str = "libgcc";
@@ -131,7 +132,6 @@ pub const RADULA_CERAS_LZLIB: &'static str = "lzlib";
 
 pub const RADULA_CERAS_MANDOC: &'static str = "mandoc";
 pub const RADULA_CERAS_MKSH: &'static str = "mksh";
-pub const RADULA_CERAS_MOLD: &'static str = "mold";
 pub const RADULA_CERAS_MPC: &'static str = "mpc";
 pub const RADULA_CERAS_MPFR: &'static str = "mpfr";
 pub const RADULA_CERAS_MUSL: &'static str = "musl";
@@ -414,7 +414,7 @@ OPTIONS:
 \ts, search    \tSearch for cerata within the cerata directory
 \tu, upgrade   \tUpgrade cerata";
 
-pub const RADULA_HELP_VERSION: &'static str = "radula version 1.1.4
+pub const RADULA_HELP_VERSION: &'static str = "radula version 1.1.5
 
 Copyright (c) 2018-2022, Firas Khalil Khana
 Distributed under the terms of the ISC License";

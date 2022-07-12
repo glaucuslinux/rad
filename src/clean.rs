@@ -30,15 +30,11 @@ pub async fn radula_behave_remove_file_force(path: &str) -> Result<(), Box<dyn E
 }
 
 pub async fn radula_behave_bootstrap_clean() -> Result<(), Box<dyn Error>> {
-    radula_behave_remove_dir_all_force(&env::var(
-        constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS,
-    )?)
-    .await?;
+    radula_behave_remove_dir_all_force(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS)?)
+        .await?;
 
-    radula_behave_remove_dir_all_force(&env::var(
-        constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS,
-    )?)
-    .await?;
+    radula_behave_remove_dir_all_force(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS)?)
+        .await?;
 
     radula_behave_remove_dir_all_force(&env::var(
         constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN_TEMPORARY_BUILDS,
@@ -59,10 +55,8 @@ pub async fn radula_behave_bootstrap_clean() -> Result<(), Box<dyn Error>> {
 }
 
 pub async fn radula_behave_bootstrap_distclean() -> Result<(), Box<dyn Error>> {
-    radula_behave_remove_dir_all_force(&env::var(
-        constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS,
-    )?)
-    .await?;
+    radula_behave_remove_dir_all_force(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?)
+        .await?;
 
     radula_behave_remove_file_force(
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS)?)
@@ -72,10 +66,8 @@ pub async fn radula_behave_bootstrap_distclean() -> Result<(), Box<dyn Error>> {
     )
     .await?;
 
-    radula_behave_remove_dir_all_force(&env::var(
-        constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES,
-    )?)
-    .await?;
+    radula_behave_remove_dir_all_force(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES)?)
+        .await?;
 
     radula_behave_bootstrap_clean().await?;
 

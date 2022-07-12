@@ -83,7 +83,8 @@ pub async fn radula_behave_download(
 
 // Extract source tarballs
 pub async fn radula_behave_extract(file: PathBuf, path: PathBuf) -> Result<(), Box<dyn Error>> {
-    let decoder: Box<dyn Read> = match file.extension().and_then(OsStr::to_str).unwrap() {
+    let decoder: Box<dyn Read> = match file.extension().and_then(OsStr::to_str).unwrap_or_default()
+    {
         "bz2" => Box::new(BzDecoder::new(std::fs::File::open(file)?)),
         "gz" | "tgz" => Box::new(GzDecoder::new(std::fs::File::open(file)?)),
         "xz" => Box::new(XzDecoder::new_multi_decoder(std::fs::File::open(file)?)),
@@ -156,7 +157,7 @@ pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn Err
             radula_behave_verify(name, file.to_string(), checksum.to_string()).await?;
 
             // Extract ceras's source tarball
-            radula_behave_extract(PathBuf::from(file), path);
+            radula_behave_extract(PathBuf::from(file), path).await?;
         }
     } else if version != constants::RADULA_TOOTH_GIT {
         // Only verify existing ceras's source tarballs without extracting them again

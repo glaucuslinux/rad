@@ -21,7 +21,8 @@ use super::toolchain;
 pub async fn radula_behave_bootstrap_cross_ccache() -> Result<(), Box<dyn Error>> {
     env::set_var(
         constants::RADULA_ENVIRONMENT_CCACHE_CONFIGURATION,
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA)?)
+        Path::new(constants::RADULA_PATH_RADULA_CLUSTERS)
+            .join(constants::RADULA_DIRECTORY_GLAUCUS)
             .join(constants::RADULA_CERAS_CCACHE)
             .join(constants::RADULA_FILE_CCACHE_CONFIGURATION),
     );
@@ -55,7 +56,8 @@ pub async fn radula_behave_bootstrap_cross_ccache() -> Result<(), Box<dyn Error>
 pub async fn radula_behave_bootstrap_toolchain_ccache() -> Result<(), Box<dyn Error>> {
     env::set_var(
         constants::RADULA_ENVIRONMENT_CCACHE_CONFIGURATION,
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CERATA)?)
+        Path::new(constants::RADULA_PATH_RADULA_CLUSTERS)
+            .join(constants::RADULA_DIRECTORY_GLAUCUS)
             .join(constants::RADULA_CERAS_CCACHE)
             .join(constants::RADULA_FILE_CCACHE_CONFIGURATION),
     );

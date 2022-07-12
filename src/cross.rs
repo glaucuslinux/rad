@@ -91,7 +91,7 @@ pub async fn radula_behave_bootstrap_cross_construct() -> Result<(), Box<dyn Err
 
     // Development
     radula_behave_construct_cross(constants::RADULA_CERAS_BINUTILS).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_GCC).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_GCC).await;
 
     // Synchronization
     radula_behave_construct_cross(constants::RADULA_CERAS_RSYNC).await;
@@ -109,37 +109,38 @@ pub async fn radula_behave_bootstrap_cross_construct() -> Result<(), Box<dyn Err
     radula_behave_construct_cross(constants::RADULA_CERAS_MANDOC).await;
 
     // Userland
-    // radula_behave_construct_cross(constants::RADULA_CERAS_PLOCATE).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_PLOCATE).await;
 
     // Networking
-    // radula_behave_construct_cross(constants::RADULA_CERAS_LIBCAP).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_IPROUTE2).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_IPUTILS).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_SDHCP).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_WGET2).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_LIBCAP).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_LIBCAP_NG).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_IPROUTE2).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_IPUTILS).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_SDHCP).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_WGET2).await;
 
     // Time Zone
-    // radula_behave_construct_cross(constants::RADULA_CERAS_TZCODE).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_TZDATA).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_TZCODE).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_TZDATA).await;
 
     // Utilities
-    // radula_behave_construct_cross(constants::RADULA_CERAS_KMOD).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_EUDEV).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_PSMISC).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_PROCPS_NG).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_UTIL_LINUX).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_E2FSPROGS).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_PCIUTILS).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_HWIDS).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_KMOD).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_EUDEV).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_PSMISC).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_PROCPS_NG).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_UTIL_LINUX).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_E2FSPROGS).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_PCIUTILS).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_HWDATA).await;
 
     // Services
-    // radula_behave_construct_cross(constants::RADULA_CERAS_S6_LINUX_INIT).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_S6_RC).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_S6_BOOT_SCRIPTS).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_S6_LINUX_INIT).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_S6_RC).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_S6_BOOT_SCRIPTS).await;
 
     // Kernel
-    // radula_behave_construct_cross(constants::RADULA_CERAS_LIBUARGP).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_LIBELF).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_LIBUARGP).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_LIBELF).await;
     // radula_behave_construct_cross(constants::RADULA_CERAS_LINUX).await;
 
     Ok(())
@@ -172,7 +173,7 @@ pub fn radula_behave_bootstrap_cross_environment_directories() -> Result<(), Box
             Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_LOGS)?)
                 .join(constants::RADULA_DIRECTORY_CROSS)
                 .to_str()
-                .unwrap(),
+                .unwrap_or_default(),
             ".",
             constants::RADULA_DIRECTORY_LOGS,
         ]
@@ -277,16 +278,18 @@ pub async fn radula_behave_bootstrap_cross_prepare() -> Result<(), Box<dyn Error
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?)
             .join(constants::RADULA_DIRECTORY_CROSS)
             .to_str()
-            .unwrap(),
+            .unwrap_or_default(),
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS)?,
-    )?;
+    )
+    .await?;
     rsync::radula_behave_rsync(
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?)
             .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
             .to_str()
-            .unwrap(),
+            .unwrap_or_default(),
         &env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS)?,
-    )?;
+    )
+    .await?;
 
     clean::radula_behave_remove_dir_all_force(&env::var(
         constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS_TEMPORARY_BUILDS,
@@ -322,7 +325,7 @@ fn radula_behave_bootstrap_cross_strip() -> Result<(), Box<dyn Error>> {
             Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS)?)
                 .join(constants::RADULA_PATH_ETC)
                 .to_str()
-                .unwrap(),
+                .unwrap_or_default(),
             "-type",
             "d",
             "-empty",
@@ -335,7 +338,7 @@ fn radula_behave_bootstrap_cross_strip() -> Result<(), Box<dyn Error>> {
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS)?)
             .join(constants::RADULA_PATH_USR)
             .to_str()
-            .unwrap(),
+            .unwrap_or_default(),
     );
 
     Command::new(constants::RADULA_TOOTH_SHELL)
