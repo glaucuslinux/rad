@@ -11,21 +11,21 @@ keywords = ["glaucus", "radula"]
 
 [dependencies]
 bzip2 = { version = "0.4.3", features = ["tokio"] }
-chrono = "0.4.19"
+chrono = "0.4.22"
 colored = "2.0.0"
 flate2 = { version = "1.0.24", default-features = false, features = [
     "zlib-ng-compat",
 ] }
-futures-util = "0.3.21"
-git2 = { version = "0.14.4", features = ["zlib-ng-compat"] }
+futures-util = "0.3.24"
+git2 = { version = "0.15.0", features = ["zlib-ng-compat"] }
 indicatif = { git = "https://github.com/mitsuhiko/indicatif", features = [
     "improved_unicode",
 ] }
 num_cpus = "1.13.1"
 reqwest = { version = "0.11.11", features = ["stream"] }
-serde = { version = "1.0.139", features = ["derive"] }
+serde = { version = "1.0.144", features = ["derive"] }
 tar = "0.4.38"
-tokio = { version = "1.19.2", features = [
+tokio = { version = "1.21.0", features = [
     "fs",
     "io-util",
     "macros",

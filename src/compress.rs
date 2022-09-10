@@ -6,8 +6,7 @@ use std::fs::File;
 use std::io::BufWriter;
 
 use tar::{Archive, Builder};
-use zstd::stream::read::Decoder;
-use zstd::stream::write::Encoder;
+use zstd::stream::{read::Decoder, write::Encoder};
 
 pub fn radula_behave_compress(name: &str, path: &str) -> Result<(), Box<dyn Error>> {
     let mut encoder = Encoder::new(
