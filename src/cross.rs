@@ -64,13 +64,12 @@ pub async fn radula_behave_bootstrap_cross_construct() -> Result<(), Box<dyn Err
 
     // Userland
     radula_behave_construct_cross(constants::RADULA_CERAS_TOYBOX).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_BC).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_DIFFUTILS).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_FILE).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_FINDUTILS).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_GREP).await;
-    radula_behave_construct_cross(constants::RADULA_CERAS_HOSTNAME).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_SED).await;
-    radula_behave_construct_cross(constants::RADULA_CERAS_WHICH).await;
 
     // Development
     radula_behave_construct_cross(constants::RADULA_CERAS_EXPAT).await;
@@ -102,7 +101,6 @@ pub async fn radula_behave_bootstrap_cross_construct() -> Result<(), Box<dyn Err
 
     // Editors & Pagers
     radula_behave_construct_cross(constants::RADULA_CERAS_LIBEDIT).await;
-    radula_behave_construct_cross(constants::RADULA_CERAS_BC).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_PCRE2).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_LESS).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_VIM).await;

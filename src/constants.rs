@@ -99,7 +99,6 @@ pub const RADULA_CERAS_GETTEXT_TINY: &'static str = "gettext-tiny";
 pub const RADULA_CERAS_GMP: &'static str = "gmp";
 pub const RADULA_CERAS_GREP: &'static str = "grep";
 
-pub const RADULA_CERAS_HOSTNAME: &'static str = "hostname";
 pub const RADULA_CERAS_HWDATA: &'static str = "hwdata";
 pub const RADULA_CERAS_HYDROSKELETON: &'static str = "hydroskeleton";
 
@@ -177,7 +176,6 @@ pub const RADULA_CERAS_UTMPS: &'static str = "utmps";
 pub const RADULA_CERAS_VIM: &'static str = "vim";
 
 pub const RADULA_CERAS_WGET2: &'static str = "wget2";
-pub const RADULA_CERAS_WHICH: &'static str = "which";
 
 pub const RADULA_CERAS_XXHASH: &'static str = "xxhash";
 pub const RADULA_CERAS_XZ: &'static str = "xz";
