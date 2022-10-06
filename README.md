@@ -13,6 +13,7 @@ glaucus's radula
 * [Gitter](https://gitter.im/glaucuslinux/radula)
 * [Reddit](https://www.reddit.com/r/glaucus)
 * [Telegram](https://t.me/glaucuslinux)
+* [YouTube](https://www.youtube.com/channel/UCOpZsBcIF2NvJHuzdP1UP_w)
 
 ## Mirrors
 * [BitBucket](https://bitbucket.org/glaucuslinux/radula)
