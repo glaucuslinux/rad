@@ -121,6 +121,13 @@ pub async fn radula_behave_bootstrap_cross_image() -> Result<(), Box<dyn Error>>
         .wait()
         .await?;
 
+    // Detach all used loop devices
+    Command::new(constants::RADULA_TOOTH_LOSETUP)
+        .arg("-D")
+        .spawn()?
+        .wait()
+        .await?;
+
     // Find the first unused loop device
     let device = &String::from_utf8_lossy(
         &Command::new(constants::RADULA_TOOTH_LOSETUP)
@@ -135,11 +142,6 @@ pub async fn radula_behave_bootstrap_cross_image() -> Result<(), Box<dyn Error>>
     let partition = &[device, "p1"].concat();
 
     // Associate the first unused loop device with the image
-    Command::new(constants::RADULA_TOOTH_LOSETUP)
-        .arg("-D")
-        .spawn()?
-        .wait()
-        .await?;
     Command::new(constants::RADULA_TOOTH_LOSETUP)
         .args(&[device, image])
         .spawn()?
@@ -256,7 +258,7 @@ pub async fn radula_behave_bootstrap_cross_image() -> Result<(), Box<dyn Error>>
         .wait()
         .await?;
     Command::new(constants::RADULA_TOOTH_LOSETUP)
-        .args(&["-d", partition])
+        .args(&["-d", device])
         .spawn()?
         .wait()
         .await?;
