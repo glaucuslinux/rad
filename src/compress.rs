@@ -13,7 +13,7 @@ pub fn radula_behave_compress(name: &str, path: &str) -> Result<(), Box<dyn Erro
         BufWriter::new(File::create(&format!("{}.tar.zst", name))?),
         22,
     )?;
-    encoder.multithread((num_cpus::get() as f32 * 1.5) as u32)?;
+    encoder.multithread(num_cpus::get() as u32)?;
     encoder.long_distance_matching(true)?;
     encoder.window_log(31)?;
 
