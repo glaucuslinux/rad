@@ -13,7 +13,7 @@ use super::constants;
 
 use tokio::{fs, process::Command};
 
-pub async fn radula_behave_bootstrap_cross_image() -> Result<(), Box<dyn Error>> {
+pub async fn radula_behave_bootstrap_cross_img() -> Result<(), Box<dyn Error>> {
     // A custom rsync function to prevent permission errors (`-S` is not used)
     let radula_behave_rsync = |source: PathBuf, destination: PathBuf| async move {
         Command::new(constants::RADULA_TOOTH_RSYNC)
@@ -31,28 +31,28 @@ pub async fn radula_behave_bootstrap_cross_image() -> Result<(), Box<dyn Error>>
             .unwrap();
     };
 
-    let image = &String::from(
+    let img = &String::from(
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS)?)
-            .join(constants::RADULA_FILE_GLAUCUS_IMAGE)
+            .join(constants::RADULA_FILE_GLAUCUS_IMG)
             .to_str()
             .unwrap_or_default(),
     );
 
-    // Create a new image
-    clean::radula_behave_remove_file_force(image).await?;
-    Command::new(constants::RADULA_TOOTH_QEMU_IMAGE)
+    // Create a new IMG image file
+    clean::radula_behave_remove_file_force(img).await?;
+    Command::new(constants::RADULA_TOOTH_QEMU_IMG)
         .args(&[
             "create",
             "-f",
             "raw",
-            image,
-            constants::RADULA_FILE_GLAUCUS_IMAGE_SIZE,
+            img,
+            constants::RADULA_FILE_GLAUCUS_IMG_SIZE,
         ])
         .stdout(Stdio::null())
         .spawn()?
         .wait()
         .await?;
-    // Write mbr.bin (from SYSLINUX) to the first 440 bytes of the image
+    // Write mbr.bin (from SYSLINUX) to the first 440 bytes of the IMG image file
     Command::new(constants::RADULA_TOOTH_DD)
         .args(&[
             &format!(
@@ -63,7 +63,7 @@ pub async fn radula_behave_bootstrap_cross_image() -> Result<(), Box<dyn Error>>
                     .to_str()
                     .unwrap_or_default()
             ),
-            &format!("of={}", image),
+            &format!("of={}", img),
             "conv=notrunc",
             "bs=440",
             "count=1",
@@ -74,11 +74,11 @@ pub async fn radula_behave_bootstrap_cross_image() -> Result<(), Box<dyn Error>>
         .wait()
         .await?;
 
-    // Partition the image
+    // Partition the IMG image file
     Command::new(constants::RADULA_TOOTH_PARTED)
         .args(&[
             constants::RADULA_TOOTH_PARTED_FLAGS,
-            image,
+            img,
             "mklabel",
             "msdos",
         ])
@@ -90,12 +90,12 @@ pub async fn radula_behave_bootstrap_cross_image() -> Result<(), Box<dyn Error>>
             constants::RADULA_TOOTH_PARTED_FLAGS,
             "-a",
             "none",
-            image,
+            img,
             "mkpart",
             "primary",
             "ext4",
             "0",
-            constants::RADULA_FILE_GLAUCUS_IMAGE_SIZE,
+            constants::RADULA_FILE_GLAUCUS_IMG_SIZE,
         ])
         .spawn()?
         .wait()
@@ -105,7 +105,7 @@ pub async fn radula_behave_bootstrap_cross_image() -> Result<(), Box<dyn Error>>
             constants::RADULA_TOOTH_PARTED_FLAGS,
             "-a",
             "none",
-            image,
+            img,
             "set",
             "1",
             "boot",
@@ -141,14 +141,14 @@ pub async fn radula_behave_bootstrap_cross_image() -> Result<(), Box<dyn Error>>
 
     let partition = &[device, "p1"].concat();
 
-    // Associate the first unused loop device with the image
+    // Associate the first unused loop device with the IMG image file
     Command::new(constants::RADULA_TOOTH_LOSETUP)
-        .args(&[device, image])
+        .args(&[device, img])
         .spawn()?
         .wait()
         .await?;
 
-    // Notify the kernel about the new partition on the image
+    // Notify the kernel about the new partition on the IMG image file
     Command::new(constants::RADULA_TOOTH_PARTX)
         .args(&["-a", device])
         .spawn()?
@@ -263,9 +263,9 @@ pub async fn radula_behave_bootstrap_cross_image() -> Result<(), Box<dyn Error>>
         .wait()
         .await?;
 
-    // Backup the new image
+    // Backup the new IMG image file
     radula_behave_rsync(
-        PathBuf::from(image),
+        PathBuf::from(img),
         PathBuf::from(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap()),
     )
     .await;
@@ -274,13 +274,13 @@ pub async fn radula_behave_bootstrap_cross_image() -> Result<(), Box<dyn Error>>
 }
 
 #[tokio::test]
-async fn test_radula_behave_bootstrap_cross_image() -> Result<(), Box<dyn Error>> {
+async fn test_radula_behave_bootstrap_cross_img() -> Result<(), Box<dyn Error>> {
     bootstrap::radula_behave_bootstrap_environment().await?;
 
     println!(
         "\nglaucus.img   :: {}",
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS)?)
-            .join(constants::RADULA_FILE_GLAUCUS_IMAGE)
+            .join(constants::RADULA_FILE_GLAUCUS_IMG)
             .to_str()
             .unwrap_or_default(),
     );
@@ -321,7 +321,7 @@ async fn test_radula_behave_bootstrap_cross_image() -> Result<(), Box<dyn Error>
 
     assert!(
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS)?)
-            .join(constants::RADULA_FILE_GLAUCUS_IMAGE)
+            .join(constants::RADULA_FILE_GLAUCUS_IMG)
             .ends_with("glaucus.img")
     );
     assert!(Path::new(constants::RADULA_PATH_RADULA_CLUSTERS)

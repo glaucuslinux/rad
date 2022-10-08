@@ -14,7 +14,8 @@ use super::constants;
 use super::cross;
 use super::flags;
 use super::help;
-use super::image;
+use super::img;
+use super::iso;
 use super::pkg_config;
 use super::teeth;
 use super::toolchain;
@@ -58,12 +59,12 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                             println!("distclean complete");
                         }
                         "h" | "help" => help::radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP)?,
-                        "i" | "image" => {
+                        "i" | "img" => {
                             bootstrap::radula_behave_bootstrap_environment().await?;
 
-                            image::radula_behave_bootstrap_cross_image().await?;
+                            img::radula_behave_bootstrap_cross_img().await?;
 
-                            println!("image complete");
+                            println!("img complete");
                         }
                         "l" | "list" => {
                             help::radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP_LIST)?
@@ -129,6 +130,13 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
                             //cross::radula_behave_bootstrap_cross_strip()?;
 
                             println!("cross complete");
+                        }
+                        "z" | "iso" => {
+                            bootstrap::radula_behave_bootstrap_environment().await?;
+
+                            iso::radula_behave_bootstrap_cross_iso().await?;
+
+                            println!("iso complete");
                         }
                         _ => {
                             help::radula_help(constants::RADULA_HELP_BEHAVE_BOOTSTRAP)?;

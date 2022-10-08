@@ -60,7 +60,7 @@ pub async fn radula_behave_bootstrap_distclean() -> Result<(), Box<dyn Error>> {
 
     radula_behave_remove_file_force(
         Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_GLAUCUS)?)
-            .join(constants::RADULA_FILE_GLAUCUS_IMAGE)
+            .join(constants::RADULA_FILE_GLAUCUS_IMG)
             .to_str()
             .unwrap_or_default(),
     )

@@ -73,13 +73,18 @@ pub const RADULA_CERAS: &'static str = "ceras";
 
 pub const RADULA_CERAS_ACL: &'static str = "acl";
 pub const RADULA_CERAS_ATTR: &'static str = "attr";
+pub const RADULA_CERAS_AUTOCONF: &'static str = "autoconf";
+pub const RADULA_CERAS_AUTOMAKE: &'static str = "automake";
 
 pub const RADULA_CERAS_BC: &'static str = "bc";
 pub const RADULA_CERAS_BINUTILS: &'static str = "binutils";
+pub const RADULA_CERAS_BYACC: &'static str = "byacc";
 pub const RADULA_CERAS_BZIP2: &'static str = "bzip2";
 
 pub const RADULA_CERAS_CCACHE: &'static str = "ccache";
 pub const RADULA_CERAS_CERATA: &'static str = "cerata";
+pub const RADULA_CERAS_CMAKE: &'static str = "cmake";
+pub const RADULA_CERAS_CURL: &'static str = "curl";
 
 pub const RADULA_CERAS_DASH: &'static str = "dash";
 pub const RADULA_CERAS_DIFFUTILS: &'static str = "diffutils";
@@ -92,6 +97,7 @@ pub const RADULA_CERAS_EXPAT: &'static str = "expat";
 
 pub const RADULA_CERAS_FILE: &'static str = "file";
 pub const RADULA_CERAS_FINDUTILS: &'static str = "findutils";
+pub const RADULA_CERAS_FLEX: &'static str = "flex";
 
 pub const RADULA_CERAS_GCC: &'static str = "gcc";
 pub const RADULA_CERAS_GCOMPAT: &'static str = "gcompat";
@@ -99,6 +105,7 @@ pub const RADULA_CERAS_GETTEXT_TINY: &'static str = "gettext-tiny";
 pub const RADULA_CERAS_GMP: &'static str = "gmp";
 pub const RADULA_CERAS_GREP: &'static str = "grep";
 
+pub const RADULA_CERAS_HELP2MAN: &'static str = "help2man";
 pub const RADULA_CERAS_HWDATA: &'static str = "hwdata";
 pub const RADULA_CERAS_HYDROSKELETON: &'static str = "hydroskeleton";
 
@@ -121,6 +128,7 @@ pub const RADULA_CERAS_LIBGCC: &'static str = "libgcc";
 pub const RADULA_CERAS_LIBGOMP: &'static str = "libgomp";
 pub const RADULA_CERAS_LIBRESSL: &'static str = "libressl";
 pub const RADULA_CERAS_LIBSTDCXX_V3: &'static str = "libstdc++-v3";
+pub const RADULA_CERAS_LIBTOOL: &'static str = "libtool";
 pub const RADULA_CERAS_LIBUARGP: &'static str = "libuargp";
 pub const RADULA_CERAS_LIBUCONTEXT: &'static str = "libucontext";
 pub const RADULA_CERAS_LINUX: &'static str = "linux";
@@ -129,7 +137,10 @@ pub const RADULA_CERAS_LKSH: &'static str = "lksh";
 pub const RADULA_CERAS_LZ4: &'static str = "lz4";
 pub const RADULA_CERAS_LZLIB: &'static str = "lzlib";
 
+pub const RADULA_CERAS_M4: &'static str = "m4";
+pub const RADULA_CERAS_MAKE: &'static str = "make";
 pub const RADULA_CERAS_MANDOC: &'static str = "mandoc";
+pub const RADULA_CERAS_MAWK: &'static str = "mawk";
 pub const RADULA_CERAS_MKSH: &'static str = "mksh";
 pub const RADULA_CERAS_MPC: &'static str = "mpc";
 pub const RADULA_CERAS_MPFR: &'static str = "mpfr";
@@ -146,13 +157,16 @@ pub const RADULA_CERAS_NSSS: &'static str = "nsss";
 
 pub const RADULA_CERAS_OKSH: &'static str = "oksh";
 
+pub const RADULA_CERAS_PATCH: &'static str = "patch";
 pub const RADULA_CERAS_PCIUTILS: &'static str = "pciutils";
 pub const RADULA_CERAS_PCRE2: &'static str = "pcre2";
 pub const RADULA_CERAS_PIGZ: &'static str = "pigz";
+pub const RADULA_CERAS_PKGCONF: &'static str = "pkgconf";
 pub const RADULA_CERAS_PLOCATE: &'static str = "plocate";
 pub const RADULA_CERAS_PLZIP: &'static str = "plzip";
 pub const RADULA_CERAS_PROCPS_NG: &'static str = "procps-ng";
 pub const RADULA_CERAS_PSMISC: &'static str = "psmisc";
+pub const RADULA_CERAS_PYTHON: &'static str = "python";
 
 pub const RADULA_CERAS_RADULA: &'static str = "radula";
 pub const RADULA_CERAS_RSYNC: &'static str = "rsync";
@@ -161,6 +175,7 @@ pub const RADULA_CERAS_S6: &'static str = "s6";
 pub const RADULA_CERAS_S6_BOOT_SCRIPTS: &'static str = "s6-boot-scripts";
 pub const RADULA_CERAS_S6_LINUX_INIT: &'static str = "s6-linux-init";
 pub const RADULA_CERAS_S6_RC: &'static str = "s6-rc";
+pub const RADULA_CERAS_SAMURAI: &'static str = "samurai";
 pub const RADULA_CERAS_SDHCP: &'static str = "sdhcp";
 pub const RADULA_CERAS_SED: &'static str = "sed";
 pub const RADULA_CERAS_SHADOW: &'static str = "shadow";
@@ -332,8 +347,8 @@ pub const RADULA_ENVIRONMENT_TUPLE_TARGET: &'static str = "TGT";
 pub const RADULA_FILE_CCACHE_CONFIGURATION: &'static str = "ccache.conf";
 pub const RADULA_FILE_CONFIG_GUESS: &'static str = "config.guess";
 
-pub const RADULA_FILE_GLAUCUS_IMAGE: &'static str = "glaucus.img";
-pub const RADULA_FILE_GLAUCUS_IMAGE_SIZE: &'static str = "1024M";
+pub const RADULA_FILE_GLAUCUS_IMG: &'static str = "glaucus.img";
+pub const RADULA_FILE_GLAUCUS_IMG_SIZE: &'static str = "2048M";
 
 pub const RADULA_FILE_SYSLINUX_EXTLINUX_CONF: &'static str = "syslinux/extlinux.conf";
 pub const RADULA_FILE_SYSLINUX_MBR_BIN: &'static str = "syslinux/mbr.bin";
@@ -375,7 +390,7 @@ pub const RADULA_HELP_BEHAVE_BINARY: &'static str = "USAGE:
 OPTIONS:
 \td, decyst    \tRemove binary cerata without preserving their cysts
 \th, help      \tDisplay this help message
-\ti, install   \tInstall binary cerata (default)
+\ti, install   \tInstall binary cerata
 \tr, remove    \tRemove binary cerata while preserving their cyst(s)
 \ts, search    \tSearch for binary cerata within the remote repositories
 \tu, upgrade   \tUpgrade binary cerata";
@@ -387,12 +402,13 @@ OPTIONS:
 \tc, clean     \tClean up while preserving sources and backups
 \td, distclean \tClean up everything
 \th, help      \tDisplay this help message
-\ti, image     \tCreate an image file of the glaucus system
+\ti, img       \tCreate an IMG image file of the glaucus system
 \tl, list      \tList supported genomes
 \tr, require   \tCheck if host has all required packages
 \ts, release   \tRelease a compressed tarball of the toolchain
 \tt, toolchain \tBootstrap a cross compiler toolchain
-\tx, cross     \tBootstrap a cross compiled glaucus system";
+\tx, cross     \tBootstrap a cross compiled glaucus system
+\tz, iso       \tCreate an ISO image file of the glaucus system";
 
 pub const RADULA_HELP_BEHAVE_BOOTSTRAP_LIST: &'static str = "GENOMES (ARCHITECTURES):
 \taarch64,     \tarm64,       \tarmv8-a
@@ -407,12 +423,12 @@ pub const RADULA_HELP_BEHAVE_ENVENOMATE: &'static str = "USAGE:
 OPTIONS:
 \td, decyst    \tRemove cerata without preserving their cyst(s)
 \th, help      \tDisplay this help message
-\ti, install   \tInstall cerata from source (default)
+\ti, install   \tInstall cerata from source
 \tr, remove    \tRemove cerata while preserving their cyst(s)
 \ts, search    \tSearch for cerata within the cerata directory
 \tu, upgrade   \tUpgrade cerata";
 
-pub const RADULA_HELP_VERSION: &'static str = "radula version 1.1.5
+pub const RADULA_HELP_VERSION: &'static str = "radula version 1.1.6
 
 Copyright (c) 2018-2022, Firas Khalil Khana
 Distributed under the terms of the ISC License";
@@ -496,7 +512,7 @@ pub const RADULA_TOOTH_LN_FLAGS: &'static str = "-fnsv";
 pub const RADULA_TOOTH_LOSETUP: &'static str = "losetup";
 
 pub const RADULA_TOOTH_MAKE: &'static str = "make";
-pub const RADULA_TOOTH_MAKEFLAGS: &'static str = "-O V=1";
+pub const RADULA_TOOTH_MAKEFLAGS: &'static str = "-j4 -O";
 
 pub const RADULA_TOOTH_MAWK: &'static str = "mawk";
 
@@ -524,7 +540,7 @@ pub const RADULA_TOOTH_PATCH_FLAGS: &'static str = "--verbose";
 
 pub const RADULA_TOOTH_PKGCONF: &'static str = "pkgconf";
 
-pub const RADULA_TOOTH_QEMU_IMAGE: &'static str = "qemu-img";
+pub const RADULA_TOOTH_QEMU_IMG: &'static str = "qemu-img";
 
 pub const RADULA_TOOTH_RM: &'static str = "rm";
 pub const RADULA_TOOTH_RM_FLAGS: &'static str = "-frv";

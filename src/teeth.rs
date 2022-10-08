@@ -6,8 +6,6 @@ use std::error::Error;
 
 use super::constants;
 
-extern crate num_cpus;
-
 //
 // Teeth Function
 //
@@ -81,13 +79,7 @@ pub fn radula_behave_teeth_environment() -> Result<(), Box<dyn Error>> {
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_MAKEFLAGS,
-        [
-            "-j",
-            &(num_cpus::get() as f32 * 1.5).to_string(),
-            " ",
-            constants::RADULA_TOOTH_MAKEFLAGS,
-        ]
-        .concat(),
+        constants::RADULA_TOOTH_MAKEFLAGS,
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_MKDIR,
@@ -263,8 +255,7 @@ fn test_radula_behave_teeth_environment() -> Result<(), Box<dyn Error>> {
         "ln -fnsv"
     );
     assert_eq!(env::var(constants::RADULA_ENVIRONMENT_TOOTH_MAKE)?, "make");
-    assert!(env::var(constants::RADULA_ENVIRONMENT_TOOTH_MAKEFLAGS)?.starts_with("-j"));
-    assert!(env::var(constants::RADULA_ENVIRONMENT_TOOTH_MAKEFLAGS)?.ends_with("V=1"));
+    assert_eq!(env::var(constants::RADULA_ENVIRONMENT_TOOTH_MAKEFLAGS)?, "-j4 -O");
     assert_eq!(
         env::var(constants::RADULA_ENVIRONMENT_TOOTH_MKDIR)?,
         "/usr/bin/install -dv"
