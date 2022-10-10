@@ -255,7 +255,10 @@ fn test_radula_behave_teeth_environment() -> Result<(), Box<dyn Error>> {
         "ln -fnsv"
     );
     assert_eq!(env::var(constants::RADULA_ENVIRONMENT_TOOTH_MAKE)?, "make");
-    assert_eq!(env::var(constants::RADULA_ENVIRONMENT_TOOTH_MAKEFLAGS)?, "-j4 -O");
+    assert_eq!(
+        env::var(constants::RADULA_ENVIRONMENT_TOOTH_MAKEFLAGS)?,
+        "-j4 -O"
+    );
     assert_eq!(
         env::var(constants::RADULA_ENVIRONMENT_TOOTH_MKDIR)?,
         "/usr/bin/install -dv"
