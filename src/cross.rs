@@ -45,9 +45,13 @@ pub async fn radula_behave_bootstrap_cross_construct() -> Result<(), Box<dyn Err
     // Compatibility
     radula_behave_construct_cross(constants::RADULA_CERAS_MUSL_FTS).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_MUSL_OBSTACK).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_MUSL_RPMATCH).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_LIBUCONTEXT).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_GCOMPAT).await;
 
     // i18n & L10n
     radula_behave_construct_cross(constants::RADULA_CERAS_GETTEXT_TINY).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_MUSL_LOCALES).await;
 
     // Permissions
     radula_behave_construct_cross(constants::RADULA_CERAS_ATTR).await;
@@ -82,22 +86,22 @@ pub async fn radula_behave_bootstrap_cross_construct() -> Result<(), Box<dyn Err
     radula_behave_construct_cross(constants::RADULA_CERAS_LIBARCHIVE).await;
 
     // Development
-    radula_behave_construct_cross(constants::RADULA_CERAS_AUTOCONF).await;
-    radula_behave_construct_cross(constants::RADULA_CERAS_AUTOMAKE).await;
+    // radula_behave_construct_cross(constants::RADULA_CERAS_AUTOCONF).await;
+    // radula_behave_construct_cross(constants::RADULA_CERAS_AUTOMAKE).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_BINUTILS).await;
-    radula_behave_construct_cross(constants::RADULA_CERAS_BYACC).await;
-    radula_behave_construct_cross(constants::RADULA_CERAS_CMAKE).await;
-    radula_behave_construct_cross(constants::RADULA_CERAS_FLEX).await;
+    // radula_behave_construct_cross(constants::RADULA_CERAS_BYACC).await;
+    // radula_behave_construct_cross(constants::RADULA_CERAS_CMAKE).await;
+    // radula_behave_construct_cross(constants::RADULA_CERAS_FLEX).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_GCC).await;
-    radula_behave_construct_cross(constants::RADULA_CERAS_HELP2MAN).await;
-    radula_behave_construct_cross(constants::RADULA_CERAS_LIBTOOL).await;
-    radula_behave_construct_cross(constants::RADULA_CERAS_M4).await;
+    // radula_behave_construct_cross(constants::RADULA_CERAS_HELP2MAN).await;
+    // radula_behave_construct_cross(constants::RADULA_CERAS_LIBTOOL).await;
+    // radula_behave_construct_cross(constants::RADULA_CERAS_M4).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_MAKE).await;
-    radula_behave_construct_cross(constants::RADULA_CERAS_MAWK).await;
-    radula_behave_construct_cross(constants::RADULA_CERAS_PATCH).await;
-    radula_behave_construct_cross(constants::RADULA_CERAS_PKGCONF).await;
-    radula_behave_construct_cross(constants::RADULA_CERAS_PYTHON).await;
-    radula_behave_construct_cross(constants::RADULA_CERAS_SAMURAI).await;
+    // radula_behave_construct_cross(constants::RADULA_CERAS_MAWK).await;
+    // radula_behave_construct_cross(constants::RADULA_CERAS_PATCH).await;
+    // radula_behave_construct_cross(constants::RADULA_CERAS_PKGCONF).await;
+    // radula_behave_construct_cross(constants::RADULA_CERAS_PYTHON).await;
+    // radula_behave_construct_cross(constants::RADULA_CERAS_SAMURAI).await;
 
     // Synchronization
     radula_behave_construct_cross(constants::RADULA_CERAS_RSYNC).await;
@@ -117,6 +121,7 @@ pub async fn radula_behave_bootstrap_cross_construct() -> Result<(), Box<dyn Err
     // Userland
     radula_behave_construct_cross(constants::RADULA_CERAS_BC).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_GREP).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_PLOCATE).await;
 
     // Networking
     radula_behave_construct_cross(constants::RADULA_CERAS_LIBCAP).await;
