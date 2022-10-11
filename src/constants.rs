@@ -348,7 +348,7 @@ pub const RADULA_FILE_CCACHE_CONFIGURATION: &'static str = "ccache.conf";
 pub const RADULA_FILE_CONFIG_GUESS: &'static str = "config.guess";
 
 pub const RADULA_FILE_GLAUCUS_IMG: &'static str = "glaucus.img";
-pub const RADULA_FILE_GLAUCUS_IMG_SIZE: &'static str = "2048M";
+pub const RADULA_FILE_GLAUCUS_IMG_SIZE: &'static str = "1024M";
 
 pub const RADULA_FILE_SYSLINUX_EXTLINUX_CONF: &'static str = "syslinux/extlinux.conf";
 pub const RADULA_FILE_SYSLINUX_MBR_BIN: &'static str = "syslinux/mbr.bin";
