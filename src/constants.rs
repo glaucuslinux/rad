@@ -391,7 +391,7 @@ OPTIONS:
 \td, decyst    \tRemove binary cerata without preserving their cysts
 \th, help      \tDisplay this help message
 \ti, install   \tInstall binary cerata
-\tr, remove    \tRemove binary cerata while preserving their cyst(s)
+\tr, remove    \tRemove binary cerata while preserving their cysts
 \ts, search    \tSearch for binary cerata within the remote repositories
 \tu, upgrade   \tUpgrade binary cerata";
 
@@ -402,13 +402,13 @@ OPTIONS:
 \tc, clean     \tClean up while preserving sources and backups
 \td, distclean \tClean up everything
 \th, help      \tDisplay this help message
-\ti, img       \tCreate an IMG image file of the glaucus system
+\ti, img       \tRelease an IMG image file of the glaucus system
 \tl, list      \tList supported genomes
 \tr, require   \tCheck if host has all required packages
 \ts, release   \tRelease a compressed tarball of the toolchain
 \tt, toolchain \tBootstrap a cross compiler toolchain
 \tx, cross     \tBootstrap a cross compiled glaucus system
-\tz, iso       \tCreate an ISO image file of the glaucus system";
+\tz, iso       \tRelease an ISO image file of the glaucus system";
 
 pub const RADULA_HELP_BEHAVE_BOOTSTRAP_LIST: &'static str = "GENOMES (ARCHITECTURES):
 \taarch64,     \tarm64,       \tarmv8-a
@@ -421,14 +421,14 @@ pub const RADULA_HELP_BEHAVE_ENVENOMATE: &'static str = "USAGE:
 \tradula [ -b | --behave ] [ e | envenomate ] [ OPTIONS ] [ cerata ]
 
 OPTIONS:
-\td, decyst    \tRemove cerata without preserving their cyst(s)
+\td, decyst    \tRemove cerata without preserving their cysts
 \th, help      \tDisplay this help message
 \ti, install   \tInstall cerata from source
-\tr, remove    \tRemove cerata while preserving their cyst(s)
+\tr, remove    \tRemove cerata while preserving their cysts
 \ts, search    \tSearch for cerata within the cerata directory
 \tu, upgrade   \tUpgrade cerata";
 
-pub const RADULA_HELP_VERSION: &'static str = "radula version 1.1.6
+pub const RADULA_HELP_VERSION: &'static str = "radula version 1.2.0
 
 Copyright (c) 2018-2022, Firas Khalil Khana
 Distributed under the terms of the ISC License";
