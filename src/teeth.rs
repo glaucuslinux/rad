@@ -23,12 +23,12 @@ pub fn radula_behave_teeth_environment() -> Result<(), Box<dyn Error>> {
     // Use `mawk` as the default AWK implementation
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_AWK,
-        constants::RADULA_TOOTH_MAWK,
+        constants::RADULA_CERAS_MAWK,
     );
     // Use `byacc` as the default YACC implementation
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_BISON,
-        constants::RADULA_TOOTH_BYACC,
+        constants::RADULA_CERAS_BYACC,
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_CHMOD,
@@ -51,17 +51,17 @@ pub fn radula_behave_teeth_environment() -> Result<(), Box<dyn Error>> {
     // Use `flex` as the default LEX implementation (will be replaced by `reflex` in the future)
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_FLEX,
-        constants::RADULA_TOOTH_FLEX,
+        constants::RADULA_CERAS_FLEX,
     );
     // Use `mawk` as the default AWK implementation
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_GAWK,
-        constants::RADULA_TOOTH_MAWK,
+        constants::RADULA_CERAS_MAWK,
     );
     // Use `flex` as the default LEX implementation (will be replaced by `reflex` in the future)
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_LEX,
-        constants::RADULA_TOOTH_FLEX,
+        constants::RADULA_CERAS_FLEX,
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_LN,
@@ -75,7 +75,7 @@ pub fn radula_behave_teeth_environment() -> Result<(), Box<dyn Error>> {
     // `make` and its flags
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_MAKE,
-        constants::RADULA_TOOTH_MAKE,
+        constants::RADULA_CERAS_MAKE,
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_MAKEFLAGS,
@@ -111,7 +111,7 @@ pub fn radula_behave_teeth_environment() -> Result<(), Box<dyn Error>> {
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_PATCH,
         [
-            constants::RADULA_TOOTH_PATCH,
+            constants::RADULA_CERAS_PATCH,
             " ",
             constants::RADULA_TOOTH_PATCH_FLAGS,
         ]
@@ -120,7 +120,7 @@ pub fn radula_behave_teeth_environment() -> Result<(), Box<dyn Error>> {
     // Use `pkgconf` as the default PKG_CONFIG implementation
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_PKG_CONFIG,
-        constants::RADULA_TOOTH_PKGCONF,
+        constants::RADULA_CERAS_PKGCONF,
     );
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_RM,
@@ -134,7 +134,7 @@ pub fn radula_behave_teeth_environment() -> Result<(), Box<dyn Error>> {
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_RSYNC,
         [
-            constants::RADULA_TOOTH_RSYNC,
+            constants::RADULA_CERAS_RSYNC,
             " ",
             constants::RADULA_TOOTH_RSYNC_FLAGS,
         ]
@@ -143,7 +143,7 @@ pub fn radula_behave_teeth_environment() -> Result<(), Box<dyn Error>> {
     // Use `byacc` as the default YACC implementation
     env::set_var(
         constants::RADULA_ENVIRONMENT_TOOTH_YACC,
-        constants::RADULA_TOOTH_BYACC,
+        constants::RADULA_CERAS_BYACC,
     );
 
     Ok(())

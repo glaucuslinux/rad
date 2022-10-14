@@ -3,8 +3,7 @@
 
 use std::env;
 use std::error::Error;
-use std::path::{Path, PathBuf};
-use std::process::Stdio;
+use std::path::Path;
 use std::string::String;
 
 use super::clean;
@@ -14,7 +13,7 @@ use super::construct;
 use super::rsync;
 
 use chrono::Utc;
-use tokio::{fs, process::Command};
+use tokio::fs;
 use walkdir::WalkDir;
 
 //
@@ -189,72 +188,6 @@ pub async fn radula_behave_bootstrap_toolchain_release() -> Result<(), Box<dyn E
                 .unwrap_or_default()
         })
         .for_each(|e| std::fs::remove_file(e.path()).unwrap());
-
-    let radula_behave_bootstrap_toolchain_strip_libraries = |path: PathBuf| async move {
-        Command::new(constants::RADULA_TOOTH_SHELL)
-            .args(&[
-                constants::RADULA_TOOTH_SHELL_FLAGS,
-                &[
-                    constants::RADULA_CROSS_STRIP,
-                    &format!(" -gv {}/*", path.display()),
-                ]
-                .concat(),
-            ])
-            .stderr(Stdio::null())
-            .stdout(Stdio::null())
-            .spawn()
-            .unwrap()
-            .wait()
-            .await
-            .unwrap();
-    };
-
-    radula_behave_bootstrap_toolchain_strip_libraries(
-        Path::new(path)
-            .join(constants::RADULA_DIRECTORY_CROSS)
-            .join(constants::RADULA_PATH_USR)
-            .join(constants::RADULA_PATH_LIB),
-    )
-    .await;
-    radula_behave_bootstrap_toolchain_strip_libraries(
-        Path::new(path)
-            .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
-            .join(constants::RADULA_PATH_LIB),
-    )
-    .await;
-
-    let radula_behave_bootstrap_toolchain_strip_binaries = |path: PathBuf| async move {
-        Command::new(constants::RADULA_TOOTH_SHELL)
-            .args(&[
-                constants::RADULA_TOOTH_SHELL_FLAGS,
-                &[
-                    constants::RADULA_CROSS_STRIP,
-                    &format!(" --strip-unneeded -v {}/*", path.display()),
-                ]
-                .concat(),
-            ])
-            .stderr(Stdio::null())
-            .stdout(Stdio::null())
-            .spawn()
-            .unwrap()
-            .wait()
-            .await
-            .unwrap();
-    };
-
-    radula_behave_bootstrap_toolchain_strip_binaries(
-        Path::new(path)
-            .join(constants::RADULA_DIRECTORY_CROSS)
-            .join(constants::RADULA_PATH_USR)
-            .join(constants::RADULA_PATH_BIN),
-    )
-    .await;
-    radula_behave_bootstrap_toolchain_strip_binaries(
-        Path::new(path)
-            .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
-            .join(constants::RADULA_PATH_BIN),
-    )
-    .await;
 
     // Remove toolchain manual pages
     clean::radula_behave_remove_dir_all_force(

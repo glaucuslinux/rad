@@ -127,7 +127,6 @@ pub async fn radula_options() -> Result<(), Box<dyn Error>> {
 
                             cross::radula_behave_bootstrap_cross_prepare().await?;
                             cross::radula_behave_bootstrap_cross_construct().await?;
-                            //cross::radula_behave_bootstrap_cross_strip()?;
 
                             println!("cross complete");
                         }

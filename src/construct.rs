@@ -62,7 +62,7 @@ pub async fn radula_behave_construct(
     println!("{} construct", "::".bold());
 
     // The `.wait()` is needed to allow `Ctrl + C` to work...
-    Command::new(constants::RADULA_TOOTH_SHELL)
+    Command::new(constants::RADULA_CERAS_DASH)
         .args(&[
             constants::RADULA_TOOTH_SHELL_FLAGS,
             &format!(

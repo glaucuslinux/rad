@@ -16,7 +16,7 @@ use tokio::{fs, process::Command};
 pub async fn radula_behave_bootstrap_cross_img() -> Result<(), Box<dyn Error>> {
     // A custom rsync function to prevent permission errors (`-S` is not used)
     let radula_behave_rsync = |source: PathBuf, destination: PathBuf| async move {
-        Command::new(constants::RADULA_TOOTH_RSYNC)
+        Command::new(constants::RADULA_CERAS_RSYNC)
             .args(&[
                 "-vaHAXx",
                 source.to_str().unwrap_or_default(),

@@ -4,8 +4,6 @@
 use std::env;
 use std::error::Error;
 use std::path::Path;
-use std::process::{Command, Stdio};
-use std::string::String;
 
 use super::clean;
 use super::constants;
@@ -108,7 +106,7 @@ pub async fn radula_behave_bootstrap_cross_construct() -> Result<(), Box<dyn Err
 
     // Shell
     radula_behave_construct_cross(constants::RADULA_CERAS_NETBSD_CURSES).await;
-    radula_behave_construct_cross(constants::RADULA_CERAS_OKSH).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_BASH).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_DASH).await;
 
     // Editors & Pagers
@@ -327,84 +325,6 @@ pub async fn radula_behave_bootstrap_cross_prepare() -> Result<(), Box<dyn Error
         constants::RADULA_ENVIRONMENT_FILE_CROSS_LOG,
     )?)
     .await?;
-
-    Ok(())
-}
-
-// This function is not a mess anymore but it still breaks some libraries
-fn radula_behave_bootstrap_cross_strip() -> Result<(), Box<dyn Error>> {
-    Command::new(constants::RADULA_TOOTH_FIND)
-        .args(&[
-            Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS)?)
-                .join(constants::RADULA_PATH_ETC)
-                .to_str()
-                .unwrap_or_default(),
-            "-type",
-            "d",
-            "-empty",
-            "-delete",
-        ])
-        .spawn()?
-        .wait()?;
-
-    let x = &String::from(
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS)?)
-            .join(constants::RADULA_PATH_USR)
-            .to_str()
-            .unwrap_or_default(),
-    );
-
-    Command::new(constants::RADULA_TOOTH_SHELL)
-        .args(&[
-            constants::RADULA_TOOTH_SHELL_FLAGS,
-            &[
-                constants::RADULA_TOOTH_FIND,
-                " ",
-                x,
-                " -name *.a -type f -exec ",
-                &[constants::RADULA_CROSS_STRIP, " -gv {} \\;"].concat(),
-            ]
-            .concat(),
-        ])
-        .stdout(Stdio::null())
-        .spawn()?
-        .wait()?;
-    Command::new(constants::RADULA_TOOTH_SHELL)
-        .args(&[
-            constants::RADULA_TOOTH_SHELL_FLAGS,
-            &[
-                constants::RADULA_TOOTH_FIND,
-                " ",
-                x,
-                " \\( -name *.so* -a ! -name *dbg \\) -type f -exec ",
-                &[constants::RADULA_CROSS_STRIP, " --strip-unneeded -v {} \\;"].concat(),
-            ]
-            .concat(),
-        ])
-        .stderr(Stdio::null())
-        .stdout(Stdio::null())
-        .spawn()?
-        .wait()?;
-    Command::new(constants::RADULA_TOOTH_SHELL)
-        .args(&[
-            constants::RADULA_TOOTH_SHELL_FLAGS,
-            &[
-                constants::RADULA_TOOTH_FIND,
-                " ",
-                x,
-                " -type f -exec ",
-                &[constants::RADULA_CROSS_STRIP, " -sv {} \\;"].concat(),
-            ]
-            .concat(),
-        ])
-        .stderr(Stdio::null())
-        .stdout(Stdio::null())
-        .spawn()?
-        .wait()?;
-    Command::new(constants::RADULA_TOOTH_FIND)
-        .args(&[x, "-name", "*.la", "-delete"])
-        .spawn()?
-        .wait()?;
 
     Ok(())
 }

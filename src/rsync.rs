@@ -12,7 +12,7 @@ use tokio::process::Command;
 //
 
 pub async fn radula_behave_rsync(source: &str, destination: &str) -> Result<(), Box<dyn Error>> {
-    Command::new(constants::RADULA_TOOTH_RSYNC)
+    Command::new(constants::RADULA_CERAS_RSYNC)
         .args(&[
             constants::RADULA_TOOTH_RSYNC_FLAGS,
             source,

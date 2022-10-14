@@ -76,6 +76,8 @@ pub const RADULA_CERAS_ATTR: &'static str = "attr";
 pub const RADULA_CERAS_AUTOCONF: &'static str = "autoconf";
 pub const RADULA_CERAS_AUTOMAKE: &'static str = "automake";
 
+// `bash` is the default shell for interactive use
+pub const RADULA_CERAS_BASH: &'static str = "bash";
 pub const RADULA_CERAS_BC: &'static str = "bc";
 pub const RADULA_CERAS_BINUTILS: &'static str = "binutils";
 pub const RADULA_CERAS_BYACC: &'static str = "byacc";
@@ -86,6 +88,7 @@ pub const RADULA_CERAS_CERATA: &'static str = "cerata";
 pub const RADULA_CERAS_CMAKE: &'static str = "cmake";
 pub const RADULA_CERAS_CURL: &'static str = "curl";
 
+// `dash` is the default shell for running scripts
 pub const RADULA_CERAS_DASH: &'static str = "dash";
 pub const RADULA_CERAS_DIFFUTILS: &'static str = "diffutils";
 
@@ -154,8 +157,6 @@ pub const RADULA_CERAS_MUSL_UTILS: &'static str = "musl-utils";
 
 pub const RADULA_CERAS_NETBSD_CURSES: &'static str = "netbsd-curses";
 pub const RADULA_CERAS_NSSS: &'static str = "nsss";
-
-pub const RADULA_CERAS_OKSH: &'static str = "oksh";
 
 pub const RADULA_CERAS_PATCH: &'static str = "patch";
 pub const RADULA_CERAS_PCIUTILS: &'static str = "pciutils";
@@ -482,12 +483,6 @@ pub const RADULA_PATH_UTMPS: &'static str = "s6/current/run-image/utmps";
 pub const RADULA_TOOTH_AUTORECONF: &'static str = "autoreconf";
 pub const RADULA_TOOTH_AUTORECONF_FLAGS: &'static str = "-vfis";
 
-// `bash` is only required for building some packages, and isn't actually used
-// for running shell scripts (we're using `dash` for that)
-pub const RADULA_TOOTH_BASH: &'static str = "bash";
-
-pub const RADULA_TOOTH_BYACC: &'static str = "byacc";
-
 // Both `chmod` and `chown` use the same flags
 pub const RADULA_TOOTH_CHMOD: &'static str = "chmod";
 pub const RADULA_TOOTH_CHMOD_CHOWN_FLAGS: &'static str = "-Rv";
@@ -502,8 +497,6 @@ pub const RADULA_TOOTH_EXTLINUX_FLAGS: &'static str = "--install";
 
 pub const RADULA_TOOTH_FIND: &'static str = "find";
 
-pub const RADULA_TOOTH_FLEX: &'static str = "flex";
-
 pub const RADULA_TOOTH_GIT: &'static str = "git";
 
 pub const RADULA_TOOTH_LN: &'static str = "ln";
@@ -511,10 +504,7 @@ pub const RADULA_TOOTH_LN_FLAGS: &'static str = "-fnsv";
 
 pub const RADULA_TOOTH_LOSETUP: &'static str = "losetup";
 
-pub const RADULA_TOOTH_MAKE: &'static str = "make";
 pub const RADULA_TOOTH_MAKEFLAGS: &'static str = "-j4 -O";
-
-pub const RADULA_TOOTH_MAWK: &'static str = "mawk";
 
 // Full path is being used here to not overlap with the install() function in stage files
 pub const RADULA_TOOTH_MKDIR: &'static str = "/usr/bin/install";
@@ -535,21 +525,15 @@ pub const RADULA_TOOTH_PARTED_FLAGS: &'static str = "-s";
 
 pub const RADULA_TOOTH_PARTX: &'static str = "partx";
 
-pub const RADULA_TOOTH_PATCH: &'static str = "patch";
 pub const RADULA_TOOTH_PATCH_FLAGS: &'static str = "--verbose";
-
-pub const RADULA_TOOTH_PKGCONF: &'static str = "pkgconf";
 
 pub const RADULA_TOOTH_QEMU_IMG: &'static str = "qemu-img";
 
 pub const RADULA_TOOTH_RM: &'static str = "rm";
 pub const RADULA_TOOTH_RM_FLAGS: &'static str = "-frv";
 
-pub const RADULA_TOOTH_RSYNC: &'static str = "rsync";
 pub const RADULA_TOOTH_RSYNC_FLAGS: &'static str = "-vaHAXSx";
 
-// The main shell used for running shell scripts
-pub const RADULA_TOOTH_SHELL: &'static str = "dash";
 pub const RADULA_TOOTH_SHELL_FLAGS: &'static str = "-c";
 
 pub const RADULA_TOOTH_UMOUNT: &'static str = "umount";
