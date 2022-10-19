@@ -76,7 +76,6 @@ pub const RADULA_CERAS_ATTR: &'static str = "attr";
 pub const RADULA_CERAS_AUTOCONF: &'static str = "autoconf";
 pub const RADULA_CERAS_AUTOMAKE: &'static str = "automake";
 
-// `bash` is the default shell for interactive use
 pub const RADULA_CERAS_BASH: &'static str = "bash";
 pub const RADULA_CERAS_BC: &'static str = "bc";
 pub const RADULA_CERAS_BINUTILS: &'static str = "binutils";
@@ -195,6 +194,9 @@ pub const RADULA_CERAS_WGET2: &'static str = "wget2";
 
 pub const RADULA_CERAS_XXHASH: &'static str = "xxhash";
 pub const RADULA_CERAS_XZ: &'static str = "xz";
+
+// `yash` is the default shell for interactive use
+pub const RADULA_CERAS_YASH: &'static str = "yash";
 
 pub const RADULA_CERAS_ZLIB_NG: &'static str = "zlib-ng";
 pub const RADULA_CERAS_ZSTD: &'static str = "zstd";

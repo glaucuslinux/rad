@@ -84,34 +84,32 @@ pub async fn radula_behave_bootstrap_cross_construct() -> Result<(), Box<dyn Err
     radula_behave_construct_cross(constants::RADULA_CERAS_LIBARCHIVE).await;
 
     // Development
-    // radula_behave_construct_cross(constants::RADULA_CERAS_AUTOCONF).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_AUTOMAKE).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_AUTOCONF).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_AUTOMAKE).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_BINUTILS).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_BYACC).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_CMAKE).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_CMAKE).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_FLEX).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_GCC).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_HELP2MAN).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_LIBTOOL).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_HELP2MAN).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_LIBTOOL).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_M4).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_MAKE).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_MAWK).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_PATCH).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_PKGCONF).await;
-    // radula_behave_construct_cross(constants::RADULA_CERAS_PYTHON).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_PYTHON).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_SAMURAI).await;
 
     // Synchronization
     radula_behave_construct_cross(constants::RADULA_CERAS_RSYNC).await;
 
-    // Shell
+    // Editors, Pagers and Shells
     radula_behave_construct_cross(constants::RADULA_CERAS_NETBSD_CURSES).await;
-    radula_behave_construct_cross(constants::RADULA_CERAS_BASH).await;
-    radula_behave_construct_cross(constants::RADULA_CERAS_DASH).await;
-
-    // Editors & Pagers
     radula_behave_construct_cross(constants::RADULA_CERAS_LIBEDIT).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_PCRE2).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_DASH).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_YASH).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_LESS).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_VIM).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_MANDOC).await;
