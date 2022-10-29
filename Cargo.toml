@@ -16,14 +16,14 @@ colored = "2.0.0"
 flate2 = { version = "1.0.24", default-features = false, features = [
     "zlib-ng-compat",
 ] }
-futures-util = "0.3.24"
+futures-util = "0.3.25"
 git2 = { version = "0.15.0", features = ["zlib-ng-compat"] }
 indicatif = { git = "https://github.com/mitsuhiko/indicatif", features = [
     "improved_unicode",
 ] }
 num_cpus = "1.13.1"
 reqwest = { version = "0.11.12", features = ["stream"] }
-serde = { version = "1.0.145", features = ["derive"] }
+serde = { version = "1.0.147", features = ["derive"] }
 tar = "0.4.38"
 tokio = { version = "1.21.2", features = [
     "fs",
