@@ -93,9 +93,9 @@ pub async fn radula_behave_bootstrap_cross_construct() -> Result<(), Box<dyn Err
     radula_behave_construct_cross(constants::RADULA_CERAS_GCC).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_HELP2MAN).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_LIBTOOL).await;
-    radula_behave_construct_cross(constants::RADULA_CERAS_M4).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_MAKE).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_MAWK).await;
+    radula_behave_construct_cross(constants::RADULA_CERAS_OM4).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_PATCH).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_PKGCONF).await;
     radula_behave_construct_cross(constants::RADULA_CERAS_PYTHON).await;

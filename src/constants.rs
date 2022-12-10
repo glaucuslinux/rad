@@ -139,7 +139,6 @@ pub const RADULA_CERAS_LKSH: &'static str = "lksh";
 pub const RADULA_CERAS_LZ4: &'static str = "lz4";
 pub const RADULA_CERAS_LZLIB: &'static str = "lzlib";
 
-pub const RADULA_CERAS_M4: &'static str = "m4";
 pub const RADULA_CERAS_MAKE: &'static str = "make";
 pub const RADULA_CERAS_MANDOC: &'static str = "mandoc";
 pub const RADULA_CERAS_MAWK: &'static str = "mawk";
@@ -156,6 +155,8 @@ pub const RADULA_CERAS_MUSL_UTILS: &'static str = "musl-utils";
 
 pub const RADULA_CERAS_NETBSD_CURSES: &'static str = "netbsd-curses";
 pub const RADULA_CERAS_NSSS: &'static str = "nsss";
+
+pub const RADULA_CERAS_OM4: &'static str = "om4";
 
 pub const RADULA_CERAS_PATCH: &'static str = "patch";
 pub const RADULA_CERAS_PCIUTILS: &'static str = "pciutils";
