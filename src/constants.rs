@@ -22,29 +22,6 @@ pub const RADULA_ARCHITECTURE_AARCH64_GCOMPAT: &'static str = ".so.1";
 pub const RADULA_ARCHITECTURE_AARCH64_LINUX: &'static str = "arm64";
 pub const RADULA_ARCHITECTURE_AARCH64_LINUX_IMAGE: &'static str = "arch/arm64/boot/Image";
 
-// armv6zk
-pub const RADULA_ARCHITECTURE_ARMV6ZK: &'static str = "armv6zk";
-pub const RADULA_ARCHITECTURE_ARMV6ZK_FLAGS: &'static str = "-mabi=aapcs-linux -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -mcpu=arm1176jzf-s -mfpu=vfpv2 -mtls-dialect=gnu2";
-pub const RADULA_ARCHITECTURE_ARMV6ZK_GCC_CONFIGURATION: &'static str = "--with-arch=armv6zk --with-tune=arm1176jzf-s --with-abi=aapcs-linux --with-fpu=vfpv2 --with-float=hard";
-pub const RADULA_ARCHITECTURE_ARMV6ZK_GCOMPAT: &'static str = ".so.3";
-pub const RADULA_ARCHITECTURE_ARMV6ZK_LINUX: &'static str = "arm";
-pub const RADULA_ARCHITECTURE_ARMV6ZK_LINUX_CONFIGURATION: &'static str = "bcm2835_";
-pub const RADULA_ARCHITECTURE_ARMV6ZK_LINUX_IMAGE: &'static str = "arch/arm/boot/zImage";
-pub const RADULA_ARCHITECTURE_ARMV6ZK_MUSL_LINKER: &'static str = "hf";
-pub const RADULA_ARCHITECTURE_ARMV6ZK_TUPLE_TARGET: &'static str = "eabihf";
-
-// i686
-pub const RADULA_ARCHITECTURE_I686: &'static str = "i686";
-pub const RADULA_ARCHITECTURE_I686_FLAGS: &'static str =
-    "-march=i686 -mtune=generic -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2";
-pub const RADULA_ARCHITECTURE_I686_GCC_CONFIGURATION: &'static str =
-    "--with-arch=i686 --with-tune=generic";
-pub const RADULA_ARCHITECTURE_I686_GCOMPAT: &'static str = ".so.2";
-pub const RADULA_ARCHITECTURE_I686_LINUX: &'static str = "i386";
-pub const RADULA_ARCHITECTURE_I686_LINUX_CONFIGURATION: &'static str = "i386_";
-pub const RADULA_ARCHITECTURE_I686_LINUX_IMAGE: &'static str = "arch/x86/boot/bzImage";
-pub const RADULA_ARCHITECTURE_I686_UCONTEXT: &'static str = "x86";
-
 // riscv64
 pub const RADULA_ARCHITECTURE_RISCV64: &'static str = "riscv64";
 pub const RADULA_ARCHITECTURE_RISCV64_CERATA: &'static str = "rv64gc";
@@ -62,8 +39,10 @@ pub const RADULA_ARCHITECTURE_X86_64_V3_FLAGS: &'static str =
     "-march=x86-64-v3 -mtune=generic -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2";
 pub const RADULA_ARCHITECTURE_X86_64_V3_GCC_CONFIGURATION: &'static str =
     "--with-arch=x86-64-v3 --with-tune=generic";
+pub const RADULA_ARCHITECTURE_X86_64_V3_GCOMPAT: &'static str = ".so.2";
 pub const RADULA_ARCHITECTURE_X86_64_V3_LINUX: &'static str = "x86_64";
 pub const RADULA_ARCHITECTURE_X86_64_V3_LINUX_CONFIGURATION: &'static str = "x86_64_";
+pub const RADULA_ARCHITECTURE_X86_64_V3_LINUX_IMAGE: &'static str = "arch/x86/boot/bzImage";
 
 //
 // Cerata
@@ -416,8 +395,6 @@ OPTIONS:
 
 pub const RADULA_HELP_BEHAVE_BOOTSTRAP_LIST: &'static str = "GENOMES (ARCHITECTURES):
 \taarch64,     \tarm64,       \tarmv8-a
-\tarm,         \tarmv6zk,     \tbcm2835
-\ti386,        \ti686,        \tx86
 \triscv,       \triscv64,     \trv64gc
 \tx86-64,      \tx86-64-v3,   \tx86_64     \tx86_64-v3    \tx86_64_v3";
 
