@@ -170,6 +170,7 @@ pub async fn radula_behave_bootstrap_toolchain_release() -> Result<(), Box<dyn E
     clean::radula_behave_remove_dir_all_force(
         Path::new(path)
             .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
+            .join(constants::RADULA_PATH_USR)
             .join(constants::RADULA_PATH_LIB64)
             .to_str()
             .unwrap_or_default(),
@@ -189,10 +190,21 @@ pub async fn radula_behave_bootstrap_toolchain_release() -> Result<(), Box<dyn E
         })
         .for_each(|e| std::fs::remove_file(e.path()).unwrap());
 
-    // Remove toolchain manual pages
+    // Remove toolchain documentation
     clean::radula_behave_remove_dir_all_force(
         Path::new(path)
             .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
+            .join(constants::RADULA_PATH_USR)
+            .join(constants::RADULA_PATH_SHARE)
+            .join(constants::RADULA_PATH_DOC)
+            .to_str()
+            .unwrap_or_default(),
+    )
+    .await?;
+    clean::radula_behave_remove_dir_all_force(
+        Path::new(path)
+            .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
+            .join(constants::RADULA_PATH_USR)
             .join(constants::RADULA_PATH_SHARE)
             .join(constants::RADULA_PATH_INFO)
             .to_str()
@@ -202,6 +214,7 @@ pub async fn radula_behave_bootstrap_toolchain_release() -> Result<(), Box<dyn E
     clean::radula_behave_remove_dir_all_force(
         Path::new(path)
             .join(constants::RADULA_DIRECTORY_TOOLCHAIN)
+            .join(constants::RADULA_PATH_USR)
             .join(constants::RADULA_PATH_SHARE)
             .join(constants::RADULA_PATH_MAN)
             .to_str()

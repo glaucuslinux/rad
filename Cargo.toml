@@ -21,9 +21,9 @@ git2 = { version = "0.15.0", features = ["zlib-ng-compat"] }
 indicatif = { git = "https://github.com/mitsuhiko/indicatif", features = [
     "improved_unicode",
 ] }
-num_cpus = "1.14.0"
+num_cpus = "1.15.0"
 reqwest = { version = "0.11.13", features = ["stream"] }
-serde = { version = "1.0.150", features = ["derive"] }
+serde = { version = "1.0.152", features = ["derive"] }
 tar = "0.4.38"
 tokio = { version = "1.23.0", features = [
     "fs",
@@ -36,7 +36,9 @@ toml = { version = "0.5.10", features = ["preserve_order"] }
 walkdir = "2.3.2"
 xxhash-rust = { version = "0.8.6", features = ["xxh3"] }
 xz2 = { git = "https://github.com/alexcrichton/xz2-rs", features = ["tokio"] }
-zstd = { version = "0.12.1+zstd.1.5.2", default-features = false, features = ["zstdmt"] }
+zstd = { version = "0.12.1+zstd.1.5.2", default-features = false, features = [
+    "zstdmt",
+] }
 
 [profile.release]
 opt-level = 3

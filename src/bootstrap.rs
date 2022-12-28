@@ -53,6 +53,7 @@ pub async fn radula_behave_bootstrap_environment() -> Result<(), Box<dyn Error>>
             [Path::new(&env::var(
                 constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN,
             )?)
+            .join(constants::RADULA_PATH_USR)
             .join(constants::RADULA_PATH_BIN)]
             .into_iter()
             .chain(env::split_paths(&env::var(
@@ -130,7 +131,7 @@ async fn test_radula_behave_bootstrap_environment() -> Result<(), Box<dyn Error>
         env::split_paths(&env::var(constants::RADULA_ENVIRONMENT_PATH)?)
             .next()
             .unwrap_or_default()
-            .ends_with("toolchain/bin")
+            .ends_with("toolchain/usr/bin")
     );
 
     Ok(())

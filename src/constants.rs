@@ -18,7 +18,6 @@ pub const RADULA_ARCHITECTURE_AARCH64_CERATA: &'static str = "armv8-a";
 pub const RADULA_ARCHITECTURE_AARCH64_FLAGS: &'static str =
     "-mabi=lp64 -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 -march=armv8-a -mtune=generic";
 pub const RADULA_ARCHITECTURE_AARCH64_GCC_CONFIGURATION: &'static str = "--with-arch=armv8-a --with-abi=lp64 --enable-fix-cortex-a53-835769 --enable-fix-cortex-a53-843419";
-pub const RADULA_ARCHITECTURE_AARCH64_GCOMPAT: &'static str = ".so.1";
 pub const RADULA_ARCHITECTURE_AARCH64_LINUX: &'static str = "arm64";
 pub const RADULA_ARCHITECTURE_AARCH64_LINUX_IMAGE: &'static str = "arch/arm64/boot/Image";
 
@@ -29,7 +28,6 @@ pub const RADULA_ARCHITECTURE_RISCV64_FLAGS: &'static str =
     "-mabi=lp64d -march=rv64gc -mcpu=sifive-u74 -mtune=sifive-7-series -mcmodel=medany";
 pub const RADULA_ARCHITECTURE_RISCV64_GCC_CONFIGURATION: &'static str =
     "--with-cpu=sifive-u74 --with-arch=rv64gc --with-tune=sifive-7-series --with-abi=lp64d";
-pub const RADULA_ARCHITECTURE_RISCV64_GCOMPAT: &'static str = "-lp64d.so.1";
 pub const RADULA_ARCHITECTURE_RISCV64_LINUX: &'static str = "riscv";
 pub const RADULA_ARCHITECTURE_RISCV64_LINUX_IMAGE: &'static str = "arch/riscv/boot/Image";
 
@@ -39,7 +37,6 @@ pub const RADULA_ARCHITECTURE_X86_64_V3_FLAGS: &'static str =
     "-march=x86-64-v3 -mtune=generic -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2";
 pub const RADULA_ARCHITECTURE_X86_64_V3_GCC_CONFIGURATION: &'static str =
     "--with-arch=x86-64-v3 --with-tune=generic";
-pub const RADULA_ARCHITECTURE_X86_64_V3_GCOMPAT: &'static str = ".so.2";
 pub const RADULA_ARCHITECTURE_X86_64_V3_LINUX: &'static str = "x86_64";
 pub const RADULA_ARCHITECTURE_X86_64_V3_LINUX_CONFIGURATION: &'static str = "x86_64_";
 pub const RADULA_ARCHITECTURE_X86_64_V3_LINUX_IMAGE: &'static str = "arch/x86/boot/bzImage";
@@ -81,7 +78,6 @@ pub const RADULA_CERAS_FINDUTILS: &'static str = "findutils";
 pub const RADULA_CERAS_FLEX: &'static str = "flex";
 
 pub const RADULA_CERAS_GCC: &'static str = "gcc";
-pub const RADULA_CERAS_GCOMPAT: &'static str = "gcompat";
 pub const RADULA_CERAS_GETTEXT_TINY: &'static str = "gettext-tiny";
 pub const RADULA_CERAS_GMP: &'static str = "gmp";
 pub const RADULA_CERAS_GREP: &'static str = "grep";
@@ -224,7 +220,6 @@ pub const RADULA_ENVIRONMENT_ARCHITECTURE: &'static str = "ARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_CERATA: &'static str = "CARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_FLAGS: &'static str = "FARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION: &'static str = "GCARCH";
-pub const RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT: &'static str = "GARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_LINUX: &'static str = "LARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_CONFIGURATION: &'static str = "LCARCH";
 pub const RADULA_ENVIRONMENT_ARCHITECTURE_LINUX_IMAGE: &'static str = "LIARCH";
@@ -425,6 +420,8 @@ pub const RADULA_PATH_BOOT: &'static str = "boot";
 // Default `ccache` directories on glaucus, Arch and Fedora
 pub const RADULA_PATH_CCACHE: &'static str =
     "/usr/lib/ccache:/usr/lib/ccache/bin:/usr/lib64/ccache";
+
+pub const RADULA_PATH_DOC: &'static str = "doc";
 
 pub const RADULA_PATH_ETC: &'static str = "etc";
 

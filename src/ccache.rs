@@ -39,6 +39,7 @@ pub async fn radula_behave_bootstrap_cross_ccache() -> Result<(), Box<dyn Error>
             [Path::new(&env::var(
                 constants::RADULA_ENVIRONMENT_DIRECTORY_TOOLCHAIN,
             )?)
+            .join(constants::RADULA_PATH_USR)
             .join(constants::RADULA_PATH_LIB)
             .join(constants::RADULA_CERAS_CCACHE)]
             .into_iter()
@@ -109,13 +110,13 @@ async fn test_radula_behave_bootstrap_cross_ccache() -> Result<(), Box<dyn Error
         env::split_paths(&env::var(constants::RADULA_ENVIRONMENT_PATH)?)
             .nth(0)
             .unwrap()
-            .ends_with("toolchain/lib/ccache")
+            .ends_with("toolchain/usr/lib/ccache")
     );
 
     Ok(())
 }
 
-// Expected to have an additional "toolchain/lib/ccache" before "toolchain/bin"
+// Expected to have an additional "toolchain/usr/lib/ccache" before "toolchain/usr/bin"
 // as a side-effect for using async/await (which is technically wrong but we'll
 // let it slide because that path will be empty until ccache, the last toolchain
 // package, is built...

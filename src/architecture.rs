@@ -71,15 +71,6 @@ pub async fn radula_behave_architecture_environment(
                 constants::RADULA_ARCHITECTURE_AARCH64_GCC_CONFIGURATION,
             );
             env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT,
-                [
-                    "-",
-                    constants::RADULA_ARCHITECTURE_AARCH64,
-                    constants::RADULA_ARCHITECTURE_AARCH64_GCOMPAT,
-                ]
-                .concat(),
-            );
-            env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX,
                 constants::RADULA_ARCHITECTURE_AARCH64_LINUX,
             );
@@ -122,15 +113,6 @@ pub async fn radula_behave_architecture_environment(
                 constants::RADULA_ARCHITECTURE_RISCV64_GCC_CONFIGURATION,
             );
             env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT,
-                [
-                    "-",
-                    constants::RADULA_ARCHITECTURE_RISCV64,
-                    constants::RADULA_ARCHITECTURE_RISCV64_GCOMPAT,
-                ]
-                .concat(),
-            );
-            env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX,
                 constants::RADULA_ARCHITECTURE_RISCV64_LINUX,
             );
@@ -163,15 +145,6 @@ pub async fn radula_behave_architecture_environment(
             env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION,
                 constants::RADULA_ARCHITECTURE_X86_64_V3_GCC_CONFIGURATION,
-            );
-            env::set_var(
-                constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT,
-                [
-                    "-",
-                    constants::RADULA_ARCHITECTURE_X86_64_V3,
-                    constants::RADULA_ARCHITECTURE_X86_64_V3_GCOMPAT,
-                ]
-                .concat(),
             );
             env::set_var(
                 constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX,
@@ -255,10 +228,6 @@ async fn test_radula_behave_architecture_environment_aarch64() -> Result<(), Box
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION)?
     );
     println!(
-        "GARCH  :: {}",
-        env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT)?
-    );
-    println!(
         "LARCH  :: {}",
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX)?
     );
@@ -307,10 +276,6 @@ async fn test_radula_behave_architecture_environment_aarch64() -> Result<(), Box
     assert_eq!(
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION)?,
         "--with-arch=armv8-a --with-abi=lp64 --enable-fix-cortex-a53-835769 --enable-fix-cortex-a53-843419"
-    );
-    assert_eq!(
-        env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT)?,
-        "-aarch64.so.1"
     );
     assert_eq!(
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX)?,
@@ -365,10 +330,6 @@ async fn test_radula_behave_architecture_environment_riscv64() -> Result<(), Box
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION)?
     );
     println!(
-        "GARCH  :: {}",
-        env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT)?
-    );
-    println!(
         "LARCH  :: {}",
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX)?
     );
@@ -412,10 +373,6 @@ async fn test_radula_behave_architecture_environment_riscv64() -> Result<(), Box
     assert_eq!(
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION)?,
         "--with-cpu=sifive-u74 --with-arch=rv64gc --with-tune=sifive-7-series --with-abi=lp64d"
-    );
-    assert_eq!(
-        env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT)?,
-        "-riscv64-lp64d.so.1"
     );
     assert_eq!(
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX)?,
@@ -470,10 +427,6 @@ async fn test_radula_behave_architecture_environment_x86_64_v3() -> Result<(), B
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION)?
     );
     println!(
-        "GARCH  :: {}",
-        env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT)?
-    );
-    println!(
         "LARCH  :: {}",
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX)?
     );
@@ -517,10 +470,6 @@ async fn test_radula_behave_architecture_environment_x86_64_v3() -> Result<(), B
     assert_eq!(
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCC_CONFIGURATION)?,
         "--with-arch=x86-64-v3 --with-tune=generic"
-    );
-    assert_eq!(
-        env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_GCOMPAT)?,
-        "-x86-64.so.2"
     );
     assert_eq!(
         env::var(constants::RADULA_ENVIRONMENT_ARCHITECTURE_LINUX)?,
