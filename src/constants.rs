@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2022, Firas Khalil Khana
+// Copyright (c) 2018-2023, Firas Khalil Khana
 // Distributed under the terms of the ISC License
 
 // * All constants are prefixed with `RADULA_`
@@ -406,7 +406,7 @@ OPTIONS:
 
 pub const RADULA_HELP_VERSION: &'static str = "radula version 1.2.0
 
-Copyright (c) 2018-2022, Firas Khalil Khana
+Copyright (c) 2018-2023, Firas Khalil Khana
 Distributed under the terms of the ISC License";
 
 //
