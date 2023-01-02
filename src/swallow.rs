@@ -40,6 +40,7 @@ pub async fn radula_behave_clone(
 // Asynchronously download source tarballs
 pub async fn radula_behave_download(
     url: Url,
+    path: PathBuf,
     m: Arc<MultiProgress>,
 ) -> Result<(), Box<dyn Error + Send + Sync>> {
     let client = Client::new();
@@ -57,14 +58,13 @@ pub async fn radula_behave_download(
     pb.set_style(
         ProgressStyle::default_bar()
             .template(
-                " {wide_msg} {bytes:>} {bytes_per_sec:>12} {elapsed_precise} [{bar:40}]
-                {percent:>3}%",
+                " {wide_msg} {bytes:>} {bytes_per_sec:>12} {elapsed_precise} [{bar:40}] {percent:>3}%",
             )?
             .progress_chars("##-"),
     );
     pb.set_message(file.clone());
 
-    let mut out = File::create(file.clone()).await?;
+    let mut out = File::create(path.join(file)).await?;
 
     // Use `write_all` instead of `write`:
     // https://rust-lang.github.io/rust-clippy/master/index.html#unused_io_amount
@@ -111,7 +111,7 @@ pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn Err
     // Get the path of the source directory
     let path = Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_SOURCES)?).join(name);
 
-    let file = String::from(
+    let file = path.join(
         url.path_segments()
             .and_then(|segments| segments.last())
             .unwrap_or_default(),
@@ -122,9 +122,11 @@ pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn Err
             task::spawn(async move { radula_behave_clone(commit, url, path).await.unwrap() })
                 .await?;
         } else {
+            fs::create_dir_all(&path).await?;
+
+            // Currently we're only pushing one url at a time...
             let mut urls = Vec::new();
-            urls.push("https://musl.libc.org/releases/musl-1.2.2.tar.gz");
-            urls.push("https://github.com/landley/toybox/archive/0.8.6.tar.gz");
+            urls.push(url.as_str());
 
             let m = Arc::new(MultiProgress::new());
 
@@ -137,11 +139,12 @@ pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn Err
             stream::iter(urls)
                 .enumerate()
                 .for_each_concurrent(Some(8), |(_, url)| {
+                    let path = path.clone();
                     let m = m.clone();
                     let pb = pb.clone();
 
                     async move {
-                        task::spawn(radula_behave_download(Url::parse(url).unwrap(), m))
+                        task::spawn(radula_behave_download(Url::parse(url).unwrap(), path, m))
                             .await
                             .unwrap()
                             .unwrap();
@@ -152,12 +155,10 @@ pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn Err
 
             pb.finish();
 
-            fs::create_dir_all(&path).await?;
-
-            radula_behave_verify(name, file.to_string(), checksum.to_string()).await?;
+            radula_behave_verify(name, file.clone(), checksum.to_string()).await?;
 
             // Extract ceras's source tarball
-            radula_behave_extract(PathBuf::from(file), path).await?;
+            radula_behave_extract(file, path).await?;
         }
     } else if version != constants::RADULA_TOOTH_GIT {
         // Only verify existing ceras's source tarballs without extracting them again
@@ -170,7 +171,7 @@ pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn Err
 // Verify `XXH3_128bits` checksum of source tarballs
 pub async fn radula_behave_verify(
     name: &'static str,
-    file: String,
+    file: PathBuf,
     checksum: String,
 ) -> Result<bool, Box<dyn Error>> {
     let mut file = File::open(ceras::radula_behave_ceras_source(&name).await?.join(file)).await?;
