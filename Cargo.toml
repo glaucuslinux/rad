@@ -25,7 +25,7 @@ num_cpus = "1.15.0"
 reqwest = { version = "0.11.13", features = ["stream"] }
 serde = { version = "1.0.152", features = ["derive"] }
 tar = "0.4.38"
-tokio = { version = "1.23.0", features = [
+tokio = { version = "1.24.1", features = [
     "fs",
     "io-util",
     "macros",
