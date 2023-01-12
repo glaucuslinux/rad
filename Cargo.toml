@@ -17,7 +17,7 @@ flate2 = { version = "1.0.25", default-features = false, features = [
     "zlib-ng-compat",
 ] }
 futures-util = "0.3.25"
-git2 = { version = "0.15.0", features = ["zlib-ng-compat"] }
+git2 = { version = "0.16.0", features = ["zlib-ng-compat"] }
 indicatif = { git = "https://github.com/mitsuhiko/indicatif", features = [
     "improved_unicode",
 ] }
@@ -36,7 +36,7 @@ toml = { version = "0.5.10", features = ["preserve_order"] }
 walkdir = "2.3.2"
 xxhash-rust = { version = "0.8.6", features = ["xxh3"] }
 xz2 = { git = "https://github.com/alexcrichton/xz2-rs", features = ["tokio"] }
-zstd = { version = "0.12.1+zstd.1.5.2", default-features = false, features = [
+zstd = { version = "0.12.2+zstd.1.5.2", default-features = false, features = [
     "zstdmt",
 ] }
 
