@@ -20,5 +20,4 @@ glaucus's radula
 * [GitHub](https://github.com/glaucuslinux/radula)
 * [GitLab](https://gitlab.com/glaucuslinux/radula)
 * [NotABug](https://notabug.org/glaucuslinux/radula)
-* [SourceForge](https://git.code.sf.net/p/glaucuslinux/radula)
 * [SourceHut](https://git.sr.ht/~glaucuslinux/radula)
