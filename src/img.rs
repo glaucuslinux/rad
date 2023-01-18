@@ -188,7 +188,7 @@ pub async fn radula_behave_bootstrap_cross_img() -> Result<(), Box<dyn Error>> {
     .await?;
 
     radula_behave_rsync(
-        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS).unwrap()).join(
+        Path::new(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_CROSS)?).join(
             constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR
                 .strip_prefix(constants::RADULA_PATH_PKG_CONFIG_SYSROOT_DIR)
                 .unwrap(),
@@ -266,7 +266,7 @@ pub async fn radula_behave_bootstrap_cross_img() -> Result<(), Box<dyn Error>> {
     // Backup the new IMG image file
     radula_behave_rsync(
         PathBuf::from(img),
-        PathBuf::from(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS).unwrap()),
+        PathBuf::from(&env::var(constants::RADULA_ENVIRONMENT_DIRECTORY_BACKUPS)?),
     )
     .await;
 
