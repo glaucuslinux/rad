@@ -162,7 +162,7 @@ pub async fn radula_behave_swallow(name: &'static str) -> Result<(), Box<dyn Err
         }
     } else if version != constants::RADULA_TOOTH_GIT {
         // Only verify existing ceras's source tarballs without extracting them again
-        // radula_behave_verify();
+        radula_behave_verify(name, file.clone(), checksum.to_string()).await?;
     }
 
     Ok(())
