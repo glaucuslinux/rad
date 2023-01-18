@@ -10,14 +10,12 @@ license = "ISC"
 keywords = ["glaucus", "radula"]
 
 [dependencies]
-bzip2 = { version = "0.4.3", features = ["tokio"] }
+bzip2 = { version = "0.4.4", features = ["tokio"] }
 chrono = "0.4.23"
 colored = "2.0.0"
-flate2 = { version = "1.0.25", default-features = false, features = [
-    "zlib-ng-compat",
-] }
+flate2 = "1.0.25"
 futures-util = "0.3.25"
-git2 = { version = "0.16.0", features = ["zlib-ng-compat"] }
+git2 = "0.16.0"
 indicatif = { git = "https://github.com/mitsuhiko/indicatif", features = [
     "improved_unicode",
 ] }
@@ -25,7 +23,7 @@ num_cpus = "1.15.0"
 reqwest = { version = "0.11.13", features = ["stream"] }
 serde = { version = "1.0.152", features = ["derive"] }
 tar = "0.4.38"
-tokio = { version = "1.24.1", features = [
+tokio = { version = "1.24.2", features = [
     "fs",
     "io-util",
     "macros",
