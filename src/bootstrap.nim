@@ -82,7 +82,6 @@ proc setEnvNativeTools*() =
   putEnv($radEnv.CPP, &"{gcc} {cpp}")
   putEnv($CXX, $cxx)
   putEnv($CXXCPP, &"{cxx} {cpp}")
-  putEnv($LEX, $flex)
   putEnv($LIBTOOL, $slibtool)
   putEnv($NM, $nm)
   putEnv($PKG_CONFIG, $pkgconf)

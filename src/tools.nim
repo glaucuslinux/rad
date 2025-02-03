@@ -25,17 +25,17 @@ proc extractTar*(archive, dir: string): int =
   execCmd(&"{tar} -xmPpf {archive} -C {dir}")
 
 proc genFiles*(dir, files: string) =
-  var items: seq[string]
+  var entries: seq[string]
 
-  for item in walkDirRec(dir, relative = true, skipSpecial = true):
-    items.add(item)
+  for entry in walkDirRec(dir, relative = true, skipSpecial = true):
+    entries.add(entry)
 
-  sort(items)
+  sort(entries)
 
   let files = open(files, fmWrite)
 
-  for item in items:
-    files.writeLine(item)
+  for entry in entries:
+    files.writeLine(entry)
 
   files.close()
 

@@ -12,7 +12,6 @@ echo "CC          :: ", getEnv($CC)
 echo "CPP         :: ", getEnv($radEnv.CPP)
 echo "CXX         :: ", getEnv($CXX)
 echo "CXXCPP      :: ", getEnv($CXXCPP)
-echo "LEX         :: ", getEnv($LEX)
 echo "LIBTOOL     :: ", getEnv($LIBTOOL)
 echo "NM          :: ", getEnv($NM)
 echo "PKG_CONFIG  :: ", getEnv($PKG_CONFIG)
@@ -24,7 +23,6 @@ doAssert getEnv($CC) == "gcc"
 doAssert getEnv($radEnv.CPP) == "gcc -E"
 doAssert getEnv($CXX) == "g++"
 doAssert getEnv($radEnv.CXXCPP) == "g++ -E"
-doAssert getEnv($LEX) == "flex"
 doAssert getEnv($LIBTOOL) == "slibtool"
 doAssert getEnv($NM) == "gcc-nm"
 doAssert getEnv($PKG_CONFIG) == "pkgconf"
