@@ -57,7 +57,6 @@ proc options*() =
           echo "native complete"
         of "t", "toolchain":
           require()
-
           setEnvArch(toolchain)
           setEnvBootstrap()
           cleanBootstrap()

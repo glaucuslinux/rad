@@ -140,7 +140,6 @@ type
     CXX
     CXXCPP
     HOSTCC
-    LEX
     LIBTOOL
     NM
     OBJCOPY
@@ -261,7 +260,6 @@ Distributed under the terms of the ISC License"""
     nm = "gcc-nm"
     objcopy
     objdump
-    parted
     ranlib = "gcc-ranlib"
     readelf
     sh
