@@ -278,7 +278,7 @@ const
     $fs,
 
     # Development
-    $radCerata.cerata,
+    $cerata,
     $expat,
     $linuxHeaders,
     $muslUtils,
@@ -344,7 +344,7 @@ const
     $fs,
 
     # Development
-    $radCerata.cerata,
+    $cerata,
     $linuxHeaders,
     $musl,
     $perl,

@@ -32,7 +32,7 @@ proc setEnvBootstrap*() =
 
   putEnv($GLAD, path)
 
-  putEnv($CERD, path / $radCerata.cerata)
+  putEnv($CERD, path / $cerata)
   putEnv($CRSD, path / $cross)
   putEnv($LOGD, path / $log)
   putEnv($PKGD, path / $pkg)
