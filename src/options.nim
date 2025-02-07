@@ -19,11 +19,6 @@ proc options*() =
 
     quit(QuitFailure)
   of cmdLongOption, cmdShortOption:
-    # Catch `Ctrl-C` and exit gracefully
-    setControlCHook(interrupt)
-
-    lock()
-
     case p.key
     of "b", "bootstrap":
       p.next()

@@ -345,6 +345,7 @@ const
     $perl,
     $automake,
     $bash,
+    $curl,
     $cmake,
     $gmp,
     $gperf,
@@ -388,7 +389,6 @@ const
     $slibtool,
 
     # Networking
-    $curl,
     $eiwd,
     $fping,
     $iproute2,

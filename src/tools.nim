@@ -5,7 +5,7 @@ import std/[algorithm, os, osproc, strformat, strutils, terminal, times], consta
 
 proc createTarZst*(archive, dir: string): int =
   execCmd(
-    &"{tar} --use-compress-program '{zstd} {zstdCompress}' -cPpf {archive} -C {dir} ."
+    &"{tar} --use-compress-program '{zstd} {zstdCompress}' -cPf {archive} -C {dir} ."
   )
 
 proc downloadFile*(url, file: string): int =
@@ -22,7 +22,7 @@ proc abort*(err: string, status = QuitFailure) =
   exit(status)
 
 proc extractTar*(archive, dir: string): int =
-  execCmd(&"{tar} -xmPpf {archive} -C {dir}")
+  execCmd(&"{tar} --no-same-owner -xmPf {archive} -C {dir}")
 
 proc genFiles*(dir, files: string) =
   var entries: seq[string]
