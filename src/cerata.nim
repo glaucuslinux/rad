@@ -256,7 +256,7 @@ proc removeCerata*(cerata: openArray[string]) =
     printContent(idx, $ceras, ceras.ver, $remove)
 
     for line in lines($radPkgLib / $ceras / $files):
-      removeFile(&"/{line.split()[2]}")
+      removeFile(&"/{line}")
 
     removeDir($radPkgLib / $ceras)
 
