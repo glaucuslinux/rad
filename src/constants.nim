@@ -17,7 +17,7 @@ type
     automake
     bash
     binutils
-    bison
+    byacc
     bzip2
     cerata
     cmake
@@ -27,7 +27,6 @@ type
     execline
     expat
     file
-    flex
     fping
     fs
     gcc
@@ -71,6 +70,7 @@ type
     pigz
     pkgconf
     rad
+    reflex
     s6
     s6BootScripts = "s6-boot-scripts"
     s6LinuxInit = "s6-linux-init"
@@ -140,6 +140,7 @@ type
     CXX
     CXXCPP
     HOSTCC
+    LEX
     LIBTOOL
     NM
     OBJCOPY
@@ -149,6 +150,7 @@ type
     READELF
     SIZE
     STRIP
+    YACC
 
   radFiles* = enum
     ceras
@@ -255,8 +257,10 @@ Distributed under the terms of the ISC License"""
   radTools* = enum
     ar = "gcc-ar"
     As = "as"
+    awk
     cxx = "g++"
     git
+    lex
     nm = "gcc-nm"
     objcopy
     objdump
@@ -266,6 +270,7 @@ Distributed under the terms of the ISC License"""
     size
     strip
     tar = "bsdtar"
+    yacc
 
 const
   Cross* = [
@@ -307,7 +312,6 @@ const
     $autoconf,
     $binutils,
     $file,
-    $flex,
     $gcc,
     $gettextTiny,
     $libedit,
@@ -315,6 +319,7 @@ const
     $radCerata.make,
     $mawk,
     $pcre2,
+    $reflex,
     $slibtool,
 
     # Utilities
@@ -345,11 +350,11 @@ const
     $perl,
     $automake,
     $bash,
+    $byacc,
     $curl,
     $cmake,
     $gmp,
     $gperf,
-    $bison,
     $mpfr,
     $mpc,
     $isl,
@@ -375,7 +380,6 @@ const
     $binutils,
     $expat,
     $file,
-    $flex,
     $gcc,
     $gettextTiny,
     $libedit,
@@ -385,6 +389,7 @@ const
     $netbsdCurses,
     $pcre2,
     $pkgconf,
+    $reflex,
     $samurai,
     $slibtool,
 
