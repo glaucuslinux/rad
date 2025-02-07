@@ -109,7 +109,6 @@ type
     # DIRS
     CERD
     CRSD
-    GLAD
     LOGD
     PATH
     PKGD
