@@ -30,8 +30,6 @@ proc prepareCross*() =
 proc setEnvBootstrap*() =
   let path = parentDir(getCurrentDir())
 
-  putEnv($GLAD, path)
-
   putEnv($CERD, path / $cerata)
   putEnv($CRSD, path / $cross)
   putEnv($LOGD, path / $log)

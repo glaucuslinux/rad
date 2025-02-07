@@ -5,10 +5,6 @@ import std/[os, strutils], ../../src/[bootstrap, constants]
 
 setEnvBootstrap()
 
-echo "GLAD  :: ", getEnv($GLAD)
-
-echo ""
-
 echo "CERD  :: ", getEnv($CERD)
 echo "CRSD  :: ", getEnv($CRSD)
 echo "LOGD  :: ", getEnv($LOGD)
@@ -20,8 +16,6 @@ echo "TLCD  :: ", getEnv($TLCD)
 echo ""
 
 echo "PATH  :: ", getEnv($PATH)
-
-doAssert getEnv($GLAD).endsWith("glaucus")
 
 doAssert getEnv($CERD).endsWith("cerata")
 doAssert getEnv($CRSD).endsWith("cross")
