@@ -27,8 +27,19 @@ proc extractTar*(archive, dir: string): int =
 proc genFiles*(dir, files: string) =
   var entries: seq[string]
 
-  for entry in walkDirRec(dir, relative = true, skipSpecial = true):
-    entries.add(entry)
+  for entry in walkDirRec(
+    dir,
+    yieldFilter = {pcFile .. pcLinkToDir},
+    followFilter = {pcDir, pcLinkToDir},
+    relative = true,
+    skipSpecial = true,
+  ):
+    entries.add(
+      if dirExists(dir / $entry):
+        &"{entry}/"
+      else:
+        $entry
+    )
 
   sort(entries)
 
