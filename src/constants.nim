@@ -401,6 +401,7 @@ const
     $wget2,
 
     # Utilities
+    $dash,
     $grep,
     $hwdata,
     $kmod,

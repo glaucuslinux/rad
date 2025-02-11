@@ -2,9 +2,6 @@
 # Distributed under the terms of the ISC License
 
 when isMainModule:
-  import options, tools
-
-  setControlCHook(interrupt)
-  lock()
+  import options
 
   options()
