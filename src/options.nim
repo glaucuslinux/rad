@@ -5,9 +5,7 @@ import std/[os, parseopt], arch, bootstrap, cerata, constants, tools
 
 proc options*() =
   if paramCount() < 1:
-    echo Rad
-
-    quit(QuitFailure)
+    quit($Rad, QuitFailure)
 
   var p = initOptParser()
 
@@ -15,19 +13,17 @@ proc options*() =
 
   case p.kind
   of cmdArgument, cmdEnd:
-    echo Rad
-
-    quit(QuitFailure)
+    quit($Rad, QuitFailure)
   of cmdLongOption, cmdShortOption:
+    lock()
+
     case p.key
     of "b", "bootstrap":
       p.next()
 
       case p.kind
       of cmdEnd:
-        echo Bootstrap
-
-        exit(QuitFailure)
+        exit($Bootstrap, QuitFailure)
       of cmdArgument, cmdLongOption, cmdShortOption:
         case p.key
         of "c", "clean":
@@ -70,17 +66,13 @@ proc options*() =
           echo ""
           echo "cross complete"
         else:
-          echo Bootstrap
-
-          exit(QuitFailure)
+          exit($Bootstrap, QuitFailure)
     of "c", "cerata":
       p.next()
 
       case p.kind
       of cmdEnd:
-        echo Cerata
-
-        exit(QuitFailure)
+        exit($Cerata, QuitFailure)
       of cmdArgument, cmdLongOption, cmdShortOption:
         case p.key
         of "b", "build":
@@ -122,16 +114,12 @@ proc options*() =
           echo ""
           echo "upgrade complete"
         else:
-          echo Cerata
-
-          exit(QuitFailure)
+          exit($Cerata, QuitFailure)
     of "h", "help":
       echo Rad
     of "v", "version":
       echo version
     else:
-      echo Rad
-
-      exit(QuitFailure)
+      exit($Rad, QuitFailure)
 
     exit()

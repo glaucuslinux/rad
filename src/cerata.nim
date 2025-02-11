@@ -271,7 +271,7 @@ proc searchCerata*(pattern: openArray[string]) =
         cerata.add(ceras[1])
 
   if cerata.len() == 0:
-    exit(QuitFailure)
+    exit(status = QuitFailure)
 
   sort(cerata)
 

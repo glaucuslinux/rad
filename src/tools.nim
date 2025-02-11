@@ -11,15 +11,18 @@ proc createTarZst*(archive, dir: string): int =
 proc downloadFile*(url, file: string): int =
   execCmd(&"{wget2} -q -O {file} -c -N {url}")
 
-proc exit*(status = QuitSuccess) =
+proc exit*(msg = "", status = QuitSuccess) =
   removeFile($radLock)
+
+  if not msg.isEmptyOrWhitespace():
+    quit(msg, status)
 
   quit(status)
 
-proc abort*(err: string, status = QuitFailure) =
+proc abort*(err = "", status = QuitFailure) =
   styledEcho fgRed, styleBright, &"""{err}{"abort":8}{now().format("hh:mm tt")}"""
 
-  exit(status)
+  exit(status = status)
 
 proc extractTar*(archive, dir: string): int =
   execCmd(&"{tar} --no-same-owner -xmPf {archive} -C {dir}")
@@ -61,9 +64,15 @@ proc interrupt*() {.noconv.} =
 
 proc lock*() =
   if fileExists($radLock):
-    abort(&"""{$QuitFailure:8}{"lock exists":48}""")
+    styledEcho fgRed,
+      styleBright,
+      &"""{$QuitFailure:8}{"lock exists":48}{"abort":8}{now().format("hh:mm tt")}"""
+
+    quit(QuitFailure)
 
   writeFile($radLock, "")
+
+  setControlCHook(interrupt)
 
 proc require*() =
   for exe in [
@@ -95,3 +104,8 @@ proc xxhsum(file: string): string =
 
 proc verifyFile*(file, sum: string): bool =
   fileExists(file) and xxhsum(file).split()[0] == sum
+
+proc verifyFiles*(files: string): bool =
+  for file in lines(files):
+    if not fileExists(file):
+      return
