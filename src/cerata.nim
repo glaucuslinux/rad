@@ -209,6 +209,9 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
         sac = getEnv($SACD)
         status = createTarZst(archive, sac)
 
+      # Purge
+      # if $radNop.empty notin $ceras.nop:
+
       if status == QuitSuccess:
         genFiles(sac, $radPkgCache / $ceras / $files)
         removeDir(sac)
@@ -258,11 +261,15 @@ proc removeCerata*(cerata: openArray[string]) =
     for line in lines($radPkgLib / $ceras / $files):
       let path = &"/{line}"
 
-      if getFileInfo(path, followSymlink = false).kind in
-          {pcFile, pcLinkToFile, pcLinkToDir}:
+      if fileExists(path):
         removeFile(path)
-      else:
-        removeDir(path)
+
+    for line in lines($radPkgLib / $ceras / $files):
+      let path = &"/{line}"
+
+      if dirExists(path):
+        if path.isEmpty():
+          removeDir(path)
 
     removeDir($radPkgLib / $ceras)
 

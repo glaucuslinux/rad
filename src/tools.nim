@@ -31,14 +31,10 @@ proc genFiles*(dir, files: string) =
   var entries: seq[string]
 
   for entry in walkDirRec(
-    dir,
-    yieldFilter = {pcFile .. pcLinkToDir},
-    followFilter = {pcDir, pcLinkToDir},
-    relative = true,
-    skipSpecial = true,
+    dir, yieldFilter = {pcFile .. pcLinkToDir}, relative = true, skipSpecial = true
   ):
     entries.add(
-      if dirExists(dir / $entry):
+      if getFileInfo(dir / entry, followSymlink = false).kind == pcDir:
         &"{entry}/"
       else:
         $entry
@@ -61,6 +57,11 @@ proc gitCloneRepo*(url, dir: string): int =
 
 proc interrupt*() {.noconv.} =
   abort(&"""{$QuitFailure:8}{"interrupt received":48}""")
+
+proc isEmpty*(dir: string): bool =
+  for entry in walkDir(dir, true, skipSpecial = true):
+    return
+  return true
 
 proc lock*() =
   if fileExists($radLock):
