@@ -58,6 +58,7 @@ type
     mimalloc
     mpc
     mpfr
+    muon
     musl
     muslHeaders = "musl-headers"
     muslUtils = "musl-utils"
@@ -75,7 +76,6 @@ type
     s6BootScripts = "s6-boot-scripts"
     s6LinuxInit = "s6-linux-init"
     s6Rc = "s6-rc"
-    samurai
     sdhcp
     shadow
     skalibs
@@ -379,13 +379,13 @@ const
     $gettextTiny,
     $libedit,
     $m4,
+    $muon,
     $radCerata.make,
     $mawk,
     $netbsdCurses,
     $pcre2,
     $pkgconf,
     $reflex,
-    $samurai,
     $slibtool,
 
     # Networking
