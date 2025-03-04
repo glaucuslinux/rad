@@ -256,7 +256,13 @@ proc removeCerata*(cerata: openArray[string]) =
     printContent(idx, $ceras, ceras.ver, $remove)
 
     for line in lines($radPkgLib / $ceras / $files):
-      removeFile(&"/{line}")
+      let path = &"/{line}"
+
+      if getFileInfo(path, followSymlink = false).kind in
+          {pcFile, pcLinkToFile, pcLinkToDir}:
+        removeFile(path)
+      else:
+        removeDir(path)
 
     removeDir($radPkgLib / $ceras)
 
