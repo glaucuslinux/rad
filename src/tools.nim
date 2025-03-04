@@ -19,7 +19,7 @@ proc exit*(msg = "", status = QuitSuccess) =
 
   quit(status)
 
-proc abort*(err = "", status = QuitFailure) =
+proc abort*(err: string, status = QuitFailure) =
   styledEcho fgRed, styleBright, &"""{err}{"abort":8}{now().format("hh:mm tt")}"""
 
   exit(status = status)

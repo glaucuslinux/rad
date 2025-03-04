@@ -184,7 +184,7 @@ OPTIONS:
     Bootstrap =
       """
 USAGE:
-  rad [ -b | --bootstrap ] [ COMMAND ]
+  rad [ -b, --bootstrap ] [ COMMAND ]
 
 COMMANDS:
   c, clean         Clean cache
@@ -196,7 +196,7 @@ COMMANDS:
     Cerata =
       """
 USAGE:
-  rad [ -c | --cerata ] [ COMMAND ] [ cerata ]
+  rad [ -c, --cerata ] [ COMMAND ] [ cerata ]
 
 COMMANDS:
   b, build         Build cerata
@@ -273,10 +273,8 @@ Distributed under the terms of the ISC License"""
 
 const
   Cross* = [
-    # Filesystem
-    $fs,
-
     # Development
+    $fs,
     $cerata,
     $expat,
     $linuxHeaders,
@@ -339,10 +337,8 @@ const
     $linuxCachyOS,
   ]
   Native* = [
-    # Filesystem
-    $fs,
-
     # Development
+    $fs,
     $cerata,
     $linuxHeaders,
     $musl,
