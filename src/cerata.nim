@@ -2,7 +2,7 @@
 # Distributed under the terms of the ISC License
 
 import
-  std/[algorithm, os, osproc, sequtils, strformat, strutils, tables, terminal, times],
+  std/[algorithm, os, osproc, sequtils, strformat, strutils, tables, times],
   constants,
   flags,
   tools,
@@ -53,13 +53,6 @@ nop  :: {ceras.nop}
 """
 
 proc printContent(idx: int, nom, ver, cmd: string) =
-  styledEcho fgMagenta,
-    styleBright, &"""{idx + 1:<8}{nom:24}{ver:24}{cmd:8}{now().format("hh:mm tt")}"""
-
-proc printFooter(idx: int, nom, ver, cmd: string) =
-  cursorUp 1
-  eraseLine()
-
   echo &"""{idx + 1:<8}{nom:24}{ver:24}{cmd:8}{now().format("hh:mm tt")}"""
 
 proc printHeader() =
@@ -110,8 +103,6 @@ proc prepareCerata(cerata: openArray[string]) =
 
     # Skip virtual cerata
     if ceras.url == $Nil:
-      printFooter(idx, $ceras, ceras.ver, $prepare)
-
       continue
 
     let
@@ -138,8 +129,6 @@ proc prepareCerata(cerata: openArray[string]) =
         discard extractTar(archive, tmp)
       else:
         abort(&"""{"sum":8}{ceras:24}{ceras.ver:24}""")
-
-    printFooter(idx, $ceras, ceras.ver, $prepare)
 
 proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
   printHeader()
@@ -168,8 +157,6 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
 
     if stage == $native:
       if fileExists(archive):
-        printFooter(idx, $ceras, ceras.ver, $build)
-
         continue
 
       putEnv($SACD, $radPkgCache / $ceras / $sac)
@@ -219,8 +206,6 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       if $bootstrap in $ceras.nop:
         discard extractTar(archive, $root)
 
-    printFooter(idx, $ceras, ceras.ver, $build)
-
 proc installCerata*(
     cerata: openArray[string], cache = $radPkgCache, fs = $root, lib = $radPkgLib
 ) =
@@ -242,8 +227,6 @@ proc installCerata*(
     createDir(lib / $ceras)
     writeFile(lib / $ceras / "ver", ceras.ver)
     copyFileWithPermissions(cache / $ceras / $files, lib / $ceras / $files)
-
-    printFooter(idx, $ceras, ceras.ver, $install)
 
 proc listCerata*() =
   printCerata(walkDir($radPkgLib, true, skipSpecial = true).toSeq().unzip()[1])
@@ -272,8 +255,6 @@ proc removeCerata*(cerata: openArray[string]) =
           removeDir(path)
 
     removeDir($radPkgLib / $ceras)
-
-    printFooter(idx, $ceras, ceras.ver, $remove)
 
 proc searchCerata*(pattern: openArray[string]) =
   var cerata: seq[string]
