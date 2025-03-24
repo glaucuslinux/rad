@@ -250,9 +250,8 @@ proc removeCerata*(cerata: openArray[string]) =
     for line in lines($radPkgLib / $ceras / $files):
       let path = &"/{line}"
 
-      if dirExists(path):
-        if path.isEmpty():
-          removeDir(path)
+      if path.isEmpty():
+        removeDir(path)
 
     removeDir($radPkgLib / $ceras)
 
