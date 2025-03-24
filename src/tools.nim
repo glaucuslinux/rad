@@ -59,7 +59,7 @@ proc interrupt*() {.noconv.} =
   abort(&"""{$QuitFailure:8}{"interrupt received":48}""")
 
 proc isEmpty*(dir: string): bool =
-  for entry in walkDir(dir, true, skipSpecial = true):
+  for entry in walkDir(dir):
     return
   return true
 
