@@ -40,11 +40,9 @@ proc genFiles*(dir, files: string) =
         $entry
     )
 
-  sort(entries)
-
   let files = open(files, fmWrite)
 
-  for entry in entries:
+  for entry in entries.sorted():
     files.writeLine(entry)
 
   files.close()

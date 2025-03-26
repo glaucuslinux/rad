@@ -96,6 +96,8 @@ proc sortCerata(cerata: openArray[string], run = true): seq[string] =
   cluster
 
 proc prepareCerata(cerata: openArray[string]) =
+  printHeader()
+
   for idx, nom in cerata:
     let ceras = parseCeras(nom)
 
@@ -131,8 +133,6 @@ proc prepareCerata(cerata: openArray[string]) =
         abort(&"""{"sum":8}{ceras:24}{ceras.ver:24}""")
 
 proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
-  printHeader()
-
   let cluster = sortCerata(cerata, false)
 
   prepareCerata(cluster)
@@ -147,10 +147,6 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       archive =
         $radPkgCache / $ceras /
         &"""{ceras}{(if ceras.url == $Nil: "" else: &"-\{ceras.ver\}")}{tarZst}"""
-      log = open(
-        getEnv($LOGD) / &"""{ceras}{(if stage == $native: "" else: &".\{stage\}")}""",
-        fmWrite,
-      )
       tmp = getEnv($TMPD) / $ceras
 
     printContent(idx, $ceras, ceras.ver, $build)
@@ -185,8 +181,10 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       &"""{sh} -c 'nom={ceras} ver={ceras.ver} . {$radClustersCerataLib / $ceras / (if stage == $native: $build else: $build & '.' & stage)} && prepare && configure && build && package'"""
     )
 
-    log.writeLine(shell.output.strip())
-    log.close()
+    writeFile(
+      getEnv($LOGD) / &"""{ceras}{(if stage == $native: "" else: &".\{stage\}")}""",
+      shell.output.strip(),
+    )
 
     if shell.exitCode != QuitSuccess:
       abort(&"{shell.exitCode:<8}{ceras:24}{ceras.ver:24}")
@@ -209,9 +207,9 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
 proc installCerata*(
     cerata: openArray[string], cache = $radPkgCache, fs = $root, lib = $radPkgLib
 ) =
-  printHeader()
-
   let cluster = sortCerata(cerata)
+
+  printHeader()
 
   for idx, nom in cluster:
     let ceras = parseCeras(nom)
@@ -229,12 +227,21 @@ proc installCerata*(
     copyFileWithPermissions(cache / $ceras / $files, lib / $ceras / $files)
 
 proc listCerata*() =
-  printCerata(walkDir($radPkgLib, true, skipSpecial = true).toSeq().unzip()[1])
+  printCerata(walkDir($radPkgLib, true, skipSpecial = true).toSeq().unzip()[1].sorted())
 
 proc removeCerata*(cerata: openArray[string]) =
-  printHeader()
+  let
+    cluster = sortCerata(cerata)
+    skel = parseCeras($skel).run
 
-  let cluster = sortCerata(cerata)
+  for nom in cerata:
+    for ceras in walkDir($radClustersCerataLib, true, skipSpecial = true):
+      if nom notin ceras[1]:
+        abort(&"""{$QuitFailure:8}{&"\{nom\} not installed":48}""")
+    if nom in skel:
+      abort(&"""{$QuitFailure:8}{&"\{nom\} is a skel ceras":48}""")
+
+  printHeader()
 
   for idx, nom in cluster:
     let ceras = parseCeras(nom)
@@ -266,6 +273,4 @@ proc searchCerata*(pattern: openArray[string]) =
   if cerata.len() == 0:
     exit(status = QuitFailure)
 
-  sort(cerata)
-
-  printCerata(cerata)
+  printCerata(cerata.sorted())

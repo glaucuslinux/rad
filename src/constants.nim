@@ -79,6 +79,7 @@ type
     sdhcp
     shadow
     skalibs
+    skel
     slibtool
     toybox
     utilLinux = "util-linux"
