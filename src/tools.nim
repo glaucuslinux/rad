@@ -1,7 +1,7 @@
 # Copyright (c) 2018-2025, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import std/[algorithm, os, osproc, strformat, strutils, terminal, times], constants
+import std/[algorithm, os, osproc, strformat, strutils, times], constants
 
 proc createTarZst*(archive, dir: string): int =
   execCmd(
@@ -20,14 +20,14 @@ proc exit*(msg = "", status = QuitSuccess) =
   quit(status)
 
 proc abort*(err: string, status = QuitFailure) =
-  styledEcho fgRed, styleBright, &"""{err}{"abort":8}{now().format("hh:mm tt")}"""
+  echo &"""{err}{"abort":8}{now().format("hh:mm tt")}"""
 
   exit(status = status)
 
 proc extractTar*(archive, dir: string): int =
   execCmd(&"{tar} --no-same-owner -xmPf {archive} -C {dir}")
 
-proc genFiles*(dir, files: string) =
+proc genContents*(dir, contents: string) =
   var entries: seq[string]
 
   for entry in walkDirRec(
@@ -40,12 +40,12 @@ proc genFiles*(dir, files: string) =
         $entry
     )
 
-  let files = open(files, fmWrite)
+  let contents = open(contents, fmWrite)
 
   for entry in entries.sorted():
-    files.writeLine(entry)
+    contents.writeLine(entry)
 
-  files.close()
+  contents.close()
 
 proc gitCheckoutRepo*(dir, cmt: string): int =
   execCmd(&"{git} -C {dir} checkout {cmt} -q")
@@ -63,9 +63,7 @@ proc isEmpty*(dir: string): bool =
 
 proc lock*() =
   if fileExists($radLock):
-    styledEcho fgRed,
-      styleBright,
-      &"""{$QuitFailure:8}{"lock exists":48}{"abort":8}{now().format("hh:mm tt")}"""
+    echo &"""{$QuitFailure:8}{"lock exists":48}{"abort":8}{now().format("hh:mm tt")}"""
 
     quit(QuitFailure)
 
@@ -104,7 +102,7 @@ proc xxhsum(file: string): string =
 proc verifyFile*(file, sum: string): bool =
   fileExists(file) and xxhsum(file).split()[0] == sum
 
-proc verifyFiles*(files: string): bool =
-  for file in lines(files):
+proc verifyContents*(contents: string): bool =
+  for file in lines(contents):
     if not fileExists(file):
       return

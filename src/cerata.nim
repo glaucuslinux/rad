@@ -36,7 +36,7 @@ proc parseCeras(nom: string): Ceras =
   if not dirExists(path):
     abort(&"""{"nom":8}{&"\{nom\} not found":48}""", 127)
 
-  Toml.loadFile(path / $ceras, Ceras)
+  Toml.loadFile(path / $info, Ceras)
 
 proc printCerata*(cerata: openArray[string]) =
   for nom in cerata.deduplicate():
@@ -178,7 +178,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     #
     # Call phases sequentially to preserve the current working directory
     let shell = execCmdEx(
-      &"""{sh} -c 'nom={ceras} ver={ceras.ver} . {$radClustersCerataLib / $ceras / (if stage == $native: $build else: $build & '.' & stage)} && prepare && configure && build && package'"""
+      &"""{sh} -c 'nom={ceras} ver={ceras.ver} . {$radClustersCerataLib / $ceras / (if stage == $native: $build else: $build & '-' & stage)} && if command -v prepare {shellRedirect}; then prepare; fi && if command -v configure {shellRedirect}; then configure; fi && if command -v build {shellRedirect}; then build; fi && package'"""
     )
 
     writeFile(
@@ -198,7 +198,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
       # if $radNop.empty notin $ceras.nop:
 
       if status == QuitSuccess:
-        genFiles(sac, $radPkgCache / $ceras / $files)
+        genContents(sac, $radPkgCache / $ceras / $contents)
         removeDir(sac)
 
       if $bootstrap in $ceras.nop:
@@ -224,7 +224,11 @@ proc installCerata*(
 
     createDir(lib / $ceras)
     writeFile(lib / $ceras / "ver", ceras.ver)
-    copyFileWithPermissions(cache / $ceras / $files, lib / $ceras / $files)
+    copyFileWithPermissions(cache / $ceras / $contents, lib / $ceras / $contents)
+
+    if nom notin cerata:
+      createDir(lib / $ceras / "run")
+      # writeFile(lib / $ceras / "run" / )
 
 proc listCerata*() =
   printCerata(walkDir($radPkgLib, true, skipSpecial = true).toSeq().unzip()[1].sorted())
@@ -248,13 +252,13 @@ proc removeCerata*(cerata: openArray[string]) =
 
     printContent(idx, $ceras, ceras.ver, $remove)
 
-    for line in lines($radPkgLib / $ceras / $files):
+    for line in lines($radPkgLib / $ceras / $contents):
       let path = &"/{line}"
 
       if fileExists(path):
         removeFile(path)
 
-    for line in lines($radPkgLib / $ceras / $files):
+    for line in lines($radPkgLib / $ceras / $contents):
       let path = &"/{line}"
 
       if path.isEmpty():
