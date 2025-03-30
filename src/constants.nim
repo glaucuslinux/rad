@@ -153,9 +153,10 @@ type
     YACC
 
   radFiles* = enum
-    ceras
     configGuess = "config.guess"
-    files
+    contents
+    contentsMinimal = "contents-minimal"
+    info
     tarZst = ".tar.zst"
 
   radFlags* = enum
