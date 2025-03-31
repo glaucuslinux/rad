@@ -156,6 +156,7 @@ type
     configGuess = "config.guess"
     contents
     contentsMinimal = "contents-minimal"
+    files
     info
     tarZst = ".tar.zst"
 
@@ -189,28 +190,29 @@ USAGE:
   rad [ -b, --bootstrap ] [ COMMAND ]
 
 COMMANDS:
-  c, clean         Clean cache
-  d, distclean     Clean everything
-  h, help          Display this help message
-  n, native        Bootstrap native glaucus
-  t, toolchain     Bootstrap toolchain
-  x, cross         Bootstrap cross glaucus"""
+  clean            Clean cache
+  cross            Bootstrap cross glaucus
+  distclean        Clean everything
+  help             Display this help message
+  native           Bootstrap native glaucus
+  toolchain        Bootstrap toolchain"""
     Cerata =
       """
 USAGE:
   rad [ -c, --cerata ] [ COMMAND ] [ cerata ]
 
 COMMANDS:
-  b, build         Build cerata
-  c, clean         Clean cache
-  d, distclean     Clean everything
-  h, help          Display this help message
-  i, install       Install cerata
-  l, list          List installed cerata
-  p, print         Print cerata information
-  r, remove        Remove cerata
-  s, search        Search for cerata
-  u, upgrade       Upgrade cerata"""
+  build            Build cerata
+  clean            Clean cache
+  distclean        Clean everything
+  help             Display this help message
+  info             Show cerata information
+  install          Install cerata
+  list             List installed cerata
+  remove           Remove cerata
+  search           Search for cerata
+  update           Update clusters
+  upgrade          Upgrade cerata"""
     version =
       """
 rad version 0.1.0

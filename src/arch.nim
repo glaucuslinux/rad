@@ -6,7 +6,8 @@ import std/[os, osproc, strformat, strutils, times], constants
 proc setEnvArch*(stage = native) =
   putEnv($ARCH, $x86_64)
   putEnv(
-    $BLD, execCmdEx($radClustersCerataLib / $slibtool / $configGuess).output.strip()
+    $BLD,
+    execCmdEx($radClustersCerataLib / $slibtool / $files / $configGuess).output.strip(),
   )
   putEnv($CARCH, $x86_64_v3)
   putEnv($PRETTY_NAME, &"""{glaucus} {s6} {x86_64_v3} {now().format("YYYYMMdd")}""")
