@@ -26,19 +26,28 @@ proc options*() =
         exit($Bootstrap, QuitFailure)
       of cmdArgument, cmdLongOption, cmdShortOption:
         case p.key
-        of "c", "clean":
+        of "clean":
           setEnvBootstrap()
           cleanBootstrap()
 
           echo "clean complete"
-        of "d", "distclean":
+        of "cross":
+          setEnvArch(cross)
+          setEnvBootstrap()
+          setEnvCrossTools()
+          prepareCross()
+          buildCerata(Cross, $cross, false)
+
+          echo ""
+          echo "cross complete"
+        of "distclean":
           setEnvBootstrap()
           distcleanBootstrap()
 
           echo "distclean complete"
-        of "h", "help":
+        of "help":
           echo Bootstrap
-        of "n", "native":
+        of "native":
           setEnvArch()
           setEnvNativeDirs()
           setEnvNativeTools()
@@ -46,7 +55,7 @@ proc options*() =
 
           echo ""
           echo "native complete"
-        of "t", "toolchain":
+        of "toolchain":
           require()
           setEnvArch(toolchain)
           setEnvBootstrap()
@@ -56,15 +65,6 @@ proc options*() =
 
           echo ""
           echo "toolchain complete"
-        of "x", "cross":
-          setEnvArch(cross)
-          setEnvBootstrap()
-          setEnvCrossTools()
-          prepareCross()
-          buildCerata(Cross, $cross, false)
-
-          echo ""
-          echo "cross complete"
         else:
           exit($Bootstrap, QuitFailure)
     of "c", "cerata":
@@ -75,7 +75,7 @@ proc options*() =
         exit($Cerata, QuitFailure)
       of cmdArgument, cmdLongOption, cmdShortOption:
         case p.key
-        of "b", "build":
+        of "build":
           setEnvArch()
           setEnvNativeDirs()
           setEnvNativeTools()
@@ -84,33 +84,36 @@ proc options*() =
 
           echo ""
           echo "build complete"
-        of "c", "clean":
+        of "clean":
           cleanCerata()
 
           echo "clean complete"
-        of "d", "distclean":
+        of "distclean":
           distcleanCerata()
 
           echo "distclean complete"
-        of "h", "help":
+        of "help":
           echo Cerata
-        of "i", "install":
+        of "info":
+          showInfo(remainingArgs(p))
+        of "install":
           installCerata(remainingArgs(p))
 
           echo ""
           echo "install complete"
-        of "l", "list":
+        of "list":
           listCerata()
-        of "p", "print":
-          printCerata(remainingArgs(p))
-        of "r", "remove":
+        of "remove":
           removeCerata(remainingArgs(p))
 
           echo ""
           echo "remove complete"
-        of "s", "search":
+        of "search":
           searchCerata(remainingArgs(p))
-        of "u", "upgrade":
+        of "update":
+          echo ""
+          echo "update complete"
+        of "upgrade":
           echo ""
           echo "upgrade complete"
         else:

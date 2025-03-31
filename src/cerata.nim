@@ -38,20 +38,6 @@ proc parseCeras(nom: string): Ceras =
 
   Toml.loadFile(path / $info, Ceras)
 
-proc printCerata*(cerata: openArray[string]) =
-  for nom in cerata.deduplicate():
-    let ceras = parseCeras(nom)
-
-    echo &"""
-nom  :: {ceras}
-ver  :: {ceras.ver}
-url  :: {ceras.url}
-sum  :: {ceras.sum}
-bld  :: {ceras.bld}
-run  :: {ceras.run}
-nop  :: {ceras.nop}
-"""
-
 proc printContent(idx: int, nom, ver, cmd: string) =
   echo &"""{idx + 1:<8}{nom:24}{ver:24}{cmd:8}{now().format("hh:mm tt")}"""
 
@@ -123,7 +109,6 @@ proc prepareCerata(cerata: openArray[string]) =
       if not verifyFile(archive, ceras.sum):
         removeDir(src)
         createDir(src)
-
         discard downloadFile(ceras.url, archive)
 
       if verifyFile(archive, ceras.sum):
@@ -178,7 +163,7 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
     #
     # Call phases sequentially to preserve the current working directory
     let shell = execCmdEx(
-      &"""{sh} -c 'nom={ceras} ver={ceras.ver} . {$radClustersCerataLib / $ceras / (if stage == $native: $build else: $build & '-' & stage)} && if command -v prepare {shellRedirect}; then prepare; fi && if command -v configure {shellRedirect}; then configure; fi && if command -v build {shellRedirect}; then build; fi && package'"""
+      &"""{sh} -c 'nom={ceras} ver={ceras.ver} . {$radClustersCerataLib / $ceras / (if stage == $native: $build else: $build & '-' & stage)} && for i in prepare configure build; do if command -v $i {shellRedirect}; then $i; fi done && package'"""
     )
 
     writeFile(
@@ -230,8 +215,22 @@ proc installCerata*(
       createDir(lib / $ceras / "run")
       # writeFile(lib / $ceras / "run" / )
 
+proc showInfo*(cerata: openArray[string]) =
+  for nom in cerata.deduplicate():
+    let ceras = parseCeras(nom)
+
+    echo &"""
+nom  :: {ceras}
+ver  :: {ceras.ver}
+url  :: {ceras.url}
+sum  :: {ceras.sum}
+bld  :: {ceras.bld}
+run  :: {ceras.run}
+nop  :: {ceras.nop}
+"""
+
 proc listCerata*() =
-  printCerata(walkDir($radPkgLib, true, skipSpecial = true).toSeq().unzip()[1].sorted())
+  showInfo(walkDir($radPkgLib, true, skipSpecial = true).toSeq().unzip()[1].sorted())
 
 proc removeCerata*(cerata: openArray[string]) =
   let
@@ -277,4 +276,4 @@ proc searchCerata*(pattern: openArray[string]) =
   if cerata.len() == 0:
     exit(status = QuitFailure)
 
-  printCerata(cerata.sorted())
+  showInfo(cerata.sorted())
