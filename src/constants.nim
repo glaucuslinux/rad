@@ -174,45 +174,36 @@ type
     zstdDecompress = "-d -T0 --long"
 
   radHelp* = enum
-    Rad =
-      """
-USAGE:
-  rad [ OPTION ]
-
-OPTIONS:
-  -b, --bootstrap  Bootstrap glaucus
-  -c, --cerata     Manage cerata
-  -h, --help       Display this help message
-  -v, --version    Display current version"""
     Bootstrap =
       """
 USAGE:
-  rad [ -b, --bootstrap ] [ COMMAND ]
+  rad bootstrap [ COMMAND ]
 
 COMMANDS:
-  clean            Clean cache
-  cross            Bootstrap cross glaucus
-  distclean        Clean everything
-  help             Display this help message
-  native           Bootstrap native glaucus
-  toolchain        Bootstrap toolchain"""
-    Cerata =
+  clean      Clean cache
+  cross      Bootstrap cross glaucus
+  distclean  Clean everything
+  help       Display this help message
+  native     Bootstrap native glaucus
+  toolchain  Bootstrap toolchain"""
+    Rad =
       """
 USAGE:
-  rad [ -c, --cerata ] [ COMMAND ] [ cerata ]
+  rad [ COMMAND ]
 
 COMMANDS:
-  build            Build cerata
-  clean            Clean cache
-  distclean        Clean everything
-  help             Display this help message
-  info             Show cerata information
-  install          Install cerata
-  list             List installed cerata
-  remove           Remove cerata
-  search           Search for cerata
-  update           Update clusters
-  upgrade          Upgrade cerata"""
+  build      Build cerata
+  clean      Clean cache
+  distclean  Clean everything
+  help       Display this help message
+  info       Show cerata information
+  install    Install cerata
+  list       List installed cerata
+  remove     Remove cerata
+  search     Search for cerata
+  update     Update clusters
+  upgrade    Upgrade cerata
+  version    Display rad version"""
     version =
       """
 rad version 0.1.0

@@ -235,12 +235,14 @@ proc listCerata*() =
 proc removeCerata*(cerata: openArray[string]) =
   let
     cluster = sortCerata(cerata)
+    installed = walkDir($radClustersCerataLib, true, skipSpecial = true).toSeq().unzip()[
+      1
+    ].sorted()
     skel = parseCeras($skel).run
 
   for nom in cerata:
-    for ceras in walkDir($radClustersCerataLib, true, skipSpecial = true):
-      if nom notin ceras[1]:
-        abort(&"""{$QuitFailure:8}{&"\{nom\} not installed":48}""")
+    if nom notin installed:
+      abort(&"""{$QuitFailure:8}{&"\{nom\} not installed":48}""")
     if nom in skel:
       abort(&"""{$QuitFailure:8}{&"\{nom\} is a skel ceras":48}""")
 
