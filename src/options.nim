@@ -12,13 +12,13 @@ proc options*() =
   p.next()
 
   case p.kind
-  of cmdArgument, cmdEnd:
+  of cmdEnd:
     quit($Rad, QuitFailure)
-  of cmdLongOption, cmdShortOption:
+  of cmdArgument, cmdLongOption, cmdShortOption:
     lock()
 
     case p.key
-    of "b", "bootstrap":
+    of "bootstrap":
       p.next()
 
       case p.kind
@@ -45,7 +45,7 @@ proc options*() =
           distcleanBootstrap()
 
           echo "distclean complete"
-        of "help":
+        of "--help", "help":
           echo Bootstrap
         of "native":
           setEnvArch()
@@ -67,60 +67,48 @@ proc options*() =
           echo "toolchain complete"
         else:
           exit($Bootstrap, QuitFailure)
-    of "c", "cerata":
-      p.next()
+    of "build":
+      setEnvArch()
+      setEnvNativeDirs()
+      setEnvNativeTools()
+      cleanCerata()
+      buildCerata(remainingArgs(p))
 
-      case p.kind
-      of cmdEnd:
-        exit($Cerata, QuitFailure)
-      of cmdArgument, cmdLongOption, cmdShortOption:
-        case p.key
-        of "build":
-          setEnvArch()
-          setEnvNativeDirs()
-          setEnvNativeTools()
-          cleanCerata()
-          buildCerata(remainingArgs(p))
+      echo ""
+      echo "build complete"
+    of "clean":
+      cleanCerata()
 
-          echo ""
-          echo "build complete"
-        of "clean":
-          cleanCerata()
+      echo "clean complete"
+    of "distclean":
+      distcleanCerata()
 
-          echo "clean complete"
-        of "distclean":
-          distcleanCerata()
-
-          echo "distclean complete"
-        of "help":
-          echo Cerata
-        of "info":
-          showInfo(remainingArgs(p))
-        of "install":
-          installCerata(remainingArgs(p))
-
-          echo ""
-          echo "install complete"
-        of "list":
-          listCerata()
-        of "remove":
-          removeCerata(remainingArgs(p))
-
-          echo ""
-          echo "remove complete"
-        of "search":
-          searchCerata(remainingArgs(p))
-        of "update":
-          echo ""
-          echo "update complete"
-        of "upgrade":
-          echo ""
-          echo "upgrade complete"
-        else:
-          exit($Cerata, QuitFailure)
-    of "h", "help":
+      echo "distclean complete"
+    of "--help", "help":
       echo Rad
-    of "v", "version":
+    of "info":
+      showInfo(remainingArgs(p))
+    of "install":
+      installCerata(remainingArgs(p))
+
+      echo ""
+      echo "install complete"
+    of "list":
+      listCerata()
+    of "remove":
+      removeCerata(remainingArgs(p))
+
+      echo ""
+      echo "remove complete"
+    of "search":
+      searchCerata(remainingArgs(p))
+    of "update":
+      echo ""
+      echo "update complete"
+    of "upgrade":
+      echo ""
+      echo "upgrade complete"
+    of "--version", "version":
       echo version
     else:
       exit($Rad, QuitFailure)
