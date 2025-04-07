@@ -69,7 +69,7 @@ proc resolveDeps(
   for nom in deps[$ceras]:
     resolveDeps(nom, cluster, deps, run)
 
-  cluster.add(nom)
+  cluster &= nom
 
 proc sortCerata(cerata: openArray[string], run = true): seq[string] =
   var
@@ -273,7 +273,7 @@ proc searchCerata*(pattern: openArray[string]) =
   for ceras in walkDir($radClustersCerataLib, true, skipSpecial = true):
     for nom in pattern:
       if nom.toLowerAscii() in ceras[1]:
-        cerata.add(ceras[1])
+        cerata &= ceras[1]
 
   if cerata.len() == 0:
     exit(status = QuitFailure)
