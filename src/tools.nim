@@ -33,17 +33,15 @@ proc genContents*(dir, contents: string) =
   for entry in walkDirRec(
     dir, yieldFilter = {pcFile .. pcLinkToDir}, relative = true, skipSpecial = true
   ):
-    entries.add(
-      if getFileInfo(dir / entry, followSymlink = false).kind == pcDir:
-        &"{entry}/"
-      else:
-        $entry
+    entries &= (
+      if getFileInfo(dir / entry, followSymlink = false).kind == pcDir: &"{entry}/"
+      else: $entry
     )
 
   let contents = open(contents, fmWrite)
 
   for entry in entries.sorted():
-    contents.writeLine(entry)
+    contents &= &"{entry}\n"
 
   contents.close()
 
