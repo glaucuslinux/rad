@@ -159,10 +159,15 @@ proc buildCerata*(
     printContent(idx, $ceras, ceras.ver, $build)
 
     if stage == $native:
+      # Skip build-time dependency if installed
+      if $ceras notin cerata and dirExists(pkgLib / $ceras):
+        continue
+
+      # Skip package if archive exists
       if fileExists(archive):
+        # Install build-time dependency if not installed
         if $ceras notin cerata:
-          if not dirExists(pkgLib / $ceras):
-            installCeras($ceras)
+          installCeras($ceras)
         continue
 
       putEnv($SACD, pkgCache / $ceras / $sac)
