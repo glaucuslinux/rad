@@ -285,13 +285,15 @@ proc removeCerata*(cerata: openArray[string]) =
     printContent(idx, $ceras, ceras.ver, $remove)
 
     for line in lines($radPkgLib / $ceras / $contents):
-      removeFile(&"/{line}")
+      if not line.endsWith($root):
+        removeFile(&"/{line}")
 
     for line in lines($radPkgLib / $ceras / $contents):
-      let path = &"/{line}"
+      if line.endsWith($root):
+        let path = &"/{line}"
 
-      if path.isEmpty():
-        removeDir(path)
+        if path.isEmpty():
+          removeDir(path)
 
     removeDir($radPkgLib / $ceras)
 
