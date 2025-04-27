@@ -165,7 +165,7 @@ proc buildCerata*(
 
       # Skip package if archive exists
       if fileExists(archive):
-        # Install build-time dependency if not installed
+        # Install build-time dependency (if not installed)
         if $ceras notin cerata:
           installCeras($ceras)
         continue
@@ -268,10 +268,7 @@ proc listCerata*() =
 
 proc removeCerata*(cerata: openArray[string]) =
   let
-    cluster = sortCerata(cerata)
-    installed = walkDir($radClustersCerataLib, true, skipSpecial = true).toSeq().unzip()[
-      1
-    ].sorted()
+    installed = walkDir($radPkgLib, true, skipSpecial = true).toSeq().unzip()[1]
     skel = parseCeras($skel).run
 
   for nom in cerata:
@@ -282,7 +279,7 @@ proc removeCerata*(cerata: openArray[string]) =
 
   printHeader()
 
-  for idx, nom in cluster:
+  for idx, nom in cerata:
     let ceras = parseCeras(nom)
 
     printContent(idx, $ceras, ceras.ver, $remove)
