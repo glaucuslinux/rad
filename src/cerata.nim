@@ -47,6 +47,42 @@ proc printHeader() =
 {"idx":8}{"nom":24}{"ver":24}{"cmd":8}fin
 {'~'.repeat(72)}"""
 
+proc fetchCerata(cerata: openArray[string]) =
+  printHeader()
+
+  for idx, nom in cerata:
+    let ceras = parseCeras(nom)
+
+    printContent(idx, $ceras, ceras.ver, $fetch)
+
+    # Skip virtual cerata
+    if ceras.url == $Nil:
+      continue
+
+    let
+      src = getEnv($SRCD) / $ceras
+      tmp = getEnv($TMPD) / $ceras
+
+    if ceras.sum == $Nil:
+      if not dirExists(src):
+        discard gitCloneRepo(ceras.url, src)
+        discard gitCheckoutRepo(src, ceras.ver)
+
+      copyDirWithPermissions(src, tmp)
+    else:
+      let archive = src / lastPathPart(ceras.url)
+
+      if not verifyFile(archive, ceras.sum):
+        removeDir(src)
+        createDir(src)
+        discard downloadFile(ceras.url, archive)
+
+      if verifyFile(archive, ceras.sum):
+        createDir(tmp)
+        discard extractTar(archive, tmp)
+      else:
+        abort(&"""{"sum":8}{ceras:24}{ceras.ver:24}""")
+
 proc resolveDeps(
     nom: string,
     cluster: var seq[string],
@@ -81,43 +117,7 @@ proc sortCerata(cerata: openArray[string], run = true): seq[string] =
 
   cluster
 
-proc prepareCerata(cerata: openArray[string]) =
-  printHeader()
-
-  for idx, nom in cerata:
-    let ceras = parseCeras(nom)
-
-    printContent(idx, $ceras, ceras.ver, $prepare)
-
-    # Skip virtual cerata
-    if ceras.url == $Nil:
-      continue
-
-    let
-      src = getEnv($SRCD) / $ceras
-      tmp = getEnv($TMPD) / $ceras
-
-    if ceras.sum == $Nil:
-      if not dirExists(src):
-        discard gitCloneRepo(ceras.url, src)
-        discard gitCheckoutRepo(src, ceras.ver)
-
-      copyDirWithPermissions(src, tmp)
-    else:
-      let archive = src / lastPathPart(ceras.url)
-
-      if not verifyFile(archive, ceras.sum):
-        removeDir(src)
-        createDir(src)
-        discard downloadFile(ceras.url, archive)
-
-      if verifyFile(archive, ceras.sum):
-        createDir(tmp)
-        discard extractTar(archive, tmp)
-      else:
-        abort(&"""{"sum":8}{ceras:24}{ceras.ver:24}""")
-
-proc installCeras*(
+proc installCeras(
     ceras: string, fs = $root, pkgCache = $radPkgCache, pkgLib = $radPkgLib
 ) =
   let ceras = parseCeras(ceras)
@@ -142,7 +142,7 @@ proc buildCerata*(
 ) =
   let cluster = sortCerata(cerata, false)
 
-  prepareCerata(cluster)
+  fetchCerata(cluster)
 
   echo ""
 

@@ -238,9 +238,9 @@ Distributed under the terms of the ISC License"""
 
   radPrint* = enum
     build
+    fetch
     install
     Nil = "nil"
-    prepare
     remove
 
   radStages* = enum
