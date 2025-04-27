@@ -36,7 +36,7 @@ proc options*() =
           setEnvBootstrap()
           setEnvCrossTools()
           prepareCross()
-          buildCerata(Cross, $cross, false)
+          buildCerata(Cross, resolve = false, $cross)
 
           echo ""
           echo "cross complete"
@@ -51,7 +51,7 @@ proc options*() =
           setEnvArch()
           setEnvNativeDirs()
           setEnvNativeTools()
-          buildCerata(Native, $native, false)
+          buildCerata(Native, resolve = false)
 
           echo ""
           echo "native complete"
@@ -61,7 +61,7 @@ proc options*() =
           setEnvBootstrap()
           cleanBootstrap()
           prepareBootstrap()
-          buildCerata(Toolchain, $toolchain, false)
+          buildCerata(Toolchain, resolve = false, $toolchain)
 
           echo ""
           echo "toolchain complete"

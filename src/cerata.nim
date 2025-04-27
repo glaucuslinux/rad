@@ -117,7 +117,29 @@ proc prepareCerata(cerata: openArray[string]) =
       else:
         abort(&"""{"sum":8}{ceras:24}{ceras.ver:24}""")
 
-proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
+proc installCeras*(
+    ceras: string, fs = $root, pkgCache = $radPkgCache, pkgLib = $radPkgLib
+) =
+  let ceras = parseCeras(ceras)
+
+  discard extractTar(
+    pkgCache / $ceras /
+      &"""{ceras}{(if ceras.url == $Nil: "" else: &"-\{ceras.ver\}")}{tarZst}""",
+    fs,
+  )
+
+  createDir(pkgLib / $ceras)
+  copyFileWithPermissions(pkgCache / $ceras / $contents, pkgLib / $ceras / $contents)
+  copyFileWithPermissions(pkgCache / $ceras / $info, pkgLib / $ceras / $info)
+
+proc buildCerata*(
+    cerata: openArray[string],
+    fs = $root,
+    pkgCache = $radPkgCache,
+    pkgLib = $radPkgLib,
+    resolve = true,
+    stage = $native,
+) =
   let cluster = sortCerata(cerata, false)
 
   prepareCerata(cluster)
@@ -138,6 +160,9 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
 
     if stage == $native:
       if fileExists(archive):
+        if $ceras notin cerata:
+          if not dirExists($radPkgLib / $ceras):
+            installCeras($ceras)
         continue
 
       putEnv($SACD, $radPkgCache / $ceras / $sac)
@@ -186,11 +211,13 @@ proc buildCerata*(cerata: openArray[string], stage = $native, resolve = true) =
         genContents(sac, $radPkgCache / $ceras / $contents)
         removeDir(sac)
 
-      if $bootstrap in $ceras.nop:
-        discard extractTar(archive, $root)
+        copyFileWithPermissions(pkgLib / $ceras / $info, pkgCache / $ceras / $info)
+
+      if $bootstrap in $ceras.nop or $ceras notin cerata:
+        installCeras($ceras)
 
 proc installCerata*(
-    cerata: openArray[string], cache = $radPkgCache, fs = $root, lib = $radPkgLib
+    cerata: openArray[string], fs = $root, pkgCache = $radPkgCache, pkgLib = $radPkgLib
 ) =
   let cluster = sortCerata(cerata)
 
@@ -202,17 +229,17 @@ proc installCerata*(
     printContent(idx, $ceras, ceras.ver, $install)
 
     discard extractTar(
-      cache / $ceras /
+      pkgCache / $ceras /
         &"""{ceras}{(if ceras.url == $Nil: "" else: &"-\{ceras.ver\}")}{tarZst}""",
       fs,
     )
 
-    createDir(lib / $ceras)
-    writeFile(lib / $ceras / "ver", ceras.ver)
-    copyFileWithPermissions(cache / $ceras / $contents, lib / $ceras / $contents)
+    createDir(pkgLib / $ceras)
+    copyFileWithPermissions(pkgCache / $ceras / $contents, pkgLib / $ceras / $contents)
+    copyFileWithPermissions(pkgCache / $ceras / $info, pkgLib / $ceras / $info)
 
     if nom notin cerata:
-      createDir(lib / $ceras / "run")
+      createDir(pkgLib / $ceras / "run")
       # writeFile(lib / $ceras / "run" / )
 
 proc showInfo*(cerata: openArray[string]) =
