@@ -197,8 +197,9 @@ COMMANDS:
   distclean  Clean everything
   help       Display this help message
   info       Show cerata information
-  install    Install cerata
+  install    Build and install cerata
   list       List installed cerata
+  orphan     List orphaned cerata
   remove     Remove cerata
   search     Search for cerata
   update     Update clusters

@@ -2,7 +2,7 @@
 # Distributed under the terms of the ISC License
 
 import
-  std/[algorithm, os, osproc, sequtils, strformat, strutils, tables, times],
+  std/[algorithm, os, osproc, sequtils, strformat, strutils, tables, terminal, times],
   constants,
   flags,
   tools,
@@ -118,9 +118,15 @@ proc sortCerata(cerata: openArray[string], run = true): seq[string] =
   cluster
 
 proc installCeras(
-    ceras: string, fs = $root, pkgCache = $radPkgCache, pkgLib = $radPkgLib
+    nom: string,
+    fs = $root,
+    pkgCache = $radPkgCache,
+    pkgLib = $radPkgLib,
+    implicit = false,
 ) =
-  let ceras = parseCeras(ceras)
+  let
+    ceras = parseCeras(nom)
+    skel = parseCeras($skel).run
 
   discard extractTar(
     pkgCache / $ceras /
@@ -132,6 +138,15 @@ proc installCeras(
   copyFileWithPermissions(pkgCache / $ceras / $contents, pkgLib / $ceras / $contents)
   copyFileWithPermissions(pkgCache / $ceras / $info, pkgLib / $ceras / $info)
 
+  if implicit and $ceras notin skel:
+    writeFile(pkgLib / $ceras / "implicit", "")
+
+  if ceras.run.len() > 0:
+    for dep in ceras.run.split():
+      if dirExists(pkgLib / dep):
+        createDir(pkgLib / dep / "run")
+        writeFile(pkgLib / dep / "run" / nom, "")
+
 proc buildCerata*(
     cerata: openArray[string],
     fs = $root,
@@ -139,6 +154,7 @@ proc buildCerata*(
     pkgLib = $radPkgLib,
     resolve = true,
     stage = $native,
+    implicit = false,
 ) =
   let cluster = sortCerata(cerata, false)
 
@@ -159,15 +175,15 @@ proc buildCerata*(
     printContent(idx, $ceras, ceras.ver, $build)
 
     if stage == $native:
-      # Skip build-time dependency if installed
-      if $ceras notin cerata and dirExists(pkgLib / $ceras):
+      # Skip installed packages
+      if dirExists(pkgLib / $ceras):
         continue
 
       # Skip package if archive exists
       if fileExists(archive):
         # Install build-time dependency (if not installed)
-        if $ceras notin cerata:
-          installCeras($ceras)
+        if implicit:
+          installCeras($ceras, implicit = true)
         continue
 
       putEnv($SACD, pkgCache / $ceras / $sac)
@@ -220,13 +236,31 @@ proc buildCerata*(
           $radClustersCerataLib / $ceras / $info, pkgCache / $ceras / $info
         )
 
-      if $bootstrap in $ceras.nop or $ceras notin cerata:
-        installCeras($ceras)
+      if $bootstrap in $ceras.nop or implicit:
+        installCeras($ceras, implicit = true)
 
 proc installCerata*(
     cerata: openArray[string], fs = $root, pkgCache = $radPkgCache, pkgLib = $radPkgLib
 ) =
-  let cluster = sortCerata(cerata)
+  let
+    cluster = sortCerata(cerata)
+    skel = parseCeras($skel).run
+  var notBuilt: seq[string]
+
+  for idx, nom in cluster:
+    let
+      ceras = parseCeras(nom)
+      archive =
+        pkgCache / $ceras /
+        &"""{ceras}{(if ceras.url == $Nil: "" else: &"-\{ceras.ver\}")}{tarZst}"""
+
+    if not fileExists(archive):
+      notBuilt &= $ceras
+
+  if notBuilt.len() > 0:
+    buildCerata(notBuilt, implicit = true)
+
+    echo ""
 
   printHeader()
 
@@ -234,6 +268,16 @@ proc installCerata*(
     let ceras = parseCeras(nom)
 
     printContent(idx, $ceras, ceras.ver, $install)
+
+    # Skip installed packages
+    if dirExists(pkgLib / $ceras):
+      if $ceras notin cerata and $ceras notin skel:
+        writeFile(pkgLib / $ceras / "implicit", "")
+
+      for nom in cerata:
+        removeFile(pkgLib / nom / "implicit")
+
+      continue
 
     discard extractTar(
       pkgCache / $ceras /
@@ -245,9 +289,11 @@ proc installCerata*(
     copyFileWithPermissions(pkgCache / $ceras / $contents, pkgLib / $ceras / $contents)
     copyFileWithPermissions(pkgCache / $ceras / $info, pkgLib / $ceras / $info)
 
-    if nom notin cerata:
-      createDir(pkgLib / $ceras / "run")
-      # writeFile(lib / $ceras / "run" / )
+    if ceras.run.len() > 0:
+      for dep in ceras.run.split():
+        if dirExists(pkgLib / dep):
+          createDir(pkgLib / dep / "run")
+          writeFile(pkgLib / dep / "run" / nom, "")
 
 proc showInfo*(cerata: openArray[string]) =
   for nom in cerata.deduplicate():
@@ -266,16 +312,41 @@ nop  :: {ceras.nop}
 proc listCerata*() =
   showInfo(walkDir($radPkgLib, true, skipSpecial = true).toSeq().unzip()[1].sorted())
 
-proc removeCerata*(cerata: openArray[string]) =
+proc listOrphans*(pkgLib = $radPkgLib) =
   let
     installed = walkDir($radPkgLib, true, skipSpecial = true).toSeq().unzip()[1]
     skel = parseCeras($skel).run
+
+  for nom in installed:
+    if nom notin skel and fileExists(pkgLib / $nom / "implicit"):
+      if not dirExists(pkgLib / $nom / "run"):
+        styledEcho fgYellow,
+          styleBright, &"""{$QuitFailure:8}{&"\{nom\} is an orphan":48}"""
+
+proc removeCerata*(cerata: openArray[string], pkgLib = $radPkgLib) =
+  let
+    installed = walkDir($radPkgLib, true, skipSpecial = true).toSeq().unzip()[1]
+    skel = parseCeras($skel).run
+  var shouldAbort: bool
 
   for nom in cerata:
     if nom notin installed:
       abort(&"""{$QuitFailure:8}{&"\{nom\} not installed":48}""")
     if nom in skel:
       abort(&"""{$QuitFailure:8}{&"\{nom\} is a skel ceras":48}""")
+    if dirExists(pkgLib / $nom / "run"):
+      let runDeps = walkDir(pkgLib / $nom / "run", true, skipSpecial = true)
+      .toSeq()
+      .unzip()[1].sorted()
+      if runDeps.len() > 0:
+        for dep in runDeps:
+          if dep notin cerata:
+            styledEcho fgYellow,
+              styleBright, &"""{$QuitFailure:8}{&"\{dep\} depends on \{nom\}":48}"""
+            shouldAbort = true
+
+    if shouldAbort:
+      abort(&"""{$QuitFailure:8}{&"\{nom\} is a dependency":48}""")
 
   printHeader()
 
@@ -296,6 +367,11 @@ proc removeCerata*(cerata: openArray[string]) =
           removeDir(path)
 
     removeDir($radPkgLib / $ceras)
+
+    for installedPackage in walkDir(pkgLib, true, skipSpecial = true).toSeq().unzip()[1].sorted():
+      removeFile(pkgLib / $installedPackage / "run" / $ceras)
+      if isEmpty(pkgLib / $installedPackage / "run"):
+        removeDir(pkgLib / $installedPackage / "run")
 
 proc searchCerata*(pattern: openArray[string]) =
   var cerata: seq[string]

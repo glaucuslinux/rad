@@ -89,12 +89,18 @@ proc options*() =
     of "info":
       showInfo(remainingArgs(p))
     of "install":
+      setEnvArch()
+      setEnvNativeDirs()
+      setEnvNativeTools()
+      cleanCerata()
       installCerata(remainingArgs(p))
 
       echo ""
       echo "install complete"
     of "list":
       listCerata()
+    of "orphan":
+      listOrphans()
     of "remove":
       removeCerata(remainingArgs(p))
 

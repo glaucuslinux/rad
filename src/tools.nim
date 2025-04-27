@@ -1,7 +1,7 @@
 # Copyright (c) 2018-2025, Firas Khalil Khana
 # Distributed under the terms of the ISC License
 
-import std/[algorithm, os, osproc, strformat, strutils, times], constants
+import std/[algorithm, os, osproc, strformat, strutils, terminal, times], constants
 
 proc createTarZst*(archive, dir: string): int =
   execCmd(
@@ -20,7 +20,7 @@ proc exit*(msg = "", status = QuitSuccess) =
   quit(status)
 
 proc abort*(err: string, status = QuitFailure) =
-  echo &"""{err}{"abort":8}{now().format("hh:mm tt")}"""
+  styledEcho fgRed, styleBright, &"""{err}{"abort":8}{now().format("hh:mm tt")}"""
 
   exit(status = status)
 
@@ -61,7 +61,9 @@ proc isEmpty*(dir: string): bool =
 
 proc lock*() =
   if fileExists($radLock):
-    echo &"""{$QuitFailure:8}{"lock exists":48}{"abort":8}{now().format("hh:mm tt")}"""
+    styledEcho fgRed,
+      styleBright,
+      &"""{$QuitFailure:8}{"lock exists":48}{"abort":8}{now().format("hh:mm tt")}"""
 
     quit(QuitFailure)
 
