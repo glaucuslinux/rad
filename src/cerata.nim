@@ -152,7 +152,7 @@ proc buildCerata*(
     let
       ceras = parseCeras(nom)
       archive =
-        $radPkgCache / $ceras /
+        $pkgCache / $ceras /
         &"""{ceras}{(if ceras.url == $Nil: "" else: &"-\{ceras.ver\}")}{tarZst}"""
       tmp = getEnv($TMPD) / $ceras
 
@@ -213,7 +213,7 @@ proc buildCerata*(
       # if $radNop.empty notin $ceras.nop:
 
       if status == QuitSuccess:
-        genContents(sac, $radPkgCache / $ceras / $contents)
+        genContents(sac, $pkgCache / $ceras / $contents)
         removeDir(sac)
 
         copyFileWithPermissions(
