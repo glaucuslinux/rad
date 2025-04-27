@@ -161,11 +161,11 @@ proc buildCerata*(
     if stage == $native:
       if fileExists(archive):
         if $ceras notin cerata:
-          if not dirExists($radPkgLib / $ceras):
+          if not dirExists(pkgLib / $ceras):
             installCeras($ceras)
         continue
 
-      putEnv($SACD, $radPkgCache / $ceras / $sac)
+      putEnv($SACD, pkgCache / $ceras / $sac)
       createDir(getEnv($SACD))
 
     if stage != $toolchain:
@@ -211,7 +211,9 @@ proc buildCerata*(
         genContents(sac, $radPkgCache / $ceras / $contents)
         removeDir(sac)
 
-        copyFileWithPermissions(pkgLib / $ceras / $info, pkgCache / $ceras / $info)
+        copyFileWithPermissions(
+          $radClustersCerataLib / $ceras / $info, pkgCache / $ceras / $info
+        )
 
       if $bootstrap in $ceras.nop or $ceras notin cerata:
         installCeras($ceras)
