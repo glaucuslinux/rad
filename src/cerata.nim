@@ -312,6 +312,13 @@ nop  :: {ceras.nop}
 proc listCerata*() =
   showInfo(walkDir($radPkgLib, true, skipSpecial = true).toSeq().unzip()[1].sorted())
 
+proc listContents*(cerata: openArray[string]) =
+  for nom in cerata.deduplicate():
+    let ceras = parseCeras(nom)
+
+    for line in lines($radPkgLib / $ceras / $contents):
+      echo &"/{line}"
+
 proc listOrphans*(pkgLib = $radPkgLib) =
   let
     installed = walkDir($radPkgLib, true, skipSpecial = true).toSeq().unzip()[1]

@@ -14,7 +14,7 @@ proc options*() =
   case p.kind
   of cmdEnd:
     quit($Rad, QuitFailure)
-  of cmdArgument, cmdLongOption, cmdShortOption:
+  else:
     lock()
 
     case p.key
@@ -24,7 +24,7 @@ proc options*() =
       case p.kind
       of cmdEnd:
         exit($Bootstrap, QuitFailure)
-      of cmdArgument, cmdLongOption, cmdShortOption:
+      else:
         case p.key
         of "clean":
           setEnvBootstrap()
@@ -80,6 +80,8 @@ proc options*() =
       cleanCerata()
 
       echo "clean complete"
+    of "contents":
+      listContents(remainingArgs(p))
     of "distclean":
       distcleanCerata()
 

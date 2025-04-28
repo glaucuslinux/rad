@@ -194,6 +194,7 @@ USAGE:
 COMMANDS:
   build      Build cerata
   clean      Clean cache
+  contents   List cerata contents
   distclean  Clean everything
   help       Display this help message
   info       Show cerata information
