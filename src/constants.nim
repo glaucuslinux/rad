@@ -15,6 +15,7 @@ type
     attr
     autoconf
     automake
+    awsLc = "aws-lc"
     bash
     binutils
     byacc
@@ -43,7 +44,6 @@ type
     libcap
     libedit
     libgcc
-    libressl
     libstdcxxV3 = "libstdc++-v3"
     libudevZero = "libudev-zero"
     limine
@@ -167,8 +167,8 @@ type
     ldflags =
       "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu"
     lto = "-flto=auto -flto-compression-level=19 -fuse-linker-plugin "
-    make = "-j4 -O"
-    parallel = "-j1 -O"
+    make = "-j 4 -O"
+    parallel = "-j 1 -O"
     shellRedirect = ">/dev/null 2>&1"
     zstdCompress = "-22 --ultra -T0 --long"
     zstdDecompress = "-d -T0 --long"
@@ -183,7 +183,6 @@ COMMANDS:
   clean      Clean cache
   cross      Bootstrap cross glaucus
   distclean  Clean everything
-  help       Display this help message
   native     Bootstrap native glaucus
   toolchain  Bootstrap toolchain"""
     Rad =
@@ -289,8 +288,8 @@ const
     # Security
     $attr,
     $acl,
+    $awsLc,
     $libcap,
-    $libressl,
     $shadow,
 
     # Compression
@@ -354,8 +353,8 @@ const
     # Security
     $acl,
     $attr,
+    $awsLc,
     $libcap,
-    $libressl,
     $shadow,
 
     # Compression
@@ -369,10 +368,10 @@ const
 
     # Development
     $autoconf,
-    $binutils,
+    # $binutils,
     $expat,
     $file,
-    $gcc,
+    # $gcc,
     $gettextTiny,
     $libedit,
     $m4,
