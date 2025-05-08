@@ -371,7 +371,7 @@ const
     # $binutils,
     $expat,
     $file,
-    # $gcc,
+    $gcc,
     $gettextTiny,
     $libedit,
     $m4,
