@@ -3,9 +3,9 @@ glaucus package manager
 
 ## Community
 - [Discord](https://discord.gg/nDKNmNc)
-- [Reddit](https://www.reddit.com/r/glaucus)
+- [Reddit](https://reddit.com/r/glaucus)
 - [Telegram](https://t.me/glaucuslinux)
-- [Twitter](https://twitter.com/glaucuslinux)
+- [X](https://x.com/glaucuslinux)
 - [YouTube](https://www.youtube.com/@glaucuslinux)
 
 ## Mirrors
