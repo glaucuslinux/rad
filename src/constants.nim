@@ -368,7 +368,7 @@ const
 
     # Development
     $autoconf,
-    # $binutils,
+    $binutils,
     $expat,
     $file,
     $gcc,
