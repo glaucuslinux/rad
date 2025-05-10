@@ -6,7 +6,7 @@ glaucus package manager
 - [Reddit](https://reddit.com/r/glaucus)
 - [Telegram](https://t.me/glaucuslinux)
 - [X](https://x.com/glaucuslinux)
-- [YouTube](https://www.youtube.com/@glaucuslinux)
+- [YouTube](https://youtube.com/@glaucuslinux)
 
 ## Mirrors
 - [Codeberg](https://codeberg.org/glaucuslinux/rad)
