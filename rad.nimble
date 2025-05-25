@@ -1,7 +1,7 @@
 version = "0.1.0"
-author = "Firas Khalil Khana <firasuke@glaucuslinux.org>"
+author = "Firas Khana <firasuke@glaucuslinux.org>"
 description = "glaucus package manager"
-license = "ISC"
+license = "MPL-2.0"
 
 skipFiles = @["LICENSE", "README.md"]
 srcDir = "src"
