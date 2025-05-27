@@ -88,7 +88,6 @@ type
     toybox
     utilLinux = "util-linux"
     utmps
-    wget2
     xxhash
     xz
     yash
@@ -394,7 +393,6 @@ const
     $iproute2,
     $openresolv,
     $sdhcp,
-    $wget2,
 
     # Utilities
     $dash,

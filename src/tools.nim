@@ -9,11 +9,11 @@ import std/[algorithm, os, osproc, strformat, strutils, terminal, times], consta
 
 proc createTarZst*(archive, dir: string): int =
   execCmd(
-    &"{tar} --use-compress-program '{zstd} {zstdCompress}' -cPf {archive} -C {dir} ."
+    &"{tar} --use-compress-program '{zstd} {zstdCompress}' -cP -f {archive} -C {dir} ."
   )
 
 proc downloadFile*(url, file: string): int =
-  execCmd(&"{wget2} -q -O {file} -c -N {url}")
+  execCmd(&"{curl} -fL -o {file} -s {url}")
 
 proc exit*(msg = "", status = QuitSuccess) =
   removeFile($radLock)
@@ -29,7 +29,7 @@ proc abort*(err: string, status = QuitFailure) =
   exit(status = status)
 
 proc extractTar*(archive, dir: string): int =
-  execCmd(&"{tar} --no-same-owner -xmPf {archive} -C {dir}")
+  execCmd(&"{tar} --no-same-owner -xmP -f {archive} -C {dir}")
 
 proc genContents*(dir, contents: string) =
   var entries: seq[string]
