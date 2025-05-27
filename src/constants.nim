@@ -73,7 +73,6 @@ type
     pcre2
     perl
     pigz
-    pkgconf
     rad
     reflex
     s6
@@ -86,6 +85,7 @@ type
     skel
     slibtool
     toybox
+    uConfig = "u-config"
     utilLinux = "util-linux"
     utmps
     xxhash
@@ -165,13 +165,13 @@ type
 
   radFlags* = enum
     cflags =
-      "-pipe -O2 -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=19 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+      "-pipe -O2 -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=3 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
     cpp = "-E"
     ldflags =
       "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu"
-    lto = "-flto=auto -flto-compression-level=19 -fuse-linker-plugin "
-    make = "-j 4 -O"
-    parallel = "-j 1 -O"
+    lto = "-flto=auto -flto-compression-level=3 -fuse-linker-plugin "
+    parallel = "-j 4 -O"
+    noParallel = "-j 1"
     shellRedirect = ">/dev/null 2>&1"
 
   radHelp* = enum
@@ -213,12 +213,12 @@ rad version 0.1.0
 Licensed under the Mozilla Public License Version 2.0 (MPL-2.0)
 Copyright © 2018-2025 Firas Khana"""
 
-  radNop* = enum
+  radOpt* = enum
     bootstrap
-    check
     empty
-    lto
-    parallel
+    noCheck
+    noLTO
+    noParallel
 
   radPaths* = enum
     bin
@@ -260,6 +260,7 @@ Copyright © 2018-2025 Firas Khana"""
     nm = "gcc-nm"
     objcopy
     objdump
+    pkgConfig = "pkg-config"
     ranlib = "gcc-ranlib"
     readelf
     sh
@@ -277,7 +278,7 @@ const
     $linuxHeaders,
     $muslUtils,
     $netbsdCurses,
-    $pkgconf,
+    $uConfig,
 
     # Init
     $skalibs,
@@ -310,7 +311,7 @@ const
     $gettextTiny,
     $libedit,
     $m4,
-    $radCerata.make,
+    $make,
     $mawk,
     $pcre2,
     $reflex,
@@ -376,14 +377,14 @@ const
     $gettextTiny,
     $libedit,
     $m4,
-    $muon,
-    $radCerata.make,
+    $make,
     $mawk,
+    $muon,
     $netbsdCurses,
     $pcre2,
-    $pkgconf,
     $reflex,
     $slibtool,
+    $uConfig,
 
     # Networking
     $eiwd,

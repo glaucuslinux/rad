@@ -7,8 +7,8 @@
 
 import std/os, ../../src/[constants, flags]
 
-setEnvflagsNopParallel()
+setEnvFlagsNoParallel()
 
 echo "MAKEFLAGS  :: ", getEnv($MAKEFLAGS)
 
-doAssert getEnv($MAKEFLAGS) == "-j1 -O"
+doAssert getEnv($MAKEFLAGS) == "-j 1"

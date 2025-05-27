@@ -86,6 +86,6 @@ proc setEnvNativeTools*() =
   putEnv($LEX, $reflex)
   putEnv($LIBTOOL, $slibtool)
   putEnv($NM, $nm)
-  putEnv($PKG_CONFIG, $pkgconf)
+  putEnv($PKG_CONFIG, $uConfig)
   putEnv($RANLIB, $ranlib)
   putEnv($YACC, $byacc)

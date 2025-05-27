@@ -13,7 +13,7 @@ import
   toml_serialization
 
 type Ceras = object
-  nom, ver, url, sum, bld, run, nop = $Nil
+  nom, ver, url, sum, bld, run, opt = $Nil
 
 proc `$`(self: Ceras): string =
   self.nom
@@ -196,13 +196,13 @@ proc buildCerata*(
     if stage != $toolchain:
       setEnvFlags()
 
-      if $radNop.lto in $ceras.nop:
-        setEnvFlagsNopLto()
+      if $noLTO in $ceras.opt:
+        setEnvFlagsNoLTO()
 
-    if $radNop.parallel in $ceras.nop:
-      setEnvFlagsNopParallel()
+    if $radOpt.noParallel in $ceras.opt:
+      setEnvFlagsNoParallel()
     else:
-      putEnv($MAKEFLAGS, $radFlags.make)
+      putEnv($MAKEFLAGS, $parallel)
 
     if dirExists(tmp):
       setCurrentDir(tmp)
@@ -230,7 +230,7 @@ proc buildCerata*(
         status = createTarZst(archive, sac)
 
       # Purge
-      # if $radNop.empty notin $ceras.nop:
+      # if empty notin $ceras.opt:
 
       if status == QuitSuccess:
         genContents(sac, $pkgCache / $ceras / $contents)
@@ -240,7 +240,7 @@ proc buildCerata*(
           $radClustersCerataLib / $ceras / $info, pkgCache / $ceras / $info
         )
 
-      if $bootstrap in $ceras.nop or implicit:
+      if $bootstrap in $ceras.opt or implicit:
         installCeras($ceras, implicit = true)
 
 proc installCerata*(
@@ -310,7 +310,7 @@ url  :: {ceras.url}
 sum  :: {ceras.sum}
 bld  :: {ceras.bld}
 run  :: {ceras.run}
-nop  :: {ceras.nop}
+opt  :: {ceras.opt}
 """
 
 proc listCerata*() =
