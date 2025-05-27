@@ -158,7 +158,6 @@ type
   radFiles* = enum
     configGuess = "config.guess"
     contents
-    contentsMinimal = "contents-minimal"
     files
     info
     tarZst = ".tar.zst"
