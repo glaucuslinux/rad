@@ -173,8 +173,6 @@ type
     make = "-j 4 -O"
     parallel = "-j 1 -O"
     shellRedirect = ">/dev/null 2>&1"
-    zstdCompress = "-22 --ultra -T0 --long"
-    zstdDecompress = "-d -T0 --long"
 
   radHelp* = enum
     Bootstrap =

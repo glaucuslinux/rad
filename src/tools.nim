@@ -8,9 +8,7 @@
 import std/[algorithm, os, osproc, strformat, strutils, terminal, times], constants
 
 proc createTarZst*(archive, dir: string): int =
-  execCmd(
-    &"{tar} --use-compress-program '{zstd} {zstdCompress}' -cP -f {archive} -C {dir} ."
-  )
+  execCmd(&"{tar} --use-compress-program '{zstd} -3 -T0' -cP -f {archive} -C {dir} .")
 
 proc downloadFile*(url, file: string): int =
   execCmd(&"{curl} -fL -o {file} -s {url}")
