@@ -70,7 +70,9 @@ proc fetchCerata(cerata: openArray[string]) =
     if ceras.sum == $Nil:
       if not dirExists(src):
         discard gitCloneRepo(ceras.url, src)
-        discard gitCheckoutRepo(src, ceras.ver)
+
+        if ceras.ver != "head":
+          discard gitCheckoutRepo(src, ceras.ver)
 
       copyDirWithPermissions(src, tmp)
     else:
@@ -209,11 +211,18 @@ proc buildCerata*(
     if dirExists(tmp / &"{ceras}-{ceras.ver}"):
       setCurrentDir(tmp / &"{ceras}-{ceras.ver}")
 
-    # Only use `nom` and `ver` from `ceras`
-    #
-    # Call phases sequentially to preserve the current working directory
     let shell = execCmdEx(
-      &"""{sh} -c 'nom={ceras} ver={ceras.ver} . {$radClustersCerataLib / $ceras / (if stage == $native: $build else: $build & '-' & stage)} && for i in prepare configure build; do if command -v $i {shellRedirect}; then $i; fi done && package'"""
+      &"""{sh} -efu -c '
+        nom={ceras} ver={ceras.ver} . {$radClustersCerataLib / $ceras / (if stage == $native: $build else: $build & '-' & stage)}
+
+        for i in prepare configure build; do
+          if command -v $i {shellRedirect}; then
+            $i
+          fi
+        done
+
+        package
+      '"""
     )
 
     writeFile(
