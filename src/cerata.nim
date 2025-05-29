@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: MPL-2.0
+
 # Copyright © 2018-2025 Firas Khana
 
 # This Source Code Form is subject to the terms of the Mozilla Public
@@ -81,7 +82,7 @@ proc fetchCerata(cerata: openArray[string]) =
       if not verifyFile(archive, ceras.sum):
         removeDir(src)
         createDir(src)
-        discard downloadFile(ceras.url, archive)
+        discard downloadFile(archive, ceras.url)
 
       if verifyFile(archive, ceras.sum):
         createDir(tmp)

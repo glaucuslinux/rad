@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: MPL-2.0
+
 # Copyright © 2018-2025 Firas Khana
 
 # This Source Code Form is subject to the terms of the Mozilla Public
@@ -119,7 +120,7 @@ proc options*() =
       echo ""
       echo "upgrade complete"
     of "--version", "version":
-      echo version
+      echo Version
     else:
       exit($Rad, QuitFailure)
 

@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: MPL-2.0
+
 # Copyright © 2018-2025 Firas Khana
 
 # This Source Code Form is subject to the terms of the Mozilla Public
@@ -104,10 +105,10 @@ type
   radEnv* = enum
     # ARCH
     ARCH
+    BLD
     CARCH
     CROSS_COMPILE
     PRETTY_NAME
-    BLD
     TGT
 
     # DIRS
@@ -169,8 +170,8 @@ type
     ldflags =
       "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu"
     lto = "-flto=auto -flto-compression-level=3 -fuse-linker-plugin "
-    parallel = "-j 4 -O"
     noParallel = "-j 1"
+    parallel = "-j 4 -O"
     shellRedirect = ">/dev/null 2>&1"
 
   radHelp* = enum
@@ -205,7 +206,7 @@ COMMANDS:
   update     Update clusters
   upgrade    Upgrade cerata
   version    Display rad version"""
-    version =
+    Version =
       """
 rad version 0.1.0
 

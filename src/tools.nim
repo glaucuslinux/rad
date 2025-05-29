@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: MPL-2.0
+
 # Copyright © 2018-2025 Firas Khana
 
 # This Source Code Form is subject to the terms of the Mozilla Public
@@ -10,7 +11,7 @@ import std/[algorithm, os, osproc, strformat, strutils, terminal, times], consta
 proc createTarZst*(archive, dir: string): int =
   execCmd(&"{tar} --use-compress-program '{zstd} -3 -T0' -cP -f {archive} -C {dir} .")
 
-proc downloadFile*(url, file: string): int =
+proc downloadFile*(file, url: string): int =
   execCmd(&"{curl} -fL -o {file} -s {url}")
 
 proc exit*(msg = "", status = QuitSuccess) =
@@ -98,13 +99,13 @@ proc require*() =
     if findExe(exe).isEmptyOrWhitespace():
       abort(&"""{127:8}{&"\{exe\} not found":48}""")
 
+proc verifyContents*(contents: string): bool =
+  for file in lines(contents):
+    if not fileExists(file):
+      return
+
 proc xxhsum(file: string): string =
   execCmdEx(&"xxhsum -H2 {file}").output.strip()
 
 proc verifyFile*(file, sum: string): bool =
   fileExists(file) and xxhsum(file).split()[0] == sum
-
-proc verifyContents*(contents: string): bool =
-  for file in lines(contents):
-    if not fileExists(file):
-      return
