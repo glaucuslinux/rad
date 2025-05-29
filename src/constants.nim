@@ -171,7 +171,7 @@ type
       "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu"
     lto = "-flto=auto -flto-compression-level=3 -fuse-linker-plugin "
     noParallel = "-j 1"
-    parallel = "-j 4 -O"
+    parallel = "-j 5 -O"
     shellRedirect = ">/dev/null 2>&1"
 
   radHelp* = enum
