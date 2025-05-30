@@ -216,9 +216,9 @@ Copyright © 2018-2025 Firas Khana"""
   radOpt* = enum
     bootstrap
     empty
-    noCheck
-    noLTO
-    noParallel
+    noCheck = "no-check"
+    noLTO = "no-lto"
+    noParallel = "no-parallel"
 
   radPaths* = enum
     bin
