@@ -28,18 +28,19 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
-          for i in choosenim config.nims Nim nim nimble; dorm -fR \
-            ~/$i \
-            ~/.$i \
-            ~/.cache/$i \
-            ~/.config/$i \
-            ~/.local/share/$i \
-            ~/.local/state/$i \
-            /etc/$i \
-            /opt/$i \
-            /usr/bin/$i \
-            /usr/lib/$i \
-            /usr/share/$i
+          for i in choosenim config.nims Nim nim nimble; do
+            rm -fR \
+              ~/$i \
+              ~/.$i \
+              ~/.cache/$i \
+              ~/.config/$i \
+              ~/.local/share/$i \
+              ~/.local/state/$i \
+              /etc/$i \
+              /opt/$i \
+              /usr/bin/$i \
+              /usr/lib/$i \
+              /usr/share/$i
           done
 
           curl -fL -o nim.tar.xz -s https://github.com/nim-lang/nightlies/releases/download/latest-devel/linux_x64.tar.xz
