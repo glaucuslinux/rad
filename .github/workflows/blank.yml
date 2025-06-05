@@ -24,13 +24,32 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-      - uses: nim-lang/setup-nimble-action@v1
-        with:
-          nimble-version: 'latest'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          for i in choosenim config.nims Nim nim nimble; dorm -fR \
+            ~/$i \
+            ~/.$i \
+            ~/.cache/$i \
+            ~/.config/$i \
+            ~/.local/share/$i \
+            ~/.local/state/$i \
+            /etc/$i \
+            /opt/$i \
+            /usr/bin/$i \
+            /usr/lib/$i \
+            /usr/share/$i
+          done
+
+          curl -fL -o nim.tar.xz -s https://github.com/nim-lang/nightlies/releases/download/latest-devel/linux_x64.tar.xz
+
+          bsdtar --no-same-owner -xmP -f nim.tar.xz -C .
+
+          ./nim-*/deinstall.sh /usr/bin
+
+          mv nim-* ~/.nim
+
+          export PATH="~/.nim/bin:~/.nimble/bin:$PATH"
+
+          nimble build
