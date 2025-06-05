@@ -266,7 +266,7 @@ Copyright © 2018-2025 Firas Khana"""
     sh
     size
     strip
-    tar = "bsdtar"
+    tar
     yacc
 
 const

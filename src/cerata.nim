@@ -39,7 +39,7 @@ proc parseCeras(nom: string): Ceras =
   let path = $radClustersCerataLib / nom
 
   if not dirExists(path):
-    abort(&"""{"nom":8}{&"\{nom\} not found":48}""", 127)
+    abort(&"""{"nom":8}{&"\{nom\} not found":48}""")
 
   Toml.loadFile(path / $info, Ceras)
 
@@ -72,7 +72,7 @@ proc fetchCerata(cerata: openArray[string]) =
       if not dirExists(src):
         discard gitCloneRepo(ceras.url, src)
 
-        if ceras.ver != "head":
+        if ceras.ver != "latest":
           discard gitCheckoutRepo(src, ceras.ver)
 
       copyDirWithPermissions(src, tmp)
