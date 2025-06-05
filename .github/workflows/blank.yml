@@ -51,6 +51,7 @@ jobs:
 
           mv nim-* ~/.nim
 
-          export PATH="~/.nim/bin:~/.nimble/bin:$PATH"
+          export PATH="~/.nim/bin:$PATH"
 
           nimble build
+          ls -l
