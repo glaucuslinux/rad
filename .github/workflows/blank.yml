@@ -45,7 +45,7 @@ jobs:
 
           curl -fL -o nim.tar.xz -s https://github.com/nim-lang/nightlies/releases/download/latest-devel/linux_x64.tar.xz
 
-          bsdtar --no-same-owner -xmP -f nim.tar.xz -C .
+          tar --no-same-owner -xmP -f nim.tar.xz -C .
 
           ./nim-*/deinstall.sh /usr/bin
 
