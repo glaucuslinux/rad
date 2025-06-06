@@ -32,6 +32,4 @@ jobs:
 
           ./bubble/install-nim
 
-          export PATH="~/.nim/bin:$PATH"
-
-          nimble build
+          PATH="~/.nim/bin:$PATH" nimble build
