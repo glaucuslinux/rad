@@ -11,8 +11,8 @@ import std/[algorithm, os, osproc, strformat, strutils, terminal, times], consta
 proc createTarZst*(archive, dir: string): int =
   execCmd(&"{tar} --use-compress-program '{zstd} -3 -T0' -cP -f {archive} -C {dir} .")
 
-proc downloadFile*(file, url: string): int =
-  execCmd(&"{curl} -fL -o {file} -s {url}")
+proc downloadFile*(dir, url: string): int =
+  execCmd(&"{curl} --create-dirs -fL --output-dir {dir} -JOs {url}")
 
 proc exit*(msg = "", status = QuitSuccess) =
   removeFile($radLock)

@@ -28,29 +28,8 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
-          for i in choosenim config.nims Nim nim nimble; do
-            rm -fR \
-              ~/$i \
-              ~/.$i \
-              ~/.cache/$i \
-              ~/.config/$i \
-              ~/.local/share/$i \
-              ~/.local/state/$i \
-              /etc/$i \
-              /opt/$i \
-              /usr/bin/$i \
-              /usr/lib/$i \
-              /usr/share/$i
-          done
+          git clone https://github.com/glaucuslinux/bubble
 
-          curl -fL -o nim.tar.xz -s https://github.com/nim-lang/nightlies/releases/download/latest-devel/linux_x64.tar.xz
+          ./bubble/install-nim
 
-          tar --no-same-owner -xmP -f nim.tar.xz -C .
-
-          ./nim-*/deinstall.sh /usr/bin
-
-          mv nim-* ~/.nim
-
-          export PATH="~/.nim/bin:$PATH"
-
-          nimble build
+          PATH="~/.nim/bin:$PATH" nimble build

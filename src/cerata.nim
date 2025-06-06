@@ -81,8 +81,7 @@ proc fetchCerata(cerata: openArray[string]) =
 
       if not verifyFile(archive, ceras.sum):
         removeDir(src)
-        createDir(src)
-        discard downloadFile(archive, ceras.url)
+        discard downloadFile(src, ceras.url)
 
       if verifyFile(archive, ceras.sum):
         createDir(tmp)
