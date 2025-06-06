@@ -12,7 +12,7 @@ proc createTarZst*(archive, dir: string): int =
   execCmd(&"{tar} --use-compress-program '{zstd} -3 -T0' -cP -f {archive} -C {dir} .")
 
 proc downloadFile*(dir, url: string): int =
-  execCmd(&"{curl} --create-dirs -fL --output-dir {dir} -JOs {url}")
+  execCmd(&"{curl} -fL --output-dir {dir} -JOs {url}")
 
 proc exit*(msg = "", status = QuitSuccess) =
   removeFile($radLock)
