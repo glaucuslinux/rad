@@ -6,7 +6,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import std/[os, parseopt], arch, bootstrap, cerata, constants, tools
+import std/[os, parseopt], arch, bootstrap, packages, constants, tools
 
 proc options*() =
   if paramCount() < 1:
@@ -41,7 +41,7 @@ proc options*() =
           setEnvBootstrap()
           setEnvCrossTools()
           prepareCross()
-          buildCerata(Cross, resolve = false, stage = $cross)
+          buildPackages(Cross, resolve = false, stage = $cross)
 
           echo ""
           echo "cross complete"
@@ -54,7 +54,7 @@ proc options*() =
           setEnvArch()
           setEnvNativeDirs()
           setEnvNativeTools()
-          buildCerata(Native, resolve = false)
+          buildPackages(Native, resolve = false)
 
           echo ""
           echo "native complete"
@@ -64,7 +64,7 @@ proc options*() =
           setEnvBootstrap()
           cleanBootstrap()
           prepareBootstrap()
-          buildCerata(Toolchain, resolve = false, stage = $toolchain)
+          buildPackages(Toolchain, resolve = false, stage = $toolchain)
 
           echo ""
           echo "toolchain complete"
@@ -74,19 +74,19 @@ proc options*() =
       setEnvArch()
       setEnvNativeDirs()
       setEnvNativeTools()
-      cleanCerata()
-      buildCerata(remainingArgs(p))
+      cleanPackages()
+      buildPackages(remainingArgs(p))
 
       echo ""
       echo "build complete"
     of "clean":
-      cleanCerata()
+      cleanPackages()
 
       echo "clean complete"
     of "contents":
       listContents(remainingArgs(p))
     of "distclean":
-      distcleanCerata()
+      distcleanPackages()
 
       echo "distclean complete"
     of "--help", "help":
@@ -97,22 +97,22 @@ proc options*() =
       setEnvArch()
       setEnvNativeDirs()
       setEnvNativeTools()
-      cleanCerata()
-      installCerata(remainingArgs(p))
+      cleanPackages()
+      installPackages(remainingArgs(p))
 
       echo ""
       echo "install complete"
     of "list":
-      listCerata()
+      listPackages()
     of "orphan":
       listOrphans()
     of "remove":
-      removeCerata(remainingArgs(p))
+      removePackages(remainingArgs(p))
 
       echo ""
       echo "remove complete"
     of "search":
-      searchCerata(remainingArgs(p))
+      searchPackages(remainingArgs(p))
     of "update":
       echo ""
       echo "update complete"

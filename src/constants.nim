@@ -15,7 +15,7 @@ type
     x86_64Linux = "x86_64"
     x86_64_v3 = "x86-64-v3"
 
-  radCerata* = enum
+  radPackages* = enum
     acl
     attr
     autoconf
@@ -25,8 +25,8 @@ type
     binutils
     byacc
     bzip2
-    cerata
     cmake
+    core
     curl
     dash
     eiwd
@@ -96,31 +96,30 @@ type
     zstd
 
   radDirs* = enum
+    dst
     log
     pkg
-    sac
     src
     tmp
 
   radEnv* = enum
     # ARCH
     ARCH
-    BLD
+    BARCH
     CARCH
     CROSS_COMPILE
     PRETTY_NAME
-    TGT
+    TARCH
 
     # DIRS
-    CERD
     CRSD
+    DSTD
     LOGD
     PATH
     PKGD
-    SACD
     SRCD
-    TMPD
     TLCD
+    TMPD
 
     # FLAGS
     CFLAGS
@@ -192,19 +191,19 @@ USAGE:
   rad [ COMMAND ]
 
 COMMANDS:
-  build      Build cerata
+  build      Build packages
   clean      Clean cache
-  contents   List cerata contents
+  contents   List package contents
   distclean  Clean everything
   help       Display this help message
-  info       Show cerata information
-  install    Build and install cerata
-  list       List installed cerata
-  orphan     List orphaned cerata
-  remove     Remove cerata
-  search     Search for cerata
-  update     Update clusters
-  upgrade    Upgrade cerata
+  info       Show package information
+  install    Build and install packages
+  list       List installed packages
+  orphan     List orphaned packages
+  remove     Remove packages
+  search     Search for packages
+  update     Update repositories
+  upgrade    Upgrade packages
   version    Display rad version"""
     Version =
       """
@@ -225,18 +224,19 @@ Copyright © 2018-2025 Firas Khana"""
     # `pkgconf` and `pkg-config` do not respect sysroot; does not get prefixed
     # to PATH and LIBDIR
     pkgConfigLibdir = "/usr/lib/pkgconfig"
-    pkgConfigSystemIncludePath = "/usr/include"
-    pkgConfigSystemLibraryPath = "/usr/lib"
+    radBuildCache = "/var/cache/rad/build"
     radConf = "/etc/rad.conf"
+    radCoreRepo = "/var/lib/rad/repo/core"
+    radExtraRepo = "/var/lib/rad/repo/extra"
+    radLocalLib = "/var/lib/rad/local"
     radLock = "/tmp/rad.lock"
-    radPkgCache = "/var/cache/rad/pkg"
-    radSrcCache = "/var/cache/rad/src"
-    radClustersCerataLib = "/var/lib/rad/clusters/cerata"
-    radPkgLib = "/var/lib/rad/pkg"
     radLog = "/var/log/rad"
+    radSrcCache = "/var/cache/rad/src"
     radTmp = "/var/tmp/rad"
     root = "/"
     usr
+    usrInclude = "/usr/include"
+    usrLibrary = "/usr/lib"
 
   radPrint* = enum
     build
@@ -273,7 +273,7 @@ const
   Cross* = [
     # Development
     $fs,
-    $cerata,
+    $packages,
     $expat,
     $linuxHeaders,
     $muslUtils,
@@ -337,7 +337,7 @@ const
   Native* = [
     # Development
     $fs,
-    $cerata,
+    $packages,
     $linuxHeaders,
     $musl,
     $perl,
