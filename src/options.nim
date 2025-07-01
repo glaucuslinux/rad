@@ -6,11 +6,11 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import std/[os, parseopt], arch, bootstrap, packages, constants, tools
+import std/[os, parseopt, strutils], arch, bootstrap, packages, constants, tools
 
 proc options*() =
   if paramCount() < 1:
-    quit($Rad, QuitFailure)
+    quit(help, QuitFailure)
 
   var p = initOptParser()
 
@@ -18,7 +18,7 @@ proc options*() =
 
   case p.kind
   of cmdEnd:
-    quit($Rad, QuitFailure)
+    quit(help, QuitFailure)
   else:
     lock()
 
@@ -28,53 +28,53 @@ proc options*() =
 
       case p.kind
       of cmdEnd:
-        exit($Bootstrap, QuitFailure)
+        exit(helpBootstrap, QuitFailure)
       else:
         case p.key
         of "clean":
-          setEnvBootstrap()
           cleanBootstrap()
 
           echo "clean complete"
         of "cross":
-          setEnvArch(cross)
+          setEnvArch("glaucus")
           setEnvBootstrap()
-          setEnvCrossTools()
+          setEnvCross()
           prepareCross()
-          buildPackages(Cross, resolve = false, stage = $cross)
+
+          buildPackages(
+            parsePackage("cross").run.split(), resolve = false, stage = $cross
+          )
 
           echo ""
           echo "cross complete"
-        of "distclean":
-          setEnvBootstrap()
-          distcleanBootstrap()
-
-          echo "distclean complete"
         of "native":
           setEnvArch()
-          setEnvNativeDirs()
-          setEnvNativeTools()
-          buildPackages(Native, resolve = false)
+          setEnvNative()
+
+          buildPackages(parsePackage("native").run.split(), resolve = false)
 
           echo ""
           echo "native complete"
         of "toolchain":
           require()
-          setEnvArch(toolchain)
+          setEnvArch("glaucus")
           setEnvBootstrap()
           cleanBootstrap()
           prepareBootstrap()
-          buildPackages(Toolchain, resolve = false, stage = $toolchain)
+
+          buildPackages(
+            parsePackage("toolchain").run.split(), resolve = false, stage = $toolchain
+          )
 
           echo ""
           echo "toolchain complete"
         else:
-          exit($Bootstrap, QuitFailure)
+          exit(helpBootstrap, QuitFailure)
     of "build":
       setEnvArch()
-      setEnvNativeDirs()
-      setEnvNativeTools()
+      setEnvNative()
       cleanPackages()
+
       buildPackages(remainingArgs(p))
 
       echo ""
@@ -85,18 +85,13 @@ proc options*() =
       echo "clean complete"
     of "contents":
       listContents(remainingArgs(p))
-    of "distclean":
-      distcleanPackages()
-
-      echo "distclean complete"
     of "--help", "help":
-      echo Rad
+      echo help
     of "info":
       showInfo(remainingArgs(p))
     of "install":
       setEnvArch()
-      setEnvNativeDirs()
-      setEnvNativeTools()
+      setEnvNative()
       cleanPackages()
       installPackages(remainingArgs(p))
 
@@ -120,8 +115,8 @@ proc options*() =
       echo ""
       echo "upgrade complete"
     of "--version", "version":
-      echo Version
+      echo version
     else:
-      exit($Rad, QuitFailure)
+      exit(help, QuitFailure)
 
     exit()

@@ -14,34 +14,23 @@ import
   toml_serialization
 
 type Package = object
-  nom, ver, url, sum, bld, run, opt = $Nil
+  nom, ver, url, sum, bld, run*, opt = "nil"
 
 proc `$`(self: Package): string =
   self.nom
 
 proc cleanPackages*() =
-  removeDir($radLog)
-  removeDir($radTmp)
+  for i in [pathLog, pathTmp]:
+    removeDir(i)
+    createDir(i)
 
-  createDir($radLog)
-  createDir($radTmp)
-
-proc distcleanPackages*() =
-  cleanPackages()
-
-  removeDir($radPkgCache)
-  removeDir($radSrcCache)
-
-  createDir($radPkgCache)
-  createDir($radSrcCache)
-
-proc parsePackage(nom: string): Package =
-  let path = $radClustersCerataLib / nom
+proc parsePackage*(nom: string): Package =
+  let path = pathCoreRepo / nom
 
   if not dirExists(path):
     abort(&"""{"nom":8}{&"\{nom\} not found":48}""")
 
-  Toml.loadFile(path / $info, Package)
+  Toml.loadFile(path / "info", Package)
 
 proc printContent(idx: int, nom, ver, cmd: string) =
   echo &"""{idx + 1:<8}{nom:24}{ver:24}{cmd:8}{now().format("hh:mm tt")}"""
@@ -52,23 +41,23 @@ proc printHeader() =
 {"idx":8}{"nom":24}{"ver":24}{"cmd":8}fin
 {'~'.repeat(72)}"""
 
-proc fetchPackage(packages: openArray[string]) =
+proc fetchPackages(packages: openArray[string]) =
   printHeader()
 
   for idx, nom in packages:
     let package = parsePackage(nom)
 
-    printContent(idx, $package, package.ver, $fetch)
+    printContent(idx, $package, package.ver, "fetch")
 
     # Skip virtual packages
-    if package.url == $Nil:
+    if package.url == "nil":
       continue
 
     let
-      src = getEnv($SRCD) / $package
-      tmp = getEnv($TMPD) / $package
+      src = getEnv("SRCD") / $package
+      tmp = getEnv("TMPD") / $package
 
-    if package.sum == $Nil:
+    if package.sum == "nil":
       if not dirExists(src):
         discard gitCloneRepo(package.url, src)
 
@@ -104,7 +93,7 @@ proc resolveDeps(
     dep = if run: package.run else: package.bld
 
   deps[$package] =
-    if dep == $Nil:
+    if dep == "nil":
       @[]
     else:
       dep.split()
@@ -126,26 +115,27 @@ proc sortPackages(packages: openArray[string], run = true): seq[string] =
 
 proc installPackage(
     nom: string,
-    fs = $root,
-    pkgCache = $radPkgCache,
-    pkgLib = $radPkgLib,
+    fs = "/",
+    pkgCache = pathPkgCache,
+    pkgLib = pathLocalLib,
     implicit = false,
 ) =
   let
     package = parsePackage(nom)
-    skel = parsePackage($skel).run
+    skel = parsePackage("skel").run
 
   discard extractTar(
-    pkgCache / $package /
-      &"""{package}{(if package.url == $Nil: "" else: &"-\{package.ver\}")}{tarZst}""",
+    pkgCache / $package / $package &
+      (if package.url == "nil": ""
+      else: '-' & package.ver & ".tar.zst"),
     fs,
   )
 
   createDir(pkgLib / $package)
   copyFileWithPermissions(
-    pkgCache / $package / $contents, pkgLib / $package / $contents
+    pkgCache / $package / "contents", pkgLib / $package / "contents"
   )
-  copyFileWithPermissions(pkgCache / $package / $info, pkgLib / $package / $info)
+  copyFileWithPermissions(pkgCache / $package / "info", pkgLib / $package / "info")
 
   if implicit and $package notin skel:
     writeFile(pkgLib / $package / "implicit", "")
@@ -158,9 +148,9 @@ proc installPackage(
 
 proc buildPackages*(
     packages: openArray[string],
-    fs = $root,
-    pkgCache = $radPkgCache,
-    pkgLib = $radPkgLib,
+    fs = "/",
+    pkgCache = pathPkgCache,
+    pkgLib = pathLocalLib,
     resolve = true,
     stage = $native,
     implicit = false,
@@ -177,11 +167,12 @@ proc buildPackages*(
     let
       package = parsePackage(nom)
       archive =
-        $pkgCache / $package /
-        &"""{package}{(if package.url == $Nil: "" else: &"-\{package.ver\}")}{tarZst}"""
-      tmp = getEnv($TMPD) / $package
+        $pkgCache / $package / $package &
+        (if package.url == "nil": ""
+        else: '-' & package.ver & ".tar.zst")
+      tmp = getEnv("TMPD") / $package
 
-    printContent(idx, $package, package.ver, $build)
+    printContent(idx, $package, package.ver, "build")
 
     if stage == $native:
       # Skip installed packages
@@ -195,19 +186,19 @@ proc buildPackages*(
           installPackage($package, implicit = true)
         continue
 
-      putEnv($SACD, pkgCache / $package / $sac)
-      createDir(getEnv($SACD))
+      putEnv("DSTD", pkgCache / $package / "dst")
+      createDir(getEnv("DSTD"))
 
     if stage != $toolchain:
       setEnvFlags()
 
-      if $noLTO in $package.opt:
+      if "no-lto" in $package.opt:
         setEnvFlagsNoLTO()
 
-    if $radOpt.noParallel in $package.opt:
+    if "no-parallel" in $package.opt:
       setEnvFlagsNoParallel()
     else:
-      putEnv($MAKEFLAGS, $parallel)
+      putEnv("MAKEFLAGS", "parallel")
 
     if dirExists(tmp):
       setCurrentDir(tmp)
@@ -215,8 +206,8 @@ proc buildPackages*(
       setCurrentDir(tmp / &"{package}-{package.ver}")
 
     let shell = execCmdEx(
-      &"""{sh} -efu -c '
-        nom={package} ver={package.ver} . {$radClustersCerataLib / $package / (if stage == $native: $build else: $build & '-' & stage)}
+      &"""sh -efu -c '
+        nom={package} ver={package.ver} . {pathCoreRepo / $package / (if stage == $native: "build" else: "build" & '-' & stage)}
 
         for i in prepare configure build; do
           if command -v $i {shellRedirect}; then
@@ -229,7 +220,7 @@ proc buildPackages*(
     )
 
     writeFile(
-      getEnv($LOGD) / &"""{package}{(if stage == $native: "" else: &".\{stage\}")}""",
+      getEnv("LOGD") / $package & (if stage == $native: "" else: stage),
       shell.output.strip(),
     )
 
@@ -238,40 +229,41 @@ proc buildPackages*(
 
     if stage == $native:
       let
-        sac = getEnv($SACD)
-        status = createTarZst(archive, sac)
+        dst = getEnv("DSTD")
+        status = createTarZst(archive, dst)
 
       # Purge
-      # if empty notin $package.opt:
+      # if "empty" notin $package.opt:
 
       if status == QuitSuccess:
-        genContents(sac, $pkgCache / $package / $contents)
-        removeDir(sac)
+        genContents(dst, $pkgCache / $package / "contents")
+        removeDir(dst)
 
         copyFileWithPermissions(
-          $radClustersCerataLib / $package / $info, pkgCache / $package / $info
+          pathCoreRepo / $package / "info", pkgCache / $package / "info"
         )
 
-      if $bootstrap in $package.opt or implicit:
+      if "bootstrap" in $package.opt or implicit:
         installPackage($package, implicit = true)
 
 proc installPackages*(
     packages: openArray[string],
-    fs = $root,
-    pkgCache = $radPkgCache,
-    pkgLib = $radPkgLib,
+    fs = "/",
+    pkgCache = pathPkgCache,
+    pkgLib = pathLocalLib,
 ) =
   let
     cluster = sortPackages(packages)
-    skel = parsePackage($skel).run
+    skel = parsePackage("skel").run
   var notBuilt: seq[string]
 
   for idx, nom in cluster:
     let
       package = parsePackage(nom)
       archive =
-        pkgCache / $package /
-        &"""{package}{(if package.url == $Nil: "" else: &"-\{package.ver\}")}{tarZst}"""
+        pkgCache / $package / $package &
+        (if package.url == "nil": ""
+        else: '-' & package.ver & ".tar.zst")
 
     if not fileExists(archive):
       notBuilt &= $package
@@ -286,7 +278,7 @@ proc installPackages*(
   for idx, nom in cluster:
     let package = parsePackage(nom)
 
-    printContent(idx, $package, package.ver, $install)
+    printContent(idx, $package, package.ver, "install")
 
     # Skip installed packages
     if dirExists(pkgLib / $package):
@@ -299,16 +291,17 @@ proc installPackages*(
       continue
 
     discard extractTar(
-      pkgCache / $package /
-        &"""{package}{(if package.url == $Nil: "" else: &"-\{package.ver\}")}{tarZst}""",
+      pkgCache / $package / $package &
+        (if package.url == "nil": ""
+        else: '-' & package.ver & ".tar.zst"),
       fs,
     )
 
     createDir(pkgLib / $package)
     copyFileWithPermissions(
-      pkgCache / $package / $contents, pkgLib / $package / $contents
+      pkgCache / $package / "contents", pkgLib / $package / "contents"
     )
-    copyFileWithPermissions(pkgCache / $package / $info, pkgLib / $package / $info)
+    copyFileWithPermissions(pkgCache / $package / "info", pkgLib / $package / "info")
 
     if package.run.len() > 0:
       for dep in package.run.split():
@@ -331,19 +324,19 @@ opt  :: {package.opt}
 """
 
 proc listPackages*() =
-  showInfo(walkDir($radPkgLib, true, skipSpecial = true).toSeq().unzip()[1].sorted())
+  showInfo(walkDir(pathLocalLib, true, skipSpecial = true).toSeq().unzip()[1].sorted())
 
 proc listContents*(packages: openArray[string]) =
   for nom in packages.deduplicate():
     let package = parsePackage(nom)
 
-    for line in lines($radPkgLib / $package / $contents):
+    for line in lines(pathLocalLib / $package / "contents"):
       echo &"/{line}"
 
-proc listOrphans*(pkgLib = $radPkgLib) =
+proc listOrphans*(pkgLib = pathLocalLib) =
   let
-    installed = walkDir($radPkgLib, true, skipSpecial = true).toSeq().unzip()[1]
-    skel = parsePackage($skel).run
+    installed = walkDir(pathLocalLib, true, skipSpecial = true).toSeq().unzip()[1]
+    skel = parsePackage("skel").run
 
   for nom in installed:
     if nom notin skel and fileExists(pkgLib / $nom / "implicit"):
@@ -351,10 +344,10 @@ proc listOrphans*(pkgLib = $radPkgLib) =
         styledEcho fgYellow,
           styleBright, &"""{$QuitFailure:8}{&"\{nom\} is an orphan":48}"""
 
-proc removePackages*(packages: openArray[string], pkgLib = $radPkgLib) =
+proc removePackages*(packages: openArray[string], pkgLib = pathLocalLib) =
   let
-    installed = walkDir($radPkgLib, true, skipSpecial = true).toSeq().unzip()[1]
-    skel = parsePackage($skel).run
+    installed = walkDir(pathLocalLib, true, skipSpecial = true).toSeq().unzip()[1]
+    skel = parsePackage("skel").run
   var shouldAbort: bool
 
   for nom in packages:
@@ -381,20 +374,20 @@ proc removePackages*(packages: openArray[string], pkgLib = $radPkgLib) =
   for idx, nom in packages:
     let package = parsePackage(nom)
 
-    printContent(idx, $package, package.ver, $remove)
+    printContent(idx, $package, package.ver, "remove")
 
-    for line in lines($radPkgLib / $package / $contents):
-      if not line.endsWith($root):
+    for line in lines(pathLocalLib / $package / "contents"):
+      if not line.endsWith("/"):
         removeFile(&"/{line}")
 
-    for line in lines($radPkgLib / $package / $contents):
-      if line.endsWith($root):
+    for line in lines(pathLocalLib / $package / "contents"):
+      if line.endsWith("/"):
         let path = &"/{line}"
 
         if path.isEmpty():
           removeDir(path)
 
-    removeDir($radPkgLib / $package)
+    removeDir(pathLocalLib / $package)
 
     for installedPackage in walkDir(pkgLib, true, skipSpecial = true).toSeq().unzip()[1].sorted():
       removeFile(pkgLib / $installedPackage / "run" / $package)
@@ -404,7 +397,7 @@ proc removePackages*(packages: openArray[string], pkgLib = $radPkgLib) =
 proc searchPackages*(pattern: openArray[string]) =
   var packages: seq[string]
 
-  for package in walkDir($radClustersCerataLib, true, skipSpecial = true):
+  for package in walkDir(pathCoreRepo, true, skipSpecial = true):
     for nom in pattern:
       if nom.toLowerAscii() in package[1]:
         packages &= package[1]

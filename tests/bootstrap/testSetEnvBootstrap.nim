@@ -10,24 +10,18 @@ import std/[os, strutils], ../../src/[bootstrap, constants]
 
 setEnvBootstrap()
 
-echo "CERD  :: ", getEnv($CERD)
-echo "CRSD  :: ", getEnv($CRSD)
-echo "LOGD  :: ", getEnv($LOGD)
-echo "PKGD  :: ", getEnv($PKGD)
-echo "SRCD  :: ", getEnv($SRCD)
-echo "TMPD  :: ", getEnv($TMPD)
-echo "TLCD  :: ", getEnv($TLCD)
+echo "CORD  :: ", getEnv("CORD")
+echo "CRSD  :: ", getEnv("CRSD")
+echo "TMPD  :: ", getEnv("TMPD")
+echo "TLCD  :: ", getEnv("TLCD")
 
 echo ""
 
-echo "PATH  :: ", getEnv($PATH)
+echo "PATH  :: ", getEnv("PATH")
 
-doAssert getEnv($CERD).endsWith("cerata")
-doAssert getEnv($CRSD).endsWith("cross")
-doAssert getEnv($LOGD).endsWith("log")
-doAssert getEnv($PKGD).endsWith("pkg")
-doAssert getEnv($SRCD).endsWith("src")
-doAssert getEnv($TMPD).endsWith("tmp")
-doAssert getEnv($TLCD).endsWith("toolchain")
+doAssert getEnv("CORD").endsWith("core")
+doAssert getEnv("CRSD").endsWith("cross")
+doAssert getEnv("TMPD").endsWith("tmp")
+doAssert getEnv("TLCD").endsWith("toolchain")
 
 doAssert getEnv($PATH).split(':')[0].endsWith("toolchain/usr/bin")

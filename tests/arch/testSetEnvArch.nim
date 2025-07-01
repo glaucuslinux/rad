@@ -10,14 +10,12 @@ import std/[os, strutils], ../../src/[arch, constants]
 
 setEnvArch(cross)
 
-echo "ARCH         :: ", getEnv($ARCH)
-echo "BLD          :: ", getEnv($BLD)
-echo "CARCH        :: ", getEnv($CARCH)
-echo "PRETTY_NAME  :: ", getEnv($PRETTY_NAME)
-echo "TGT          :: ", getEnv($TGT)
+echo "ARCH         :: ", getEnv("ARCH")
+echo "BARCH        :: ", getEnv("BARCH")
+echo "PRETTY_NAME  :: ", getEnv("PRETTY_NAME")
+echo "TARCH        :: ", getEnv("TARCH")
 
-doAssert getEnv($ARCH) == "x86-64"
-doAssert getEnv($BLD).startsWith("x86_64-pc-linux-")
-doAssert getEnv($CARCH) == "x86-64-v3"
-doAssert getEnv($PRETTY_NAME).startsWith("glaucus s6 x86-64-v3 ")
-doAssert getEnv($TGT) == "x86_64-glaucus-linux-musl"
+doAssert getEnv("ARCH") == "x86-64"
+doAssert getEnv("BARCH") == "x86_64-pc-linux-gnu"
+doAssert getEnv("PRETTY_NAME").startsWith("glaucus s6 x86-64-v3 ")
+doAssert getEnv("TARCH") == "x86_64-glaucus-linux-musl"

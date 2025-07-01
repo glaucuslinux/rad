@@ -9,16 +9,22 @@
 import std/[os, strformat, strutils], constants
 
 proc setEnvFlags*() =
-  putEnv($CFLAGS, $cflags)
-  putEnv($CXXFLAGS, $cflags)
-  putEnv($LDFLAGS, &"{ldflags} {cflags}")
-  putEnv($MAKEFLAGS, $parallel)
+  for i in [
+    ("CFLAGS", cflags),
+    ("CXXFLAGS", cflags),
+    ("LDFLAGS", &"{ldflags} {cflags}"),
+    ("MAKEFLAGS", makeflags),
+  ]:
+    putEnv(i[0], i[1])
 
 proc setEnvFlagsNoLTO*() =
-  putEnv($CFLAGS, replace($cflags, $lto))
-  putEnv($CXXFLAGS, getEnv($CFLAGS))
-  putEnv($LDFLAGS, $ldflags)
-  putEnv($MAKEFLAGS, $parallel)
+  for i in [
+    ("CFLAGS", replace(cflags, $ltoflags)),
+    ("CXXFLAGS", replace(cflags, $ltoflags)),
+    ("LDFLAGS", ldflags),
+    ("MAKEFLAGS", makeflags),
+  ]:
+    putEnv(i[0], i[1])
 
 proc setEnvFlagsNoParallel*() =
-  putEnv($MAKEFLAGS, $radFlags.noParallel)
+  putEnv("MAKEFLAGS", "-j 1")
