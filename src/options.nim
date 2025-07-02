@@ -9,6 +9,43 @@
 import std/[os, parseopt, strutils], arch, bootstrap, packages, constants, tools
 
 proc options*() =
+  const
+    help =
+      """
+USAGE:
+  rad [ COMMAND ]
+
+COMMANDS:
+  build      Build packages
+  clean      Clean cache
+  contents   List package contents
+  help       Display this help message
+  info       Show package information
+  install    Install packages
+  list       List installed packages
+  orphan     List orphaned packages
+  remove     Remove packages
+  search     Search for packages
+  update     Update repositories
+  upgrade    Upgrade packages
+  version    Display rad version"""
+    helpBootstrap =
+      """
+USAGE:
+  rad bootstrap [ COMMAND ]
+
+COMMANDS:
+  clean      Clean cache
+  cross      Bootstrap cross glaucus (stage 2)
+  native     Bootstrap native glaucus (stage 3)
+  toolchain  Bootstrap toolchain (stage 1)"""
+    version =
+      """
+rad version 0.1.0
+
+Licensed under the Mozilla Public License Version 2.0 (MPL-2.0)
+Copyright © 2018-2025 Firas Khana"""
+
   if paramCount() < 1:
     quit(help, QuitFailure)
 
@@ -36,7 +73,7 @@ proc options*() =
 
           echo "clean complete"
         of "cross":
-          setEnvArch("glaucus")
+          setEnvArch()
           setEnvBootstrap()
           setEnvCross()
           prepareCross()
@@ -57,7 +94,7 @@ proc options*() =
           echo "native complete"
         of "toolchain":
           require()
-          setEnvArch("glaucus")
+          setEnvArch()
           setEnvBootstrap()
           cleanBootstrap()
           prepareBootstrap()

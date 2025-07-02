@@ -6,13 +6,16 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import std/[os, osproc, strformat, strutils], constants
+import std/[os, osproc, strutils, times], constants
 
-proc setEnvArch*(vendor = "pc") =
-  for i in [
+proc setEnvArch*() =
+  let env = [
     ("ARCH", "x86-64"),
-    ("BLDT", execCmdEx(pathCoreRepo / "slibtool/files/config.guess").output.strip()),
-    ("PRETTY_NAME", "glaucus s6 x86-64-v3"),
-    ("TGTT", &"x86_64-{vendor}-linux-musl"),
-  ]:
-    putEnv(i[0], i[1])
+    ("BUILD", execCmdEx(pathCoreRepo / "slibtool/files/config.guess").output.strip()),
+    ("CTARGET", "x86_64-glaucus-linux-musl"),
+    ("PRETTY_NAME", "glaucus s6 x86-64-v3 " & now().format("YYYYMMdd")),
+    ("TARGET", "x86_64-pc-linux-musl"),
+  ]
+
+  for (i, j) in env:
+    putEnv(i, j)

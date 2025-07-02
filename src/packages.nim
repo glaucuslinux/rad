@@ -193,10 +193,10 @@ proc buildPackages*(
       setEnvFlags()
 
       if "no-lto" in $package.opt:
-        setEnvFlagsNoLTO()
+        setEnvFlags(lto = false)
 
     if "no-parallel" in $package.opt:
-      setEnvFlagsNoParallel()
+      setEnvFlags(parallel = false)
     else:
       putEnv("MAKEFLAGS", "parallel")
 

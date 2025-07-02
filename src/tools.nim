@@ -75,7 +75,14 @@ proc lock*() =
   setControlCHook(interrupt)
 
 proc require*() =
-  for i in tool:
+  const tools = [
+    "autoconf", "automake", "autopoint", "awk", "bash", "booster", "bzip2", "curl",
+    "diff", "find", "gcc", "git", "grep", "gzip", "ld.bfd", "lex", "libtool", "limine",
+    "m4", "make", "meson", "mkfs.erofs", "mkfs.fat", "ninja", "patch", "perl",
+    "pkg-config", "sed", "tar", "xz", "yacc", "zstd",
+  ]
+
+  for i in tools:
     if findExe(i).isEmptyOrWhitespace():
       abort(&"""{127:8}{&"\{i\} not found":48}""")
 
