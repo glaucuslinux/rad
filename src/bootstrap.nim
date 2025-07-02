@@ -40,37 +40,35 @@ proc setEnvBootstrap*() =
   putEnv("PATH", getEnv("TLCD") / "usr/bin" & PathSep & getEnv("PATH"))
 
 proc setEnvCross*() =
-  const env = [
-    ("AR", "x86_64-glaucus-linux-musl-gcc-ar"),
-    ("AS", "x86_64-glaucus-linux-musl-as"),
-    ("CC", "x86_64-glaucus-linux-musl-gcc"),
-    ("CPP", "x86_64-glaucus-linux-musl-gcc -E"),
-    ("CROSS_COMPILE", "x86_64-glaucus-linux-musl-"),
-    ("CXX", "x86_64-glaucus-linux-musl-g++"),
-    ("CXXCPP", "x86_64-glaucus-linux-musl-g++ -E"),
-    ("HOSTCC", "gcc"),
-    ("NM", "x86_64-glaucus-linux-musl-gcc-nm"),
-    ("OBJCOPY", "x86_64-glaucus-linux-musl-objcopy"),
-    ("OBJDUMP", "x86_64-glaucus-linux-musl-objdump"),
-    ("RANLIB", "x86_64-glaucus-linux-musl-gcc-ranlib"),
-    ("READELF", "x86_64-glaucus-linux-musl-readelf"),
-    ("SIZE", "x86_64-glaucus-linux-musl-size"),
-    ("STRIP", "x86_64-glaucus-linux-musl-strip"),
-  ]
+  const
+    env = [
+      ("AR", "x86_64-glaucus-linux-musl-gcc-ar"),
+      ("AS", "x86_64-glaucus-linux-musl-as"),
+      ("CC", "x86_64-glaucus-linux-musl-gcc"),
+      ("CPP", "x86_64-glaucus-linux-musl-gcc -E"),
+      ("CROSS_COMPILE", "x86_64-glaucus-linux-musl-"),
+      ("CXX", "x86_64-glaucus-linux-musl-g++"),
+      ("CXXCPP", "x86_64-glaucus-linux-musl-g++ -E"),
+      ("HOSTCC", "gcc"),
+      ("NM", "x86_64-glaucus-linux-musl-gcc-nm"),
+      ("OBJCOPY", "x86_64-glaucus-linux-musl-objcopy"),
+      ("OBJDUMP", "x86_64-glaucus-linux-musl-objdump"),
+      ("RANLIB", "x86_64-glaucus-linux-musl-gcc-ranlib"),
+      ("READELF", "x86_64-glaucus-linux-musl-readelf"),
+      ("SIZE", "x86_64-glaucus-linux-musl-size"),
+      ("STRIP", "x86_64-glaucus-linux-musl-strip"),
+    ]
+    envPkgConfig = [
+      ("PKG_CONFIG_LIBDIR", "../cross/usr/lib/pkgconfig"),
+      ("PKG_CONFIG_PATH", "../cross/usr/lib/pkgconfig"),
+      ("PKG_CONFIG_SYSROOT_DIR", "../cross/"),
+      ("PKG_CONFIG_SYSTEM_INCLUDE_PATH", "../cross/usr/include"),
+      ("PKG_CONFIG_SYSTEM_LIBRARY_PATH", "../cross/usr/lib"),
+    ]
 
   for (i, j) in env:
     putEnv(i, j)
-
-proc setEnvCrossPkgConfig*() =
-  const env = [
-    ("PKG_CONFIG_LIBDIR", "../cross/usr/lib/pkgconfig"),
-    ("PKG_CONFIG_PATH", "../cross/usr/lib/pkgconfig"),
-    ("PKG_CONFIG_SYSROOT_DIR", "../cross/"),
-    ("PKG_CONFIG_SYSTEM_INCLUDE_PATH", "../cross/usr/include"),
-    ("PKG_CONFIG_SYSTEM_LIBRARY_PATH", "../cross/usr/lib"),
-  ]
-
-  for (i, j) in env:
+  for (i, j) in envPkgConfig:
     putEnv(i, absolutePath(j))
 
 proc setEnvNative*() =
