@@ -14,7 +14,7 @@ import
   toml_serialization
 
 type Package = object
-  nom, ver, url, sum, bld, run*, opt = "nil"
+  ver, url, sum, bld, run*, opt = "nil"
 
 proc cleanPackages*() =
   removeDir(pathTmp)
@@ -43,15 +43,15 @@ proc fetchPackages(packages: openArray[string]) =
   for idx, nom in packages:
     let package = parsePackage(nom)
 
-    printContent(idx, package.nom, package.ver, "fetch")
+    printContent(idx, nom, package.ver, "fetch")
 
     # Skip virtual packages
     if package.url == "nil":
       continue
 
     let
-      src = getEnv("SRCD") / package.nom
-      tmp = getEnv("TMPD") / package.nom
+      src = pathSrcCache / nom
+      tmp = getEnv("TMPD") / nom
 
     if package.sum == "nil":
       if not dirExists(src):
@@ -73,7 +73,7 @@ proc fetchPackages(packages: openArray[string]) =
         createDir(tmp)
         discard extractTar(archive, tmp)
       else:
-        abort(&"""{"sum":8}{package:24}{package.ver:24}""")
+        abort(&"""{"sum":8}{nom:24}{package.ver:24}""")
 
 proc resolveDeps(
     nom: string,
@@ -88,13 +88,13 @@ proc resolveDeps(
     package = parsePackage(nom)
     dep = if run: package.run else: package.bld
 
-  deps[package.nom] =
+  deps[nom] =
     if dep == "nil":
       @[]
     else:
       dep.split()
 
-  for nom in deps[package.nom]:
+  for nom in deps[nom]:
     resolveDeps(nom, cluster, deps, run)
 
   cluster &= nom
@@ -121,22 +121,18 @@ proc installPackage(
     skel = parsePackage("skel").run
 
   discard extractTar(
-    pkgCache / package.nom / package.nom &
+    pkgCache / nom / nom &
       (if package.url == "nil": ""
       else: '-' & package.ver & ".tar.zst"),
     fs,
   )
 
-  createDir(pkgLib / package.nom)
-  copyFileWithPermissions(
-    pkgCache / package.nom / "contents", pkgLib / package.nom / "contents"
-  )
-  copyFileWithPermissions(
-    pkgCache / package.nom / "info", pkgLib / package.nom / "info"
-  )
+  createDir(pkgLib / nom)
+  copyFileWithPermissions(pkgCache / nom / "contents", pkgLib / nom / "contents")
+  copyFileWithPermissions(pkgCache / nom / "info", pkgLib / nom / "info")
 
-  if implicit and package.nom notin skel:
-    writeFile(pkgLib / package.nom / "implicit", "")
+  if implicit and nom notin skel:
+    writeFile(pkgLib / nom / "implicit", "")
 
   if package.run.len() > 0:
     for dep in package.run.split():
@@ -150,44 +146,44 @@ proc buildPackages*(
     pkgCache = pathPkgCache,
     pkgLib = pathLocalLib,
     resolve = true,
-    stage = $native,
+    stage = native,
     implicit = false,
 ) =
-  let cluster = sortPackages(packages, false)
+  let sorted = sortPackages(packages, false)
 
-  fetchPackages(cluster)
+  fetchPackages(sorted)
 
   echo ""
 
   printHeader()
 
-  for idx, nom in (if resolve: cluster else: packages.toSeq()):
+  for idx, nom in (if resolve: sorted else: packages.toSeq()):
     let
       package = parsePackage(nom)
       archive =
-        $pkgCache / package.nom / package.nom &
+        pkgCache / nom / nom &
         (if package.url == "nil": ""
         else: '-' & package.ver & ".tar.zst")
-      tmp = getEnv("TMPD") / package.nom
+      tmp = getEnv("TMPD") / nom
 
-    printContent(idx, package.nom, package.ver, "build")
+    printContent(idx, nom, package.ver, "build")
 
-    if stage == $native:
+    if stage == native:
       # Skip installed packages
-      if dirExists(pkgLib / package.nom):
+      if dirExists(pkgLib / nom):
         continue
 
       # Skip package if archive exists
       if fileExists(archive):
         # Install build-time dependency (if not installed)
         if implicit:
-          installPackage(package.nom, implicit = true)
+          installPackage(nom, implicit = true)
         continue
 
-      putEnv("DSTD", pkgCache / package.nom / "dst")
+      putEnv("DSTD", pkgCache / nom / "dst")
       createDir(getEnv("DSTD"))
 
-    if stage != $toolchain:
+    if stage != toolchain:
       setEnvFlags()
 
       if "no-lto" in package.opt:
@@ -203,7 +199,7 @@ proc buildPackages*(
 
     let shell = execCmdEx(
       &"""sh -efu -c '
-        nom={package.nom} ver={package.ver} . {pathCoreRepo / package.nom / (if stage == $native: "build" else: "build" & '-' & stage)}
+        nom={nom} ver={package.ver} . {pathCoreRepo / nom / (if stage == native: "build" else: "build" & '-' & $stage)}
 
         for i in prepare configure build; do
           if command -v $i {shellRedirect}; then
@@ -216,14 +212,13 @@ proc buildPackages*(
     )
 
     writeFile(
-      getEnv("LOGD") / package.nom & (if stage == $native: "" else: stage),
-      shell.output.strip(),
+      getEnv("LOGD") / nom & (if stage == native: "" else: $stage), shell.output.strip()
     )
 
     if shell.exitCode != QuitSuccess:
-      abort(&"{shell.exitCode:<8}{package:24}{package.ver:24}")
+      abort(&"{shell.exitCode:<8}{nom:24}{package.ver:24}")
 
-    if stage == $native:
+    if stage == native:
       let
         dst = getEnv("DSTD")
         status = createTarZst(archive, dst)
@@ -232,15 +227,13 @@ proc buildPackages*(
       # if "empty" notin package.opt:
 
       if status == QuitSuccess:
-        genContents(dst, $pkgCache / package.nom / "contents")
+        genContents(dst, $pkgCache / nom / "contents")
         removeDir(dst)
 
-        copyFileWithPermissions(
-          pathCoreRepo / package.nom / "info", pkgCache / package.nom / "info"
-        )
+        copyFileWithPermissions(pathCoreRepo / nom / "info", pkgCache / nom / "info")
 
       if "bootstrap" in package.opt or implicit:
-        installPackage(package.nom, implicit = true)
+        installPackage(nom, implicit = true)
 
 proc installPackages*(
     packages: openArray[string],
@@ -257,12 +250,12 @@ proc installPackages*(
     let
       package = parsePackage(nom)
       archive =
-        pkgCache / package.nom / package.nom &
+        pkgCache / nom / nom &
         (if package.url == "nil": ""
         else: '-' & package.ver & ".tar.zst")
 
     if not fileExists(archive):
-      notBuilt &= package.nom
+      notBuilt &= nom
 
   if notBuilt.len() > 0:
     buildPackages(notBuilt, implicit = true)
@@ -274,12 +267,12 @@ proc installPackages*(
   for idx, nom in cluster:
     let package = parsePackage(nom)
 
-    printContent(idx, package.nom, package.ver, "install")
+    printContent(idx, nom, package.ver, "install")
 
     # Skip installed packages
-    if dirExists(pkgLib / package.nom):
-      if package.nom notin packages and package.nom notin skel:
-        writeFile(pkgLib / package.nom / "implicit", "")
+    if dirExists(pkgLib / nom):
+      if nom notin packages and nom notin skel:
+        writeFile(pkgLib / nom / "implicit", "")
 
       for nom in packages:
         removeFile(pkgLib / nom / "implicit")
@@ -287,19 +280,15 @@ proc installPackages*(
       continue
 
     discard extractTar(
-      pkgCache / package.nom / package.nom &
+      pkgCache / nom / nom &
         (if package.url == "nil": ""
         else: '-' & package.ver & ".tar.zst"),
       fs,
     )
 
-    createDir(pkgLib / package.nom)
-    copyFileWithPermissions(
-      pkgCache / package.nom / "contents", pkgLib / package.nom / "contents"
-    )
-    copyFileWithPermissions(
-      pkgCache / package.nom / "info", pkgLib / package.nom / "info"
-    )
+    createDir(pkgLib / nom)
+    copyFileWithPermissions(pkgCache / nom / "contents", pkgLib / nom / "contents")
+    copyFileWithPermissions(pkgCache / nom / "info", pkgLib / nom / "info")
 
     if package.run.len() > 0:
       for dep in package.run.split():
@@ -312,7 +301,7 @@ proc showInfo*(packages: openArray[string]) =
     let package = parsePackage(nom)
 
     echo &"""
-nom  :: {package}
+nom  :: {nom}
 ver  :: {package.ver}
 url  :: {package.url}
 sum  :: {package.sum}
@@ -328,7 +317,7 @@ proc listContents*(packages: openArray[string]) =
   for nom in packages.deduplicate():
     let package = parsePackage(nom)
 
-    for line in lines(pathLocalLib / package.nom / "contents"):
+    for line in lines(pathLocalLib / nom / "contents"):
       echo &"/{line}"
 
 proc searchPackages*(pattern: openArray[string]) =

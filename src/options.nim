@@ -79,9 +79,8 @@ Copyright © 2018-2025 Firas Khana"""
           cleanBootstrap()
           prepareBootstrap()
 
-          buildPackages(
-            parsePackage("toolchain").run.split(), resolve = false, stage = $toolchain
-          )
+          let stage1 = parsePackage("toolchain").run.split()
+          buildPackages(stage1, resolve = false, stage = toolchain)
 
           echo ""
           echo "stage 1 (toolchain) complete"
@@ -91,9 +90,8 @@ Copyright © 2018-2025 Firas Khana"""
           setEnvCross()
           prepareCross()
 
-          buildPackages(
-            parsePackage("cross").run.split(), resolve = false, stage = $cross
-          )
+          let stage2 = parsePackage("cross").run.split()
+          buildPackages(stage2, resolve = false, stage = cross)
 
           echo ""
           echo "stage 2 (cross) complete"
@@ -101,7 +99,8 @@ Copyright © 2018-2025 Firas Khana"""
           setEnvArch()
           setEnvNative()
 
-          buildPackages(parsePackage("native").run.split(), resolve = false)
+          let stage3 = parsePackage("native").run.split()
+          buildPackages(stage3, resolve = false)
 
           echo ""
           echo "stage 3 (native) complete"

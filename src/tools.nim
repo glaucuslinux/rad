@@ -12,7 +12,7 @@ proc createTarZst*(ar, dir: string): int =
   execCmd(&"tar --use-compress-program 'zstd -3 -T0' -cP -f {ar} -C {dir} .")
 
 proc downloadFile*(dir, url: string): int =
-  execCmd(&"curl -fL --output-dir {dir} -JOs {url}")
+  execCmd(&"curl -fL --output-dir {dir} -Os {url}")
 
 proc exit*(msg = "", status = QuitSuccess) =
   removeFile(pathTmpLock)
