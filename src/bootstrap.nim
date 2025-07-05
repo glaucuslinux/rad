@@ -6,7 +6,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import std/os, constants
+import std/[os, strformat, strutils], constants, tools
 
 proc cleanBootstrap*() =
   const dirs = ["../cross", "../log", "../tmp", "../toolchain"]
@@ -25,6 +25,18 @@ proc prepareCross*() =
 
   removeDir(dir)
   createDir(dir)
+
+proc require*() =
+  const exes = [
+    "autoconf", "automake", "autopoint", "awk", "bash", "booster", "bzip2", "curl",
+    "diff", "find", "gcc", "git", "grep", "gzip", "ld.bfd", "lex", "libtool", "limine",
+    "m4", "make", "meson", "mkfs.erofs", "mkfs.fat", "ninja", "patch", "perl",
+    "pkg-config", "sed", "tar", "xz", "yacc", "zstd",
+  ]
+
+  for i in exes:
+    if findExe(i).isEmptyOrWhitespace():
+      abort(&"""{127:8}{&"\{i\} not found":48}""")
 
 proc setEnvBootstrap*() =
   const env = [

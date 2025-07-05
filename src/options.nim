@@ -6,7 +6,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import std/[os, parseopt, strutils], arch, bootstrap, packages, constants, tools
+import std/[os, parseopt, strutils], bootstrap, packages, constants, tools
 
 proc options*() =
   const
@@ -74,7 +74,6 @@ Copyright © 2018-2025 Firas Khana"""
           echo helpBootstrap
         of "1", "stage1", "toolchain":
           require()
-          setEnvArch()
           setEnvBootstrap()
           cleanBootstrap()
           prepareBootstrap()
@@ -85,7 +84,6 @@ Copyright © 2018-2025 Firas Khana"""
           echo ""
           echo "stage 1 (toolchain) complete"
         of "2", "stage2", "cross":
-          setEnvArch()
           setEnvBootstrap()
           setEnvCross()
           prepareCross()
@@ -96,7 +94,6 @@ Copyright © 2018-2025 Firas Khana"""
           echo ""
           echo "stage 2 (cross) complete"
         of "3", "stage3", "native":
-          setEnvArch()
           setEnvNative()
 
           let stage3 = parsePackage("native").run.split()
@@ -107,7 +104,6 @@ Copyright © 2018-2025 Firas Khana"""
         else:
           exit(helpBootstrap, QuitFailure)
     of "build":
-      setEnvArch()
       setEnvNative()
       cleanPackages()
 
