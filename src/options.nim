@@ -16,29 +16,27 @@ USAGE:
   rad [ COMMAND ]
 
 COMMANDS:
+  bootstrap  Bootstrap glaucus
   build      Build packages
-  clean      Clean cache
+  clean      Clean build cache
   contents   List package contents
-  help       Display this help message
+  help       Show help message
   info       Show package information
-  install    Install packages
-  list       List installed packages
-  orphan     List orphaned packages
-  remove     Remove packages
+  list       List built packages
   search     Search for packages
   update     Update repositories
-  upgrade    Upgrade packages
-  version    Display rad version"""
+  version    Show rad version"""
     helpBootstrap =
       """
 USAGE:
   rad bootstrap [ COMMAND ]
 
 COMMANDS:
-  clean      Clean cache
-  cross      Bootstrap cross glaucus (stage 2)
-  native     Bootstrap native glaucus (stage 3)
-  toolchain  Bootstrap toolchain (stage 1)"""
+  clean      Clean bootstrap cache
+  help       Show help message
+  1, stage1  Bootstrap stage 1 (toolchain)
+  2, stage2  Bootstrap stage 2 (cross)
+  3, stage3  Bootstrap stage 3 (native)"""
     version =
       """
 rad version 0.1.0
@@ -72,27 +70,9 @@ Copyright © 2018-2025 Firas Khana"""
           cleanBootstrap()
 
           echo "clean complete"
-        of "cross":
-          setEnvArch()
-          setEnvBootstrap()
-          setEnvCross()
-          prepareCross()
-
-          buildPackages(
-            parsePackage("cross").run.split(), resolve = false, stage = $cross
-          )
-
-          echo ""
-          echo "cross complete"
-        of "native":
-          setEnvArch()
-          setEnvNative()
-
-          buildPackages(parsePackage("native").run.split(), resolve = false)
-
-          echo ""
-          echo "native complete"
-        of "toolchain":
+        of "--help", "help":
+          echo helpBootstrap
+        of "1", "stage1", "toolchain":
           require()
           setEnvArch()
           setEnvBootstrap()
@@ -104,7 +84,27 @@ Copyright © 2018-2025 Firas Khana"""
           )
 
           echo ""
-          echo "toolchain complete"
+          echo "stage 1 (toolchain) complete"
+        of "2", "stage2", "cross":
+          setEnvArch()
+          setEnvBootstrap()
+          setEnvCross()
+          prepareCross()
+
+          buildPackages(
+            parsePackage("cross").run.split(), resolve = false, stage = $cross
+          )
+
+          echo ""
+          echo "stage 2 (cross) complete"
+        of "3", "stage3", "native":
+          setEnvArch()
+          setEnvNative()
+
+          buildPackages(parsePackage("native").run.split(), resolve = false)
+
+          echo ""
+          echo "stage 3 (native) complete"
         else:
           exit(helpBootstrap, QuitFailure)
     of "build":
@@ -126,31 +126,13 @@ Copyright © 2018-2025 Firas Khana"""
       echo help
     of "info":
       showInfo(remainingArgs(p))
-    of "install":
-      setEnvArch()
-      setEnvNative()
-      cleanPackages()
-      installPackages(remainingArgs(p))
-
-      echo ""
-      echo "install complete"
     of "list":
       listPackages()
-    of "orphan":
-      listOrphans()
-    of "remove":
-      removePackages(remainingArgs(p))
-
-      echo ""
-      echo "remove complete"
     of "search":
       searchPackages(remainingArgs(p))
     of "update":
       echo ""
       echo "update complete"
-    of "upgrade":
-      echo ""
-      echo "upgrade complete"
     of "--version", "version":
       echo version
     else:

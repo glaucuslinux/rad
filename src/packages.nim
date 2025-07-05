@@ -7,7 +7,7 @@
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import
-  std/[algorithm, os, osproc, sequtils, strformat, strutils, tables, terminal, times],
+  std/[algorithm, os, osproc, sequtils, strformat, strutils, tables, times],
   constants,
   flags,
   tools,
@@ -17,9 +17,8 @@ type Package = object
   nom, ver, url, sum, bld, run*, opt = "nil"
 
 proc cleanPackages*() =
-  for i in [pathLog, pathTmp]:
-    removeDir(i)
-    createDir(i)
+  removeDir(pathTmp)
+  createDir(pathTmp)
 
 proc parsePackage*(nom: string): Package =
   let path = pathCoreRepo / nom
@@ -33,9 +32,9 @@ proc printContent(idx: int, nom, ver, cmd: string) =
   echo &"""{idx + 1:<8}{nom:24}{ver:24}{cmd:8}""" & now().format("hh:mm tt")
 
 proc printHeader() =
-  echo &"""
+  echo """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-{"idx":8}{"nom":24}{"ver":24}{"cmd":8}fin
+idx     nom                     ver                     cmd     fin     
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"""
 
 proc fetchPackages(packages: openArray[string]) =
@@ -196,8 +195,6 @@ proc buildPackages*(
 
     if "no-parallel" in package.opt:
       setEnvFlags(parallel = false)
-    else:
-      putEnv("MAKEFLAGS", "parallel")
 
     if dirExists(tmp):
       setCurrentDir(tmp)
@@ -206,7 +203,7 @@ proc buildPackages*(
 
     let shell = execCmdEx(
       &"""sh -efu -c '
-        nom={package} ver={package.ver} . {pathCoreRepo / package.nom / (if stage == $native: "build" else: "build" & '-' & stage)}
+        nom={package.nom} ver={package.ver} . {pathCoreRepo / package.nom / (if stage == $native: "build" else: "build" & '-' & stage)}
 
         for i in prepare configure build; do
           if command -v $i {shellRedirect}; then
@@ -333,67 +330,6 @@ proc listContents*(packages: openArray[string]) =
 
     for line in lines(pathLocalLib / package.nom / "contents"):
       echo &"/{line}"
-
-proc listOrphans*(pkgLib = pathLocalLib) =
-  let
-    installed = walkDir(pathLocalLib, true, skipSpecial = true).toSeq().unzip()[1]
-    skel = parsePackage("skel").run
-
-  for nom in installed:
-    if nom notin skel and fileExists(pkgLib / $nom / "implicit"):
-      if not dirExists(pkgLib / $nom / "run"):
-        styledEcho fgYellow,
-          styleBright, &"""{$QuitFailure:8}{&"\{nom\} is an orphan":48}"""
-
-proc removePackages*(packages: openArray[string], pkgLib = pathLocalLib) =
-  let
-    installed = walkDir(pathLocalLib, true, skipSpecial = true).toSeq().unzip()[1]
-    skel = parsePackage("skel").run
-  var shouldAbort: bool
-
-  for nom in packages:
-    if nom notin installed:
-      abort(&"""{$QuitFailure:8}{&"\{nom\} not installed":48}""")
-    if nom in skel:
-      abort(&"""{$QuitFailure:8}{&"\{nom\} is a skel package":48}""")
-    if dirExists(pkgLib / $nom / "run"):
-      let runDeps = walkDir(pkgLib / $nom / "run", true, skipSpecial = true)
-      .toSeq()
-      .unzip()[1].sorted()
-      if runDeps.len() > 0:
-        for dep in runDeps:
-          if dep notin packages:
-            styledEcho fgYellow,
-              styleBright, &"""{$QuitFailure:8}{&"\{dep\} depends on \{nom\}":48}"""
-            shouldAbort = true
-
-    if shouldAbort:
-      abort(&"""{$QuitFailure:8}{&"\{nom\} is a dependency":48}""")
-
-  printHeader()
-
-  for idx, nom in packages:
-    let package = parsePackage(nom)
-
-    printContent(idx, package.nom, package.ver, "remove")
-
-    for line in lines(pathLocalLib / package.nom / "contents"):
-      if not line.endsWith("/"):
-        removeFile(&"/{line}")
-
-    for line in lines(pathLocalLib / package.nom / "contents"):
-      if line.endsWith("/"):
-        let path = &"/{line}"
-
-        if path.isEmpty():
-          removeDir(path)
-
-    removeDir(pathLocalLib / package.nom)
-
-    for installedPackage in walkDir(pkgLib, true, skipSpecial = true).toSeq().unzip()[1].sorted():
-      removeFile(pkgLib / $installedPackage / "run" / package.nom)
-      if isEmpty(pkgLib / $installedPackage / "run"):
-        removeDir(pkgLib / $installedPackage / "run")
 
 proc searchPackages*(pattern: openArray[string]) =
   var packages: seq[string]

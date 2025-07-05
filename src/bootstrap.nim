@@ -28,7 +28,7 @@ proc prepareCross*() =
 
 proc setEnvBootstrap*() =
   const env = [
-    ("CORD", "../core"),
+    ("REPO", "../core"),
     ("CRSD", "../cross"),
     ("TMPD", "../tmp"),
     ("TLCD", "../toolchain"),
@@ -76,7 +76,6 @@ proc setEnvNative*() =
     ("AR", "gcc-ar"),
     ("AWK", "mawk"),
     ("CC", "gcc"),
-    ("CORD", pathCoreRepo),
     ("CPP", "gcc -E"),
     ("CXX", "g++"),
     ("CXXCPP", "g++ -E"),
@@ -85,6 +84,7 @@ proc setEnvNative*() =
     ("NM", "gcc-nm"),
     ("PKG_CONFIG", "u-config"),
     ("RANLIB", "gcc-ranlib"),
+    ("REPO", pathCoreRepo),
     ("TMPD", pathTmp),
     ("YACC", "byacc"),
   ]
