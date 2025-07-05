@@ -6,7 +6,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import std/[os, parseopt, strutils], bootstrap, packages, constants, tools
+import std/[os, parseopt], bootstrap, packages, tools
 
 proc options*() =
   const
@@ -63,7 +63,7 @@ Copyright © 2018-2025 Firas Khana"""
 
       case p.kind
       of cmdEnd:
-        exit(helpBootstrap, QuitFailure)
+        exit(msg = helpBootstrap, status = QuitFailure)
       else:
         case p.key
         of "clean":
@@ -73,40 +73,24 @@ Copyright © 2018-2025 Firas Khana"""
         of "--help", "help":
           echo helpBootstrap
         of "1", "stage1", "toolchain":
-          require()
-          setEnvBootstrap()
-          cleanBootstrap()
-          prepareBootstrap()
-
-          let stage1 = parsePackage("toolchain").run.split()
-          buildPackages(stage1, resolve = false, stage = toolchain)
+          bootstrapToolchain()
 
           echo ""
           echo "stage 1 (toolchain) complete"
         of "2", "stage2", "cross":
-          setEnvBootstrap()
-          setEnvCross()
-          prepareCross()
-
-          let stage2 = parsePackage("cross").run.split()
-          buildPackages(stage2, resolve = false, stage = cross)
+          bootstrapCross()
 
           echo ""
           echo "stage 2 (cross) complete"
         of "3", "stage3", "native":
-          setEnvNative()
-
-          let stage3 = parsePackage("native").run.split()
-          buildPackages(stage3, resolve = false)
+          bootstrapNative()
 
           echo ""
           echo "stage 3 (native) complete"
         else:
-          exit(helpBootstrap, QuitFailure)
+          exit(msg = helpBootstrap, status = QuitFailure)
     of "build":
-      setEnvNative()
       cleanPackages()
-
       buildPackages(remainingArgs(p))
 
       echo ""
@@ -131,6 +115,6 @@ Copyright © 2018-2025 Firas Khana"""
     of "--version", "version":
       echo version
     else:
-      exit(help, QuitFailure)
+      exit(msg = help, status = QuitFailure)
 
     exit()

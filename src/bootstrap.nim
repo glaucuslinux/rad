@@ -6,7 +6,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import std/[os, strformat, strutils], constants, tools
+import std/[os, strformat, strutils], packages, tools
 
 proc cleanBootstrap*() =
   const dirs = ["../cross", "../log", "../tmp", "../toolchain"]
@@ -14,31 +14,26 @@ proc cleanBootstrap*() =
   for i in dirs:
     removeDir(i)
 
-proc prepareBootstrap*() =
-  const dirs = ["../cross", "../log", "../pkg", "../src", "../tmp", "../toolchain"]
+proc prepareToolchain() =
+  const
+    dirs = ["../cross", "../log", "../pkg", "../src", "../tmp", "../toolchain"]
+    exes = [
+      "autoconf", "automake", "autopoint", "awk", "bash", "booster", "bzip2", "curl",
+      "diff", "find", "gcc", "git", "grep", "gzip", "ld.bfd", "lex", "libtool",
+      "limine", "m4", "make", "meson", "mkfs.erofs", "mkfs.fat", "ninja", "patch",
+      "perl", "pkg-config", "sed", "tar", "xz", "yacc", "zstd",
+    ]
+
+  for i in exes:
+    if findExe(i).isEmptyOrWhitespace():
+      abort(&"""{127:<8}{&"\{i\} not found":48}""")
+
+  cleanBootstrap()
 
   for i in dirs:
     createDir(i)
 
-proc prepareCross*() =
-  const dir = "../tmp"
-
-  removeDir(dir)
-  createDir(dir)
-
-proc require*() =
-  const exes = [
-    "autoconf", "automake", "autopoint", "awk", "bash", "booster", "bzip2", "curl",
-    "diff", "find", "gcc", "git", "grep", "gzip", "ld.bfd", "lex", "libtool", "limine",
-    "m4", "make", "meson", "mkfs.erofs", "mkfs.fat", "ninja", "patch", "perl",
-    "pkg-config", "sed", "tar", "xz", "yacc", "zstd",
-  ]
-
-  for i in exes:
-    if findExe(i).isEmptyOrWhitespace():
-      abort(&"""{127:8}{&"\{i\} not found":48}""")
-
-proc setEnvBootstrap*() =
+proc configureToolchain() =
   const env = [
     ("REPO", "../core"),
     ("CRSD", "../cross"),
@@ -51,7 +46,20 @@ proc setEnvBootstrap*() =
 
   putEnv("PATH", getEnv("TLCD") / "usr/bin" & PathSep & getEnv("PATH"))
 
-proc setEnvCross*() =
+proc bootstrapToolchain*() =
+  prepareToolchain()
+  configureToolchain()
+  buildPackages(
+    parsePackage("toolchain").run.split(), resolve = false, stage = toolchain
+  )
+
+proc prepareCross() =
+  const dir = "../tmp"
+
+  removeDir(dir)
+  createDir(dir)
+
+proc configureCross() =
   const
     env = [
       ("AR", "x86_64-glaucus-linux-musl-gcc-ar"),
@@ -83,23 +91,11 @@ proc setEnvCross*() =
   for (i, j) in envPkgConfig:
     putEnv(i, absolutePath(j))
 
-proc setEnvNative*() =
-  const env = [
-    ("AR", "gcc-ar"),
-    ("AWK", "mawk"),
-    ("CC", "gcc"),
-    ("CPP", "gcc -E"),
-    ("CXX", "g++"),
-    ("CXXCPP", "g++ -E"),
-    ("LEX", "reflex"),
-    ("LIBTOOL", "slibtool"),
-    ("NM", "gcc-nm"),
-    ("PKG_CONFIG", "u-config"),
-    ("RANLIB", "gcc-ranlib"),
-    ("REPO", pathCoreRepo),
-    ("TMPD", pathTmp),
-    ("YACC", "byacc"),
-  ]
+proc bootstrapCross*() =
+  prepareCross()
+  configureCross()
+  configureToolchain()
+  buildPackages(parsePackage("cross").run.split(), resolve = false, stage = cross)
 
-  for (i, j) in env:
-    putEnv(i, j)
+proc bootstrapNative*() =
+  buildPackages(parsePackage("native").run.split(), resolve = false)

@@ -6,16 +6,16 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import std/[algorithm, os, osproc, strformat, strutils, terminal, times], constants
+import std/[os, osproc, strformat, strutils, terminal, times]
 
-proc createTarZst*(ar, dir: string): int =
-  execCmd(&"tar --use-compress-program 'zstd -3 -T0' -cP -f {ar} -C {dir} .")
+proc createTarZst*(archive, dir: string): int =
+  execCmd(&"tar --use-compress-program 'zstd -3 -T0' -cP -f {archive} -C {dir} .")
 
 proc downloadFile*(dir, url: string): int =
   execCmd(&"curl -fL --output-dir {dir} -Os {url}")
 
-proc exit*(msg = "", status = QuitSuccess) =
-  removeFile(pathTmpLock)
+proc exit*(radLock = "/var/tmp/rad.lock", msg = "", status = QuitSuccess) =
+  removeFile(radLock)
 
   if not msg.isEmptyOrWhitespace():
     quit(msg, status)
@@ -27,26 +27,8 @@ proc abort*(err: string, status = QuitFailure) =
 
   exit(status = status)
 
-proc extractTar*(ar, dir: string): int =
-  execCmd(&"tar --no-same-owner -xmP -f {ar} -C {dir}")
-
-proc genContents*(dir, contents: string) =
-  var entries: seq[string]
-
-  for entry in walkDirRec(
-    dir, yieldFilter = {pcFile .. pcLinkToDir}, relative = true, skipSpecial = true
-  ):
-    entries &= (
-      if getFileInfo(dir / entry, followSymlink = false).kind == pcDir: entry & '/'
-      else: entry
-    )
-
-  let contents = open(contents, fmWrite)
-
-  for entry in entries.sorted():
-    contents &= entry & '\n'
-
-  contents.close()
+proc extractTar*(archive, dir: string): int =
+  execCmd(&"tar --no-same-owner -xmP -f {archive} -C {dir}")
 
 proc gitCheckoutRepo*(dir, cmt: string): int =
   execCmd(&"git -C {dir} checkout {cmt} -q")
@@ -54,30 +36,20 @@ proc gitCheckoutRepo*(dir, cmt: string): int =
 proc gitCloneRepo*(url, dir: string): int =
   execCmd(&"git clone {url} {dir} -q")
 
-proc interrupt*() {.noconv.} =
+proc interrupt() {.noconv.} =
   abort(&"""{$QuitFailure:8}{"interrupt received":48}""")
 
-proc isEmpty*(dir: string): bool =
-  for entry in walkDir(dir):
-    return
-  return true
-
-proc lock*() =
-  if fileExists(pathTmpLock):
+proc lock*(radLock = "/var/tmp/rad.lock") =
+  if fileExists(radLock):
     styledEcho fgRed,
       styleBright,
       &"""{$QuitFailure:8}{"lock exists":48}{"abort":8}""" & now().format("hh:mm tt")
 
     quit(QuitFailure)
 
-  writeFile(pathTmpLock, "")
+  writeFile(radLock, "")
 
   setControlCHook(interrupt)
-
-proc verifyContents*(contents: string): bool =
-  for file in lines(contents):
-    if not fileExists(file):
-      return
 
 proc xxhsum(file: string): string =
   execCmdEx(&"xxhsum -H2 {file}").output.strip()

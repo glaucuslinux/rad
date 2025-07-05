@@ -8,19 +8,32 @@
 
 import
   std/[algorithm, os, osproc, sequtils, strformat, strutils, tables, times],
-  constants,
   tools,
   toml_serialization
 
-type Package = object
-  ver, url, sum, bld, run*, opt = "nil"
+const
+  radPkgCache* = "/var/cache/rad/pkg"
+  radSrcCache* = "/var/cache/rad/src"
+  radCoreRepo* = "/var/lib/rad/repo/core"
+  radExtraRepo* = "/var/lib/rad/repo/extra"
+  radLog* = "/var/log/rad"
+  radTmp* = "/var/tmp/rad"
+
+type
+  Package = object
+    ver, url, sum, bld, run*, opt = "nil"
+
+  Stages* = enum
+    cross
+    native
+    toolchain
 
 proc cleanPackages*() =
-  removeDir(pathTmp)
-  createDir(pathTmp)
+  removeDir(radTmp)
+  createDir(radTmp)
 
 proc parsePackage*(name: string): Package =
-  let path = pathCoreRepo / name
+  let path = radCoreRepo / name
 
   if not dirExists(path):
     abort(&"""{"name":8}{&"\{name\} not found":48}""")
@@ -36,6 +49,29 @@ proc printHeader() =
 idx     name                    version                 cmd     time    
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"""
 
+proc genContents(dir, contents: string) =
+  var entries: seq[string]
+
+  for entry in walkDirRec(
+    dir, yieldFilter = {pcFile .. pcLinkToDir}, relative = true, skipSpecial = true
+  ):
+    entries &= (
+      if getFileInfo(dir / entry, followSymlink = false).kind == pcDir: entry & '/'
+      else: entry
+    )
+
+  let contents = open(contents, fmWrite)
+
+  for entry in entries.sorted():
+    contents &= entry & '\n'
+
+  contents.close()
+
+proc isEmpty(dir: string): bool =
+  for entry in walkDir(dir):
+    return
+  return true
+
 proc fetchPackages(packages: openArray[string]) =
   printHeader()
 
@@ -49,8 +85,8 @@ proc fetchPackages(packages: openArray[string]) =
       continue
 
     let
-      src = pathSrcCache / name
-      tmp = getEnv("TMPD") / name
+      src = radSrcCache / name
+      tmp = radTmp / name
 
     if package.sum == "nil":
       if not dirExists(src):
@@ -108,16 +144,8 @@ proc sortPackages(packages: openArray[string], run = true): seq[string] =
 
   sorted
 
-proc installPackage(
-    name: string,
-    fs = "/",
-    pkgCache = pathPkgCache,
-    pkgLib = pathLocalLib,
-    implicit = false,
-) =
-  let
-    package = parsePackage(name)
-    skel = parsePackage("skel").run
+proc installPackage(name: string, fs = "/", pkgCache = radPkgCache, implicit = false) =
+  let package = parsePackage(name)
 
   discard extractTar(
     pkgCache / name / name &
@@ -126,23 +154,10 @@ proc installPackage(
     fs,
   )
 
-  createDir(pkgLib / name)
-  copyFileWithPermissions(pkgCache / name / "contents", pkgLib / name / "contents")
-  copyFileWithPermissions(pkgCache / name / "info", pkgLib / name / "info")
-
-  if implicit and name notin skel:
-    writeFile(pkgLib / name / "implicit", "")
-
-  if package.run.len() > 0:
-    for dep in package.run.split():
-      if dirExists(pkgLib / dep):
-        createDir(pkgLib / dep / "run")
-        writeFile(pkgLib / dep / "run" / name, "")
-
-proc setEnvArch*() =
+proc configureArch*() =
   let env = [
     ("ARCH", "x86-64"),
-    ("BUILD", execCmdEx(pathCoreRepo / "slibtool/files/config.guess").output.strip()),
+    ("BUILD", execCmdEx(radCoreRepo / "slibtool/files/config.guess").output.strip()),
     ("CTARGET", "x86_64-glaucus-linux-musl"),
     ("PRETTY_NAME", "glaucus s6 x86-64-v3 " & now().format("YYYYMMdd")),
     ("TARGET", "x86_64-pc-linux-musl"),
@@ -151,7 +166,7 @@ proc setEnvArch*() =
   for (i, j) in env:
     putEnv(i, j)
 
-proc setEnvFlags*(lto = true, parallel = true) =
+proc configureFlags*(lto = true, parallel = true) =
   let
     cflags =
       if lto:
@@ -178,8 +193,7 @@ proc setEnvFlags*(lto = true, parallel = true) =
 proc buildPackages*(
     packages: openArray[string],
     fs = "/",
-    pkgCache = pathPkgCache,
-    pkgLib = pathLocalLib,
+    pkgCache = radPkgCache,
     resolve = true,
     stage = native,
     implicit = false,
@@ -204,10 +218,6 @@ proc buildPackages*(
     printContent(idx, name, package.ver, "build")
 
     if stage == native:
-      # Skip installed packages
-      if dirExists(pkgLib / name):
-        continue
-
       # Skip package if archive exists
       if fileExists(archive):
         # Install build-time dependency (if not installed)
@@ -219,25 +229,46 @@ proc buildPackages*(
       createDir(getEnv("DSTD"))
 
     if stage != toolchain:
-      setEnvFlags()
+      configureFlags()
 
       if "no-lto" in package.opt:
-        setEnvFlags(lto = false)
+        configureFlags(lto = false)
 
       if "no-parallel" in package.opt:
-        setEnvFlags(parallel = false)
+        configureFlags(parallel = false)
 
     if dirExists(tmp):
       setCurrentDir(tmp)
     if dirExists(tmp / name & package.ver):
       setCurrentDir(tmp / name & package.ver)
 
+    if stage == native:
+      const env = [
+        ("AR", "gcc-ar"),
+        ("AWK", "mawk"),
+        ("CC", "gcc"),
+        ("CPP", "gcc -E"),
+        ("CXX", "g++"),
+        ("CXXCPP", "g++ -E"),
+        ("LEX", "reflex"),
+        ("LIBTOOL", "slibtool"),
+        ("NM", "gcc-nm"),
+        ("PKG_CONFIG", "u-config"),
+        ("RANLIB", "gcc-ranlib"),
+        ("REPO", radCoreRepo),
+        ("TMPD", radTmp),
+        ("YACC", "byacc"),
+      ]
+
+      for (i, j) in env:
+        putEnv(i, j)
+
     let shell = execCmdEx(
       &"""sh -efu -c '
-        name={name} ver={package.ver} . {pathCoreRepo / name / (if stage == native: "build" else: "build" & '-' & $stage)}
+        name={name} ver={package.ver} . {radCoreRepo / name / (if stage == native: "build" else: "build" & '-' & $stage)}
 
         for i in prepare configure build; do
-          if command -v $i {shellRedirect}; then
+          if command -v $i >/dev/null 2>&1; then
             $i
           fi
         done
@@ -247,7 +278,7 @@ proc buildPackages*(
     )
 
     writeFile(
-      pathLog / name & (if stage == native: "" else: '.' & $stage), shell.output.strip()
+      radLog / name & (if stage == native: "" else: '.' & $stage), shell.output.strip()
     )
 
     if shell.exitCode != QuitSuccess:
@@ -265,23 +296,16 @@ proc buildPackages*(
         genContents(dst, $pkgCache / name / "contents")
         removeDir(dst)
 
-        copyFileWithPermissions(pathCoreRepo / name / "info", pkgCache / name / "info")
+        copyFileWithPermissions(radCoreRepo / name / "info", pkgCache / name / "info")
 
       if "bootstrap" in package.opt or implicit:
         installPackage(name, implicit = true)
 
-proc installPackages*(
-    packages: openArray[string],
-    fs = "/",
-    pkgCache = pathPkgCache,
-    pkgLib = pathLocalLib,
-) =
-  let
-    cluster = sortPackages(packages)
-    skel = parsePackage("skel").run
+proc installPackages*(packages: openArray[string], fs = "/", pkgCache = radPkgCache) =
+  let sorted = sortPackages(packages)
   var notBuilt: seq[string]
 
-  for idx, name in cluster:
+  for idx, name in sorted:
     let
       package = parsePackage(name)
       archive =
@@ -299,20 +323,10 @@ proc installPackages*(
 
   printHeader()
 
-  for idx, name in cluster:
+  for idx, name in sorted:
     let package = parsePackage(name)
 
     printContent(idx, name, package.ver, "install")
-
-    # Skip installed packages
-    if dirExists(pkgLib / name):
-      if name notin packages and name notin skel:
-        writeFile(pkgLib / name / "implicit", "")
-
-      for name in packages:
-        removeFile(pkgLib / name / "implicit")
-
-      continue
 
     discard extractTar(
       pkgCache / name / name &
@@ -321,22 +335,12 @@ proc installPackages*(
       fs,
     )
 
-    createDir(pkgLib / name)
-    copyFileWithPermissions(pkgCache / name / "contents", pkgLib / name / "contents")
-    copyFileWithPermissions(pkgCache / name / "info", pkgLib / name / "info")
-
-    if package.run.len() > 0:
-      for dep in package.run.split():
-        if dirExists(pkgLib / dep):
-          createDir(pkgLib / dep / "run")
-          writeFile(pkgLib / dep / "run" / name, "")
-
 proc showInfo*(packages: openArray[string]) =
   for name in packages.deduplicate():
     let package = parsePackage(name)
 
     echo &"""
-name  :: {name}
+nom  :: {name}
 ver  :: {package.ver}
 url  :: {package.url}
 sum  :: {package.sum}
@@ -346,19 +350,19 @@ opt  :: {package.opt}
 """
 
 proc listPackages*() =
-  showInfo(walkDir(pathLocalLib, true, skipSpecial = true).toSeq().unzip()[1].sorted())
+  showInfo(walkDir(radPkgCache, true, skipSpecial = true).toSeq().unzip()[1].sorted())
 
 proc listContents*(packages: openArray[string]) =
   for name in packages.deduplicate():
     let package = parsePackage(name)
 
-    for line in lines(pathLocalLib / name / "contents"):
+    for line in lines(radPkgCache / name / "contents"):
       echo &"/{line}"
 
 proc searchPackages*(pattern: openArray[string]) =
   var packages: seq[string]
 
-  for package in walkDir(pathCoreRepo, true, skipSpecial = true):
+  for package in walkDir(radCoreRepo, true, skipSpecial = true):
     for name in pattern:
       if name.toLowerAscii() in package[1]:
         packages &= package[1]
