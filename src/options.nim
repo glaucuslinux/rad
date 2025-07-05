@@ -63,7 +63,7 @@ Copyright © 2018-2025 Firas Khana"""
 
       case p.kind
       of cmdEnd:
-        exit(msg = helpBootstrap, status = QuitFailure)
+        exit(helpBootstrap, QuitFailure)
       else:
         case p.key
         of "clean":
@@ -88,7 +88,7 @@ Copyright © 2018-2025 Firas Khana"""
           echo ""
           echo "stage 3 (native) complete"
         else:
-          exit(msg = helpBootstrap, status = QuitFailure)
+          exit(helpBootstrap, QuitFailure)
     of "build":
       cleanPackages()
       buildPackages(remainingArgs(p))
@@ -115,6 +115,6 @@ Copyright © 2018-2025 Firas Khana"""
     of "--version", "version":
       echo version
     else:
-      exit(msg = help, status = QuitFailure)
+      exit(help, QuitFailure)
 
     exit()
