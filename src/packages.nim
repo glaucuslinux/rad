@@ -194,8 +194,8 @@ proc buildPackages*(
 
     if dirExists(tmp):
       setCurrentDir(tmp)
-    if dirExists(tmp / &"{package}-{package.ver}"):
-      setCurrentDir(tmp / &"{package}-{package.ver}")
+    if dirExists(tmp / &"{nom}-{package.ver}"):
+      setCurrentDir(tmp / &"{nom}-{package.ver}")
 
     let shell = execCmdEx(
       &"""sh -efu -c '
@@ -212,7 +212,7 @@ proc buildPackages*(
     )
 
     writeFile(
-      getEnv("LOGD") / nom & (if stage == native: "" else: $stage), shell.output.strip()
+      pathLog / nom & (if stage == native: "" else: '.' & $stage), shell.output.strip()
     )
 
     if shell.exitCode != QuitSuccess:
