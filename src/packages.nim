@@ -8,14 +8,13 @@
 
 import
   std/[algorithm, os, osproc, sequtils, strformat, strutils, tables, times],
-  tools,
+  utils,
   toml_serialization
 
 const
-  radPkgCache* = "/var/cache/rad/pkg"
-  radSrcCache* = "/var/cache/rad/src"
-  radCoreRepo* = "/var/lib/rad/repo/core"
-  radExtraRepo* = "/var/lib/rad/repo/extra"
+  pkgCache* = "/var/cache/rad/pkg"
+  srcCache* = "/var/cache/rad/src"
+  coreRepo* = "/var/lib/rad/repo/core"
   radLog* = "/var/log/rad"
   radTmp* = "/var/tmp/rad"
 
@@ -28,12 +27,12 @@ type
     native
     toolchain
 
-proc cleanPackages*() =
+proc cleanCache*() =
   removeDir(radTmp)
   createDir(radTmp)
 
-proc parsePackage*(name: string): Package =
-  let path = radCoreRepo / name
+proc parseInfo*(name: string): Package =
+  let path = coreRepo / name
 
   if not dirExists(path):
     abort(&"""{"name":8}{&"\{name\} not found":48}""")
@@ -76,7 +75,7 @@ proc fetchPackages(packages: openArray[string]) =
   printHeader()
 
   for idx, name in packages:
-    let package = parsePackage(name)
+    let package = parseInfo(name)
 
     printContent(idx, name, package.ver, "fetch")
 
@@ -85,7 +84,7 @@ proc fetchPackages(packages: openArray[string]) =
       continue
 
     let
-      src = radSrcCache / name
+      src = srcCache / name
       tmp = radTmp / name
 
     if package.sum == "nil":
@@ -102,26 +101,23 @@ proc fetchPackages(packages: openArray[string]) =
       if not verifyFile(archive, package.sum):
         removeDir(src)
         createDir(src)
-        discard downloadFile(src, package.url)
+        discard downloadFile(package.url, src)
 
-      if verifyFile(archive, package.sum):
-        createDir(tmp)
-        discard extractTar(archive, tmp)
-      else:
+      if not verifyFile(archive, package.sum):
         abort(&"""{"sum":8}{name:24}{package.ver:24}""")
 
+      createDir(tmp)
+      discard extractTar(archive, tmp)
+
 proc resolveDeps(
-    name: string,
-    packages: var seq[string],
-    deps: var Table[string, seq[string]],
-    run = true,
+    name: string, packages: var seq[string], deps: var Table[string, seq[string]]
 ) =
   if name in packages:
     return
 
   let
-    package = parsePackage(name)
-    dep = if run: package.run else: package.bld
+    package = parseInfo(name)
+    dep = package.bld
 
   deps[name] =
     if dep == "nil":
@@ -130,22 +126,22 @@ proc resolveDeps(
       dep.split()
 
   for name in deps[name]:
-    resolveDeps(name, packages, deps, run)
+    resolveDeps(name, packages, deps)
 
   packages &= name
 
-proc sortPackages(packages: openArray[string], run = true): seq[string] =
+proc sortPackages(packages: openArray[string]): seq[string] =
   var
-    sorted: seq[string]
     deps: Table[string, seq[string]]
+    sorted: seq[string]
 
   for name in packages.deduplicate():
-    resolveDeps(name, sorted, deps, run)
+    resolveDeps(name, sorted, deps)
 
   sorted
 
-proc installPackage(name: string, fs = "/", pkgCache = radPkgCache, implicit = false) =
-  let package = parsePackage(name)
+proc installPackage(name: string, fs = "/", pkgCache = pkgCache) =
+  let package = parseInfo(name)
 
   discard extractTar(
     pkgCache / name / name &
@@ -154,95 +150,38 @@ proc installPackage(name: string, fs = "/", pkgCache = radPkgCache, implicit = f
     fs,
   )
 
-proc configureArch*() =
-  let env = [
-    ("ARCH", "x86-64"),
-    ("BUILD", execCmdEx(radCoreRepo / "slibtool/files/config.guess").output.strip()),
-    ("CTARGET", "x86_64-glaucus-linux-musl"),
-    ("PRETTY_NAME", "glaucus s6 x86-64-v3 " & now().format("YYYYMMdd")),
-    ("TARGET", "x86_64-pc-linux-musl"),
-  ]
+proc buildPackages*(packages: openArray[string], bootstrap = false, stage = native) =
+  let queue =
+    if bootstrap:
+      packages.toSeq()
+    else:
+      sortPackages(packages)
 
-  for (i, j) in env:
-    putEnv(i, j)
-
-proc configureFlags*(lto = true, parallel = true) =
-  let
-    cflags =
-      if lto:
-        "-pipe -O2 -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=3 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
-      else:
-        "-pipe -O2 -fgraphite-identity -floop-nest-optimize -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
-    env = [
-      ("CFLAGS", cflags),
-      ("CXXFLAGS", cflags),
-      (
-        "LDFLAGS",
-        if lto:
-          "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu " &
-            cflags
-        else:
-          "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu",
-      ),
-      ("MAKEFLAGS", if parallel: "-j 5 -O" else: "-j 1"),
-    ]
-
-  for (i, j) in env:
-    putEnv(i, j)
-
-proc buildPackages*(
-    packages: openArray[string],
-    fs = "/",
-    pkgCache = radPkgCache,
-    resolve = true,
-    stage = native,
-    implicit = false,
-) =
-  let sorted = sortPackages(packages, false)
-
-  fetchPackages(sorted)
+  fetchPackages(queue)
 
   echo ""
 
   printHeader()
 
-  for idx, name in (if resolve: sorted else: packages.toSeq()):
+  for idx, name in queue:
     let
-      package = parsePackage(name)
+      package = parseInfo(name)
       archive =
-        pkgCache / name / name &
-        (if package.url == "nil": ""
-        else: '-' & package.ver & ".tar.zst")
-      tmp = getEnv("TMPD") / name
+        if package.url == "nil":
+          pkgCache / name / name & ".tar.zst"
+        else:
+          pkgCache / name / name & '-' & package.ver & ".tar.zst"
 
     printContent(idx, name, package.ver, "build")
 
     if stage == native:
       # Skip package if archive exists
       if fileExists(archive):
-        # Install build-time dependency (if not installed)
-        if implicit:
-          installPackage(name, implicit = true)
         continue
 
-      putEnv("DSTD", pkgCache / name / "dst")
-      createDir(getEnv("DSTD"))
+      putEnv("dir", pkgCache / name / "dir")
+      createDir(getEnv("dir"))
 
-    if stage != toolchain:
-      configureFlags()
-
-      if "no-lto" in package.opt:
-        configureFlags(lto = false)
-
-      if "no-parallel" in package.opt:
-        configureFlags(parallel = false)
-
-    if dirExists(tmp):
-      setCurrentDir(tmp)
-    if dirExists(tmp / name & package.ver):
-      setCurrentDir(tmp / name & package.ver)
-
-    if stage == native:
       const env = [
         ("AR", "gcc-ar"),
         ("AWK", "mawk"),
@@ -255,7 +194,7 @@ proc buildPackages*(
         ("NM", "gcc-nm"),
         ("PKG_CONFIG", "u-config"),
         ("RANLIB", "gcc-ranlib"),
-        ("REPO", radCoreRepo),
+        ("REPO", coreRepo),
         ("TMPD", radTmp),
         ("YACC", "byacc"),
       ]
@@ -263,9 +202,48 @@ proc buildPackages*(
       for (i, j) in env:
         putEnv(i, j)
 
+    if dirExists(radTmp):
+      setCurrentDir(radTmp)
+    if dirExists(radTmp / name & package.ver):
+      setCurrentDir(radTmp / name & package.ver)
+
+    let env = [
+      ("ARCH", "x86-64"),
+      ("BUILD", execCmdEx(coreRepo / "slibtool/files/config.guess").output.strip()),
+      ("CTARGET", "x86_64-glaucus-linux-musl"),
+      ("PRETTY_NAME", "glaucus s6 x86-64-v3 " & now().format("YYYYMMdd")),
+      ("TARGET", "x86_64-pc-linux-musl"),
+    ]
+
+    for (i, j) in env:
+      putEnv(i, j)
+
+    let
+      cflags =
+        if "no-lto" notin package.opt:
+          "-pipe -O2 -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=3 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+        else:
+          "-pipe -O2 -fgraphite-identity -floop-nest-optimize -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+      envFlags = [
+        ("CFLAGS", cflags),
+        ("CXXFLAGS", cflags),
+        (
+          "LDFLAGS",
+          if "no-lto" notin package.opt:
+            "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu " &
+              cflags
+          else:
+            "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu",
+        ),
+        ("MAKEFLAGS", if "no-parallel" notin package.opt: "-j 5 -O" else: "-j 1"),
+      ]
+
+    for (i, j) in envFlags:
+      putEnv(i, j)
+
     let shell = execCmdEx(
       &"""sh -efu -c '
-        name={name} ver={package.ver} . {radCoreRepo / name / (if stage == native: "build" else: "build" & '-' & $stage)}
+        name={name} ver={package.ver} . {coreRepo / name / (if stage == native: "build" else: "build" & '-' & $stage)}
 
         for i in prepare configure build; do
           if command -v $i >/dev/null 2>&1; then
@@ -293,51 +271,17 @@ proc buildPackages*(
       # if "empty" notin package.opt:
 
       if status == QuitSuccess:
-        genContents(dst, $pkgCache / name / "contents")
+        genContents(dst, pkgCache / name / "contents")
         removeDir(dst)
 
-        copyFileWithPermissions(radCoreRepo / name / "info", pkgCache / name / "info")
+        copyFileWithPermissions(coreRepo / name / "info", pkgCache / name / "info")
 
-      if "bootstrap" in package.opt or implicit:
-        installPackage(name, implicit = true)
-
-proc installPackages*(packages: openArray[string], fs = "/", pkgCache = radPkgCache) =
-  let sorted = sortPackages(packages)
-  var notBuilt: seq[string]
-
-  for idx, name in sorted:
-    let
-      package = parsePackage(name)
-      archive =
-        pkgCache / name / name &
-        (if package.url == "nil": ""
-        else: '-' & package.ver & ".tar.zst")
-
-    if not fileExists(archive):
-      notBuilt &= name
-
-  if notBuilt.len() > 0:
-    buildPackages(notBuilt, implicit = true)
-
-    echo ""
-
-  printHeader()
-
-  for idx, name in sorted:
-    let package = parsePackage(name)
-
-    printContent(idx, name, package.ver, "install")
-
-    discard extractTar(
-      pkgCache / name / name &
-        (if package.url == "nil": ""
-        else: '-' & package.ver & ".tar.zst"),
-      fs,
-    )
+      if "bootstrap" in package.opt:
+        installPackage(name)
 
 proc showInfo*(packages: openArray[string]) =
   for name in packages.deduplicate():
-    let package = parsePackage(name)
+    let package = parseInfo(name)
 
     echo &"""
 nom  :: {name}
@@ -350,19 +294,19 @@ opt  :: {package.opt}
 """
 
 proc listPackages*() =
-  showInfo(walkDir(radPkgCache, true, skipSpecial = true).toSeq().unzip()[1].sorted())
+  showInfo(walkDir(pkgCache, true, skipSpecial = true).toSeq().unzip()[1].sorted())
 
 proc listContents*(packages: openArray[string]) =
   for name in packages.deduplicate():
-    let package = parsePackage(name)
+    let package = parseInfo(name)
 
-    for line in lines(radPkgCache / name / "contents"):
+    for line in lines(pkgCache / name / "contents"):
       echo &"/{line}"
 
 proc searchPackages*(pattern: openArray[string]) =
   var packages: seq[string]
 
-  for package in walkDir(radCoreRepo, true, skipSpecial = true):
+  for package in walkDir(coreRepo, true, skipSpecial = true):
     for name in pattern:
       if name.toLowerAscii() in package[1]:
         packages &= package[1]

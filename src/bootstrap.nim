@@ -6,7 +6,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import std/[os, strformat, strutils], packages, tools
+import std/[os, strformat, strutils], packages, utils
 
 proc cleanBootstrap*() =
   const dirs = ["../cross", "../log", "../tmp", "../toolchain"]
@@ -35,23 +35,21 @@ proc prepareToolchain() =
 
 proc configureToolchain() =
   const env = [
-    ("REPO", "../core"),
-    ("CRSD", "../cross"),
-    ("TMPD", "../tmp"),
-    ("TLCD", "../toolchain"),
+    ("core", "../core"),
+    ("cross", "../cross"),
+    ("tmp", "../tmp"),
+    ("toolchain", "../toolchain"),
   ]
 
   for (i, j) in env:
     putEnv(i, absolutePath(j))
 
-  putEnv("PATH", getEnv("TLCD") / "usr/bin" & PathSep & getEnv("PATH"))
+  putEnv("PATH", getEnv("toolchain") / "usr/bin" & PathSep & getEnv("PATH"))
 
 proc bootstrapToolchain*() =
   prepareToolchain()
   configureToolchain()
-  buildPackages(
-    parsePackage("toolchain").run.split(), resolve = false, stage = toolchain
-  )
+  buildPackages(parseInfo("toolchain").run.split(), true, toolchain)
 
 proc prepareCross() =
   const dir = "../tmp"
@@ -95,7 +93,4 @@ proc bootstrapCross*() =
   prepareCross()
   configureCross()
   configureToolchain()
-  buildPackages(parsePackage("cross").run.split(), resolve = false, stage = cross)
-
-proc bootstrapNative*() =
-  buildPackages(parsePackage("native").run.split(), resolve = false)
+  buildPackages(parseInfo("cross").run.split(), true, cross)

@@ -11,7 +11,7 @@ import std/[os, osproc, strformat, strutils, terminal, times]
 proc createTarZst*(archive, dir: string): int =
   execCmd(&"tar --use-compress-program 'zstd -3 -T0' -cP -f {archive} -C {dir} .")
 
-proc downloadFile*(dir, url: string): int =
+proc downloadFile*(url, dir: string): int =
   execCmd(&"curl -fL --output-dir {dir} -Os {url}")
 
 proc exit*(msg = "", status = QuitSuccess, lock = "/var/tmp/rad.lock") =
@@ -37,13 +37,13 @@ proc gitCloneRepo*(url, dir: string): int =
   execCmd(&"git clone {url} {dir} -q")
 
 proc interrupt() {.noconv.} =
-  abort(&"""{$QuitFailure:8}{"interrupt received":48}""")
+  abort(&"""{QuitFailure:<8}{"interrupt received":48}""")
 
 proc lock*(lock = "/var/tmp/rad.lock") =
   if fileExists(lock):
     styledEcho fgRed,
       styleBright,
-      &"""{$QuitFailure:8}{"lock exists":48}{"abort":8}""" & now().format("hh:mm tt")
+      &"""{QuitFailure:<8}{"lock exists":48}{"abort":8}""" & now().format("hh:mm tt")
 
     quit(QuitFailure)
 

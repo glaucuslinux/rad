@@ -6,7 +6,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import std/[os, parseopt], bootstrap, packages, tools
+import std/[os, parseopt, strutils], bootstrap, packages, utils
 
 proc options*() =
   const
@@ -83,20 +83,20 @@ Copyright © 2018-2025 Firas Khana"""
           echo ""
           echo "stage 2 (cross) complete"
         of "3", "stage3", "native":
-          bootstrapNative()
+          buildPackages(parseInfo("native").run.split(), true)
 
           echo ""
           echo "stage 3 (native) complete"
         else:
           exit(helpBootstrap, QuitFailure)
     of "build":
-      cleanPackages()
+      cleanCache()
       buildPackages(remainingArgs(p))
 
       echo ""
       echo "build complete"
     of "clean":
-      cleanPackages()
+      cleanCache()
 
       echo "clean complete"
     of "contents":
