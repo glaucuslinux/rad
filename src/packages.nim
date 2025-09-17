@@ -34,9 +34,9 @@ proc parseInfo*(name: string): Package =
   if not dirExists(path):
     abort(&"""{"name":8}{&"\{name\} not found":48}""")
 
-  for line in (path / "info").lines:
-    let line = line.strip()
+  result = Package()
 
+  for line in (path / "info").lines:
     if line.isEmptyOrWhitespace() or line.startsWith('#'):
       continue
 
