@@ -6,10 +6,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import
-  std/[algorithm, os, osproc, sequtils, strformat, strutils, tables, times],
-  utils,
-  toml_serialization
+import std/[algorithm, os, osproc, sequtils, strformat, strutils, tables, times], utils
 
 const
   pkgCache* = "/var/cache/rad/pkg"
@@ -37,7 +34,40 @@ proc parseInfo*(name: string): Package =
   if not dirExists(path):
     abort(&"""{"name":8}{&"\{name\} not found":48}""")
 
-  Toml.loadFile(path / "info", Package)
+  for line in (path / "info").lines:
+    let line = line.strip()
+
+    if line.isEmptyOrWhitespace() or line.startsWith('#'):
+      continue
+
+    if line.contains("= \"") or line.contains(" =\"") or '=' notin line:
+      abort(&"""{"name":8}{&"wrong format":48}""")
+
+    let
+      pair = line.split('=', 1)
+      key = pair[0]
+    var value = pair[1]
+
+    if not (value.startsWith('"') and value.endsWith('"')):
+      abort(&"""{"name":8}{&"wrong format":48}""")
+
+    value = value.strip(chars = {'"'})
+
+    case key
+    of "ver":
+      result.ver = value
+    of "url":
+      result.url = value
+    of "sum":
+      result.sum = value
+    of "bld":
+      result.bld = value
+    of "run":
+      result.run = value
+    of "opt":
+      result.opt = value
+    else:
+      abort(&"""{"name":8}{&"wrong format":48}""")
 
 proc printContent(idx: int, name, ver, cmd: string) =
   echo &"""{idx + 1:<8}{name:24}{ver:24}{cmd:8}""" & now().format("hh:mm tt")

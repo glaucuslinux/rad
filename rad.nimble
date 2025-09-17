@@ -9,4 +9,3 @@ srcDir = "src"
 bin = @["rad"]
 
 requires "nim >= 2.3.1"
-requires "tomlSerialization >= 0.2.14"
