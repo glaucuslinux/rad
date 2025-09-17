@@ -41,33 +41,33 @@ proc parseInfo*(name: string): Package =
       continue
 
     if line.contains("= \"") or line.contains(" =\"") or '=' notin line:
-      abort(&"""{"name":8}{&"wrong format":48}""")
+      abort(&"""{"name":8}{"whitespace found":48}""")
 
     let
       pair = line.split('=', 1)
       key = pair[0]
-    var value = pair[1]
+    var val = pair[1]
 
-    if not (value.startsWith('"') and value.endsWith('"')):
-      abort(&"""{"name":8}{&"wrong format":48}""")
+    if not (val.startsWith('"') and val.endsWith('"')):
+      abort(&"""{"name":8}{"quotes not found":48}""")
 
-    value = value.strip(chars = {'"'})
+    val = val.strip(chars = {'"'})
 
     case key
     of "ver":
-      result.ver = value
+      result.ver = val
     of "url":
-      result.url = value
+      result.url = val
     of "sum":
-      result.sum = value
+      result.sum = val
     of "bld":
-      result.bld = value
+      result.bld = val
     of "run":
-      result.run = value
+      result.run = val
     of "opt":
-      result.opt = value
+      result.opt = val
     else:
-      abort(&"""{"name":8}{&"wrong format":48}""")
+      abort(&"""{"name":8}{&"\{key\} not found":48}""")
 
 proc printContent(idx: int, name, ver, cmd: string) =
   echo &"""{idx + 1:<8}{name:24}{ver:24}{cmd:8}""" & now().format("hh:mm tt")
@@ -327,10 +327,8 @@ proc listPackages*() =
   showInfo(walkDir(pkgCache, true, skipSpecial = true).toSeq().unzip()[1].sorted())
 
 proc listContents*(packages: openArray[string]) =
-  for name in packages.deduplicate():
-    let package = parseInfo(name)
-
-    for line in lines(pkgCache / name / "contents"):
+  for package in packages.deduplicate():
+    for line in lines(pkgCache / package / "contents"):
       echo &"/{line}"
 
 proc searchPackages*(pattern: openArray[string]) =
