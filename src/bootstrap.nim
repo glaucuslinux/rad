@@ -19,7 +19,7 @@ proc prepareToolchain() =
     dirs = ["../cross", "../log", "../pkg", "../src", "../tmp", "../toolchain"]
     exes = [
       "autoconf", "automake", "autopoint", "awk", "bash", "booster", "bzip2", "curl",
-      "diff", "find", "gcc", "git", "grep", "gzip", "ld.bfd", "lex", "libtool",
+      "diff", "find", "gcc", "git", "gperf", "grep", "gzip", "ld.bfd", "lex", "libtool",
       "limine", "m4", "make", "meson", "mkfs.erofs", "mkfs.fat", "ninja", "patch",
       "perl", "pkg-config", "sed", "tar", "xz", "yacc", "zstd",
     ]

@@ -28,20 +28,20 @@ proc cleanCache*() =
   removeDir(radTmp)
   createDir(radTmp)
 
-proc parseInfo*(name: string): Package =
-  let path = coreRepo / name
+proc parseInfo*(nom: string): Package =
+  let path = coreRepo / nom
 
   if not dirExists(path):
-    abort(&"""{"name":8}{&"\{name\} not found":48}""")
+    abort(&"""{"nom":8}{&"\{nom\} not found":48}""")
 
   result = Package()
 
-  for line in (path / "info").lines:
+  for line in lines(path / "info"):
     if line.isEmptyOrWhitespace() or line.startsWith('#'):
       continue
 
     if line.contains("= \"") or line.contains(" =\"") or '=' notin line:
-      abort(&"""{"name":8}{"whitespace found":48}""")
+      abort(&"""{"nom":8}{"whitespace found":48}""")
 
     let
       pair = line.split('=', 1)
@@ -49,7 +49,7 @@ proc parseInfo*(name: string): Package =
     var val = pair[1]
 
     if not (val.startsWith('"') and val.endsWith('"')):
-      abort(&"""{"name":8}{"quotes not found":48}""")
+      abort(&"""{"nom":8}{"quotes not found":48}""")
 
     val = val.strip(chars = {'"'})
 
@@ -67,15 +67,15 @@ proc parseInfo*(name: string): Package =
     of "opt":
       result.opt = val
     else:
-      abort(&"""{"name":8}{&"\{key\} not found":48}""")
+      abort(&"""{"nom":8}{&"\{key\} not found":48}""")
 
-proc printContent(idx: int, name, ver, cmd: string) =
-  echo &"""{idx + 1:<8}{name:24}{ver:24}{cmd:8}""" & now().format("hh:mm tt")
+proc printContent(idx: int, nom, ver, cmd: string) =
+  echo &"""{idx + 1:<8}{nom:24}{ver:24}{cmd:8}""" & now().format("hh:mm tt")
 
 proc printHeader() =
   echo """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-idx     name                    version                 cmd     time    
+idx     nom                     ver                     cmd     now     
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"""
 
 proc genContents(dir, contents: string) =
@@ -104,18 +104,18 @@ proc isEmpty(dir: string): bool =
 proc fetchPackages(packages: openArray[string]) =
   printHeader()
 
-  for idx, name in packages:
-    let package = parseInfo(name)
+  for idx, nom in packages:
+    let package = parseInfo(nom)
 
-    printContent(idx, name, package.ver, "fetch")
+    printContent(idx, nom, package.ver, "fetch")
 
     # Skip virtual packages
     if package.url == "nil":
       continue
 
     let
-      src = srcCache / name
-      tmp = radTmp / name
+      src = srcCache / nom
+      tmp = radTmp / nom
 
     if package.sum == "nil":
       if not dirExists(src):
@@ -134,82 +134,84 @@ proc fetchPackages(packages: openArray[string]) =
         discard downloadFile(package.url, src)
 
       if not verifyFile(archive, package.sum):
-        abort(&"""{"sum":8}{name:24}{package.ver:24}""")
+        abort(&"""{"sum":8}{nom:24}{package.ver:24}""")
 
       createDir(tmp)
       discard extractTar(archive, tmp)
 
 proc resolveDeps(
-    name: string, packages: var seq[string], deps: var Table[string, seq[string]]
+    nom: string, packages: var seq[string], deps: var Table[string, seq[string]]
 ) =
-  if name in packages:
+  if nom in packages:
     return
 
   let
-    package = parseInfo(name)
+    package = parseInfo(nom)
     dep = package.bld
 
-  deps[name] =
+  deps[nom] =
     if dep == "nil":
       @[]
     else:
       dep.split()
 
-  for name in deps[name]:
-    resolveDeps(name, packages, deps)
+  for nom in deps[nom]:
+    resolveDeps(nom, packages, deps)
 
-  packages &= name
+  packages &= nom
 
 proc sortPackages(packages: openArray[string]): seq[string] =
   var
     deps: Table[string, seq[string]]
     sorted: seq[string]
 
-  for name in packages.deduplicate():
-    resolveDeps(name, sorted, deps)
+  for nom in packages.deduplicate():
+    resolveDeps(nom, sorted, deps)
 
   sorted
 
-proc installPackage(name: string, fs = "/", pkgCache = pkgCache) =
-  let package = parseInfo(name)
+proc installPackage(nom: string, fs = "/", pkgCache = pkgCache) =
+  let package = parseInfo(nom)
 
   discard extractTar(
-    pkgCache / name / name &
+    pkgCache / nom / nom &
       (if package.url == "nil": ""
       else: '-' & package.ver & ".tar.zst"),
     fs,
   )
 
 proc buildPackages*(packages: openArray[string], bootstrap = false, stage = native) =
-  let queue =
-    if bootstrap:
-      packages.toSeq()
-    else:
-      sortPackages(packages)
+  let
+    sorted = sortPackages(packages)
+    queue =
+      if bootstrap:
+        packages.toSeq()
+      else:
+        sorted
 
-  fetchPackages(queue)
+  fetchPackages(sorted)
 
   echo ""
 
   printHeader()
 
-  for idx, name in queue:
+  for idx, nom in queue:
     let
-      package = parseInfo(name)
+      package = parseInfo(nom)
       archive =
         if package.url == "nil":
-          pkgCache / name / name & ".tar.zst"
+          pkgCache / nom / nom & ".tar.zst"
         else:
-          pkgCache / name / name & '-' & package.ver & ".tar.zst"
+          pkgCache / nom / nom & '-' & package.ver & ".tar.zst"
 
-    printContent(idx, name, package.ver, "build")
+    printContent(idx, nom, package.ver, "build")
 
     if stage == native:
       # Skip package if archive exists
       if fileExists(archive):
         continue
 
-      putEnv("dir", pkgCache / name / "dir")
+      putEnv("dir", pkgCache / nom / "dir")
       createDir(getEnv("dir"))
 
       const env = [
@@ -224,18 +226,19 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
         ("NM", "gcc-nm"),
         ("PKG_CONFIG", "u-config"),
         ("RANLIB", "gcc-ranlib"),
-        ("REPO", coreRepo),
-        ("TMPD", radTmp),
         ("YACC", "byacc"),
       ]
 
       for (i, j) in env:
         putEnv(i, j)
 
-    if dirExists(radTmp):
-      setCurrentDir(radTmp)
-    if dirExists(radTmp / name & package.ver):
-      setCurrentDir(radTmp / name & package.ver)
+    if bootstrap:
+      putEnv("PATH", absolutePath("../toolchain/usr/bin") & PathSep & getEnv("PATH"))
+
+    if dirExists(radTmp / nom):
+      setCurrentDir(radTmp / nom)
+    if dirExists(radTmp / nom / nom & '-' & package.ver):
+      setCurrentDir(radTmp / nom / nom & '-' & package.ver)
 
     let env = [
       ("ARCH", "x86-64"),
@@ -273,7 +276,7 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
 
     let shell = execCmdEx(
       &"""sh -efu -c '
-        name={name} ver={package.ver} . {coreRepo / name / (if stage == native: "build" else: "build" & '-' & $stage)}
+        nom={nom} ver={package.ver} . {coreRepo / nom / (if stage == native: "build" else: "build" & '-' & $stage)}
 
         for i in prepare configure build; do
           if command -v $i >/dev/null 2>&1; then
@@ -286,11 +289,11 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
     )
 
     writeFile(
-      radLog / name & (if stage == native: "" else: '.' & $stage), shell.output.strip()
+      radLog / nom & (if stage == native: "" else: '.' & $stage), shell.output.strip()
     )
 
     if shell.exitCode != QuitSuccess:
-      abort(&"{shell.exitCode:<8}{name:24}{package.ver:24}")
+      abort(&"{shell.exitCode:<8}{nom:24}{package.ver:24}")
 
     if stage == native:
       let
@@ -301,20 +304,20 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
       # if "empty" notin package.opt:
 
       if status == QuitSuccess:
-        genContents(dst, pkgCache / name / "contents")
+        genContents(dst, pkgCache / nom / "contents")
         removeDir(dst)
 
-        copyFileWithPermissions(coreRepo / name / "info", pkgCache / name / "info")
+        copyFileWithPermissions(coreRepo / nom / "info", pkgCache / nom / "info")
 
       if "bootstrap" in package.opt:
-        installPackage(name)
+        installPackage(nom)
 
 proc showInfo*(packages: openArray[string]) =
-  for name in packages.deduplicate():
-    let package = parseInfo(name)
+  for nom in packages.deduplicate():
+    let package = parseInfo(nom)
 
     echo &"""
-nom  :: {name}
+nom  :: {nom}
 ver  :: {package.ver}
 url  :: {package.url}
 sum  :: {package.sum}
@@ -335,8 +338,8 @@ proc searchPackages*(pattern: openArray[string]) =
   var packages: seq[string]
 
   for package in walkDir(coreRepo, true, skipSpecial = true):
-    for name in pattern:
-      if name.toLowerAscii() in package[1]:
+    for nom in pattern:
+      if nom.toLowerAscii() in package[1]:
         packages &= package[1]
 
   if packages.len() == 0:

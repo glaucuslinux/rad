@@ -70,7 +70,7 @@ Copyright © 2018-2025 Firas Khana"""
           cleanBootstrap()
 
           echo "clean complete"
-        of "--help", "help":
+        of "help", "--help":
           echo helpBootstrap
         of "1", "stage1", "toolchain":
           bootstrapToolchain()
@@ -101,7 +101,7 @@ Copyright © 2018-2025 Firas Khana"""
       echo "clean complete"
     of "contents":
       listContents(remainingArgs(p))
-    of "--help", "help":
+    of "help", "--help":
       echo help
     of "info":
       showInfo(remainingArgs(p))
@@ -112,7 +112,7 @@ Copyright © 2018-2025 Firas Khana"""
     of "update":
       echo ""
       echo "update complete"
-    of "--version", "version":
+    of "version", "--version":
       echo version
     else:
       exit(help, QuitFailure)
