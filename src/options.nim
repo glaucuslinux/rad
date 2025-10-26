@@ -6,12 +6,11 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import std/[os, parseopt, strutils], bootstrap, packages, utils
+import std/[os, parseopt, strutils]
+import bootstrap, packages, utils
 
 proc options*() =
-  const
-    help =
-      """
+  const help = """
 USAGE:
   rad [ COMMAND ]
 
@@ -26,8 +25,8 @@ COMMANDS:
   search     Search for packages
   update     Update repositories
   version    Show rad version"""
-    helpBootstrap =
-      """
+
+  const helpBootstrap = """
 USAGE:
   rad bootstrap [ COMMAND ]
 
@@ -37,8 +36,8 @@ COMMANDS:
   1, stage1  Bootstrap stage 1 (toolchain)
   2, stage2  Bootstrap stage 2 (cross)
   3, stage3  Bootstrap stage 3 (native)"""
-    version =
-      """
+
+  const version = """
 rad version 0.1.0
 
 Licensed under the Mozilla Public License Version 2.0 (MPL-2.0)

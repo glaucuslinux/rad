@@ -6,23 +6,20 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import std/[algorithm, os, osproc, sequtils, strformat, strutils, tables, times], utils
+import std/[algorithm, os, osproc, sequtils, strformat, strutils, tables, times]
+import utils
 
-const
-  pkgCache* = "/var/cache/rad/pkg"
-  srcCache* = "/var/cache/rad/src"
-  coreRepo* = "/var/lib/rad/repo/core"
-  radLog* = "/var/log/rad"
-  radTmp* = "/var/tmp/rad"
+const pkgCache = "/var/cache/rad/pkg"
+const srcCache = "/var/cache/rad/src"
+const coreRepo = "/var/lib/rad/repo/core"
+const radLog = "/var/log/rad"
+const radTmp = "/var/tmp/rad"
 
-type
-  Package = object
-    ver, url, sum, bld, run*, opt = "nil"
+type Package = object
+  ver, url, sum, bld, run*, opt = "nil"
 
-  Stages* = enum
-    cross
-    native
-    toolchain
+type Stages* = enum
+  cross, native, toolchain
 
 proc cleanCache*() =
   removeDir(radTmp)
@@ -43,9 +40,8 @@ proc parseInfo*(nom: string): Package =
     if line.contains("= \"") or line.contains(" =\"") or '=' notin line:
       abort(&"""{"nom":8}{"whitespace found":48}""")
 
-    let
-      pair = line.split('=', 1)
-      key = pair[0]
+    let pair = line.split('=', 1)
+    let key = pair[0]
     var val = pair[1]
 
     if not (val.startsWith('"') and val.endsWith('"')):
@@ -113,9 +109,8 @@ proc fetchPackages(packages: openArray[string]) =
     if package.url == "nil":
       continue
 
-    let
-      src = srcCache / nom
-      tmp = radTmp / nom
+    let src = srcCache / nom
+    let tmp = radTmp / nom
 
     if package.sum == "nil":
       if not dirExists(src):
@@ -145,9 +140,8 @@ proc resolveDeps(
   if nom in packages:
     return
 
-  let
-    package = parseInfo(nom)
-    dep = package.bld
+  let package = parseInfo(nom)
+  let dep = package.bld
 
   deps[nom] =
     if dep == "nil":
@@ -161,9 +155,8 @@ proc resolveDeps(
   packages &= nom
 
 proc sortPackages(packages: openArray[string]): seq[string] =
-  var
-    deps: Table[string, seq[string]]
-    sorted: seq[string]
+  var deps: Table[string, seq[string]]
+  var sorted: seq[string]
 
   for nom in packages.deduplicate():
     resolveDeps(nom, sorted, deps)
@@ -181,13 +174,12 @@ proc installPackage(nom: string, fs = "/", pkgCache = pkgCache) =
   )
 
 proc buildPackages*(packages: openArray[string], bootstrap = false, stage = native) =
-  let
-    sorted = sortPackages(packages)
-    queue =
-      if bootstrap:
-        packages.toSeq()
-      else:
-        sorted
+  let sorted = sortPackages(packages)
+  let queue =
+    if bootstrap:
+      packages.toSeq()
+    else:
+      sorted
 
   fetchPackages(sorted)
 
@@ -196,13 +188,12 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
   printHeader()
 
   for idx, nom in queue:
-    let
-      package = parseInfo(nom)
-      archive =
-        if package.url == "nil":
-          pkgCache / nom / nom & ".tar.zst"
-        else:
-          pkgCache / nom / nom & '-' & package.ver & ".tar.zst"
+    let package = parseInfo(nom)
+    let archive =
+      if package.url == "nil":
+        pkgCache / nom / nom & ".tar.zst"
+      else:
+        pkgCache / nom / nom & '-' & package.ver & ".tar.zst"
 
     printContent(idx, nom, package.ver, "build")
 
@@ -226,14 +217,10 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
         ("NM", "gcc-nm"),
         ("PKG_CONFIG", "u-config"),
         ("RANLIB", "gcc-ranlib"),
-        ("YACC", "byacc"),
-      ]
+        ("YACC", "byacc")]
 
       for (i, j) in env:
         putEnv(i, j)
-
-    if bootstrap:
-      putEnv("PATH", absolutePath("../toolchain/usr/bin") & PathSep & getEnv("PATH"))
 
     if dirExists(radTmp / nom):
       setCurrentDir(radTmp / nom)
@@ -245,31 +232,27 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
       ("BUILD", execCmdEx(coreRepo / "slibtool/files/config.guess").output.strip()),
       ("CTARGET", "x86_64-glaucus-linux-musl"),
       ("PRETTY_NAME", "glaucus s6 x86-64-v3 " & now().format("YYYYMMdd")),
-      ("TARGET", "x86_64-pc-linux-musl"),
-    ]
+      ("TARGET", "x86_64-pc-linux-musl")]
 
     for (i, j) in env:
       putEnv(i, j)
 
-    let
-      cflags =
+    let cflags =
+      if "no-lto" notin package.opt:
+        "-pipe -O2 -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=3 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+      else:
+        "-pipe -O2 -fgraphite-identity -floop-nest-optimize -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+
+    let envFlags = [
+      ("CFLAGS", cflags),
+      ("CXXFLAGS", cflags),
+      ("LDFLAGS",
         if "no-lto" notin package.opt:
-          "-pipe -O2 -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=3 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+          "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu " &
+            cflags
         else:
-          "-pipe -O2 -fgraphite-identity -floop-nest-optimize -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
-      envFlags = [
-        ("CFLAGS", cflags),
-        ("CXXFLAGS", cflags),
-        (
-          "LDFLAGS",
-          if "no-lto" notin package.opt:
-            "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu " &
-              cflags
-          else:
-            "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu",
-        ),
-        ("MAKEFLAGS", if "no-parallel" notin package.opt: "-j 5 -O" else: "-j 1"),
-      ]
+          "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu"),
+      ("MAKEFLAGS", if "no-parallel" notin package.opt: "-j 5 -O" else: "-j 1")]
 
     for (i, j) in envFlags:
       putEnv(i, j)
@@ -284,21 +267,16 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
           fi
         done
 
-        package
-      '"""
-    )
+        package'""")
 
-    writeFile(
-      radLog / nom & (if stage == native: "" else: '.' & $stage), shell.output.strip()
-    )
+    writeFile(radLog / nom & (if stage == native: "" else: '.' & $stage), shell.output.strip())
 
     if shell.exitCode != QuitSuccess:
       abort(&"{shell.exitCode:<8}{nom:24}{package.ver:24}")
 
     if stage == native:
-      let
-        dst = getEnv("DSTD")
-        status = createTarZst(archive, dst)
+      let dst = getEnv("DSTD")
+      let status = createTarZst(archive, dst)
 
       # Purge
       # if "empty" notin package.opt:
