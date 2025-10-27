@@ -77,13 +77,10 @@ idx     nom                     ver                     cmd     now
 proc genContents(dir, contents: string) =
   var entries: seq[string]
 
-  for entry in walkDirRec(
-    dir, yieldFilter = {pcFile .. pcLinkToDir}, relative = true, skipSpecial = true
-  ):
+  for entry in walkDirRec(dir, yieldFilter = {pcFile .. pcLinkToDir}, relative = true, skipSpecial = true):
     entries &= (
       if getFileInfo(dir / entry, followSymlink = false).kind == pcDir: entry & '/'
-      else: entry
-    )
+      else: entry)
 
   let contents = open(contents, fmWrite)
 
@@ -134,9 +131,7 @@ proc fetchPackages(packages: openArray[string]) =
       createDir(tmp)
       discard extractTar(archive, tmp)
 
-proc resolveDeps(
-    nom: string, packages: var seq[string], deps: var Table[string, seq[string]]
-) =
+proc resolveDeps(nom: string, packages: var seq[string], deps: var Table[string, seq[string]]) =
   if nom in packages:
     return
 
@@ -229,10 +224,10 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
 
     let env = [
       ("ARCH", "x86-64"),
-      ("BUILD", execCmdEx(coreRepo / "slibtool/files/config.guess").output.strip()),
-      ("CTARGET", "x86_64-glaucus-linux-musl"),
-      ("PRETTY_NAME", "glaucus s6 x86-64-v3 " & now().format("YYYYMMdd")),
-      ("TARGET", "x86_64-pc-linux-musl")]
+      ("GLAUCUS_BUILD", execCmdEx(coreRepo / "slibtool/files/config.guess").output.strip()),
+      ("GLAUCUS_HOST", "x86_64-glaucus-linux-musl"),
+      ("GLAUCUS_TARGET", "x86_64-pc-linux-musl"),
+      ("PRETTY_NAME", "glaucus s6 x86-64-v3 " & now().format("YYYYMMdd"))]
 
     for (i, j) in env:
       putEnv(i, j)
@@ -259,7 +254,7 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
 
     let shell = execCmdEx(
       &"""sh -efu -c '
-        nom={nom} ver={package.ver} . {coreRepo / nom / (if stage == native: "build" else: "build" & '-' & $stage)}
+        . {coreRepo / nom / (if stage == native: "build" else: "build" & '-' & $stage)}
 
         for i in prepare configure build; do
           if command -v $i >/dev/null 2>&1; then
