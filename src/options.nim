@@ -10,7 +10,8 @@ import std/[os, parseopt, strutils]
 import bootstrap, packages, utils
 
 proc options*() =
-  const help = """
+  const help =
+    """
 USAGE:
   rad [ COMMAND ]
 
@@ -26,7 +27,8 @@ COMMANDS:
   update     Update repositories
   version    Show rad version"""
 
-  const helpBootstrap = """
+  const helpBootstrap =
+    """
 USAGE:
   rad bootstrap [ COMMAND ]
 
@@ -37,7 +39,8 @@ COMMANDS:
   2, stage2  Bootstrap stage 2 (cross)
   3, stage3  Bootstrap stage 3 (native)"""
 
-  const version = """
+  const version =
+    """
 rad version 0.1.0
 
 Licensed under the Mozilla Public License Version 2.0 (MPL-2.0)

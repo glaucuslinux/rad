@@ -19,7 +19,9 @@ type Package = object
   ver, url, sum, bld, run*, opt = "nil"
 
 type Stages* = enum
-  cross, native, toolchain
+  cross
+  native
+  toolchain
 
 proc cleanCache*() =
   removeDir(radTmp)
@@ -37,7 +39,7 @@ proc parseInfo*(nom: string): Package =
     if line.isEmptyOrWhitespace() or line.startsWith('#'):
       continue
 
-    if line.contains("= \"") or line.contains(" =\"") or '=' notin line:
+    if line.contains(" =\"") or line.contains("= \"") or '=' notin line:
       abort(&"""{"nom":8}{"whitespace found":48}""")
 
     let pair = line.split('=', 1)
@@ -77,10 +79,13 @@ idx     nom                     ver                     cmd     now
 proc genContents(dir, contents: string) =
   var entries: seq[string]
 
-  for entry in walkDirRec(dir, yieldFilter = {pcFile .. pcLinkToDir}, relative = true, skipSpecial = true):
+  for entry in walkDirRec(
+    dir, yieldFilter = {pcFile .. pcLinkToDir}, relative = true, skipSpecial = true
+  ):
     entries &= (
       if getFileInfo(dir / entry, followSymlink = false).kind == pcDir: entry & '/'
-      else: entry)
+      else: entry
+    )
 
   let contents = open(contents, fmWrite)
 
@@ -131,7 +136,9 @@ proc fetchPackages(packages: openArray[string]) =
       createDir(tmp)
       discard extractTar(archive, tmp)
 
-proc resolveDeps(nom: string, packages: var seq[string], deps: var Table[string, seq[string]]) =
+proc resolveDeps(
+    nom: string, packages: var seq[string], deps: var Table[string, seq[string]]
+) =
   if nom in packages:
     return
 
@@ -185,10 +192,9 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
   for idx, nom in queue:
     let package = parseInfo(nom)
     let archive =
-      if package.url == "nil":
-        pkgCache / nom / nom & ".tar.zst"
-      else:
-        pkgCache / nom / nom & '-' & package.ver & ".tar.zst"
+      pkgCache / nom / nom &
+      (if package.url == "nil": ".tar.zst"
+      else: '-' & package.ver & ".tar.zst")
 
     printContent(idx, nom, package.ver, "build")
 
@@ -197,10 +203,9 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
       if fileExists(archive):
         continue
 
-      putEnv("dir", pkgCache / nom / "dir")
-      createDir(getEnv("dir"))
+      createDir(pkgCache / nom / "dir")
 
-      const env = [
+      const envExes = [
         ("AR", "gcc-ar"),
         ("AWK", "mawk"),
         ("CC", "gcc"),
@@ -212,48 +217,68 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
         ("NM", "gcc-nm"),
         ("PKG_CONFIG", "u-config"),
         ("RANLIB", "gcc-ranlib"),
-        ("YACC", "byacc")]
+        ("YACC", "byacc"),
+      ]
 
-      for (i, j) in env:
+      for (i, j) in envExes:
         putEnv(i, j)
+
+    let cflags =
+      "-pipe -O2 -fgraphite-identity -floop-nest-optimize" & (
+        if "no-lto" notin package.opt:
+          " -flto=auto -flto-compression-level=3 -fuse-linker-plugin "
+        else:
+          " "
+      ) &
+      "-fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+
+    let env = [
+      ("ARCH", "x86-64"),
+      ("CFLAGS", cflags),
+      ("CXXFLAGS", cflags),
+      (
+        "LDFLAGS",
+        "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu" &
+        (
+          if "no-lto" notin package.opt:
+            " " & cflags
+          else:
+            ""
+        ),
+      ),
+      ("MAKEFLAGS", if "no-parallel" notin package.opt: "-j 5 -O" else: "-j 1"),
+      ("PRETTY_NAME", "glaucus s6 x86-64-v3 " & now().format("YYYYMMdd")),
+    ]
+
+    for (i, j) in env:
+      putEnv(i, j)
+
+    let crossShell =
+      &"""
+      build={execCmdEx(coreRepo / "slibtool/files/config.guess").output.strip()}
+      host=x86_64-glaucus-linux-musl
+      target=x86_64-pc-linux-musl
+
+      cross={absolutePath("../../glaucus/cross")}
+      toolchain={absolutePath("../../glaucus/toolchain")}"""
 
     if dirExists(radTmp / nom):
       setCurrentDir(radTmp / nom)
     if dirExists(radTmp / nom / nom & '-' & package.ver):
       setCurrentDir(radTmp / nom / nom & '-' & package.ver)
 
-    let env = [
-      ("ARCH", "x86-64"),
-      ("GLAUCUS_BUILD", execCmdEx(coreRepo / "slibtool/files/config.guess").output.strip()),
-      ("GLAUCUS_HOST", "x86_64-glaucus-linux-musl"),
-      ("GLAUCUS_TARGET", "x86_64-pc-linux-musl"),
-      ("PRETTY_NAME", "glaucus s6 x86-64-v3 " & now().format("YYYYMMdd"))]
-
-    for (i, j) in env:
-      putEnv(i, j)
-
-    let cflags =
-      if "no-lto" notin package.opt:
-        "-pipe -O2 -fgraphite-identity -floop-nest-optimize -flto=auto -flto-compression-level=3 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
-      else:
-        "-pipe -O2 -fgraphite-identity -floop-nest-optimize -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
-
-    let envFlags = [
-      ("CFLAGS", cflags),
-      ("CXXFLAGS", cflags),
-      ("LDFLAGS",
-        if "no-lto" notin package.opt:
-          "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu " &
-            cflags
-        else:
-          "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu"),
-      ("MAKEFLAGS", if "no-parallel" notin package.opt: "-j 5 -O" else: "-j 1")]
-
-    for (i, j) in envFlags:
-      putEnv(i, j)
-
     let shell = execCmdEx(
       &"""sh -efu -c '
+        {(if bootstrap: crossShell else: ":")}
+
+        core={coreRepo}
+        tmp={radTmp}
+
+        dir={pkgCache / nom / "dir"}
+
+        nom={nom}
+        ver={package.ver}
+
         . {coreRepo / nom / (if stage == native: "build" else: "build" & '-' & $stage)}
 
         for i in prepare configure build; do
@@ -262,9 +287,12 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
           fi
         done
 
-        package'""")
+        package'"""
+    )
 
-    writeFile(radLog / nom & (if stage == native: "" else: '.' & $stage), shell.output.strip())
+    writeFile(
+      radLog / nom & (if stage == native: "" else: '.' & $stage), shell.output.strip()
+    )
 
     if shell.exitCode != QuitSuccess:
       abort(&"{shell.exitCode:<8}{nom:24}{package.ver:24}")

@@ -41,7 +41,9 @@ proc interrupt() {.noconv.} =
 
 proc lock*(lock = "/var/tmp/rad.lock") =
   if fileExists(lock):
-    styledEcho fgRed, styleBright, &"""{QuitFailure:<8}{"lock exists":48}{"abort":8}""" & now().format("hh:mm tt")
+    styledEcho fgRed,
+      styleBright,
+      &"""{QuitFailure:<8}{"lock exists":48}{"abort":8}""" & now().format("hh:mm tt")
 
     quit(QuitFailure)
 

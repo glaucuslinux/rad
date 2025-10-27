@@ -14,7 +14,8 @@ proc cleanBootstrap*() =
     "../../glaucus/cross",
     "../../glaucus/log",
     "../../glaucus/tmp",
-    "../../glaucus/toolchain"]
+    "../../glaucus/toolchain",
+  ]
 
   for i in dirs:
     removeDir(i)
@@ -26,8 +27,8 @@ proc prepareToolchain() =
     "../../glaucus/pkg",
     "../../glaucus/src",
     "../../glaucus/tmp",
-    "../../glaucus/toolchain"]
-
+    "../../glaucus/toolchain",
+  ]
   const exes = [
     "autoconf", "automake", "autopoint", "awk",
     "bash", "booster", "bzip2",
@@ -43,7 +44,8 @@ proc prepareToolchain() =
     "tar",
     "xz",
     "yacc",
-    "zstd"]
+    "zstd",
+  ]
 
   for i in exes:
     if findExe(i).isEmptyOrWhitespace():
@@ -55,17 +57,17 @@ proc prepareToolchain() =
     createDir(i)
 
 proc configureToolchain() =
-  putEnv("GLAUCUS_CROSS", absolutePath("../../glaucus/cross"))
-  putEnv("GLAUCUS_TOOLCHAIN", absolutePath("../../glaucus/toolchain"))
-  putEnv("PATH", absolutePath("../../glaucus/toolchain/usr/bin") & PathSep & getEnv("PATH"))
+  putEnv(
+    "PATH", absolutePath("../../glaucus/toolchain/usr/bin") & PathSep & getEnv("PATH")
+  )
 
 proc bootstrapToolchain*() =
   prepareToolchain()
   configureToolchain()
-  buildPackages(parseInfo("toolchain").run.split(), true, toolchain)
+  buildPackages(parseInfo($toolchain).run.split(), true, toolchain)
 
 proc prepareCross() =
-  const dir = "../tmp"
+  const dir = "../../glaucus/tmp"
 
   removeDir(dir)
   createDir(dir)
@@ -86,14 +88,15 @@ proc configureCross() =
     ("RANLIB", "x86_64-glaucus-linux-musl-gcc-ranlib"),
     ("READELF", "x86_64-glaucus-linux-musl-readelf"),
     ("SIZE", "x86_64-glaucus-linux-musl-size"),
-    ("STRIP", "x86_64-glaucus-linux-musl-strip")]
-
+    ("STRIP", "x86_64-glaucus-linux-musl-strip"),
+  ]
   const envPkgConfig = [
     ("PKG_CONFIG_LIBDIR", "../../glaucus/cross/usr/lib/pkgconfig"),
     ("PKG_CONFIG_PATH", "../../glaucus/cross/usr/lib/pkgconfig"),
     ("PKG_CONFIG_SYSROOT_DIR", "../../glaucus/cross/"),
     ("PKG_CONFIG_SYSTEM_INCLUDE_PATH", "../../glaucus/cross/usr/include"),
-    ("PKG_CONFIG_SYSTEM_LIBRARY_PATH", "../../glaucus/cross/usr/lib")]
+    ("PKG_CONFIG_SYSTEM_LIBRARY_PATH", "../../glaucus/cross/usr/lib"),
+  ]
 
   for (i, j) in envExes:
     putEnv(i, j)
@@ -104,4 +107,4 @@ proc bootstrapCross*() =
   prepareCross()
   configureCross()
   configureToolchain()
-  buildPackages(parseInfo("cross").run.split(), true, cross)
+  buildPackages(parseInfo($cross).run.split(), true, cross)
