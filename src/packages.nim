@@ -189,6 +189,9 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
 
   printHeader()
 
+  let cross = absolutePath("../../glaucus/cross")
+  let toolchain = absolutePath("../../glaucus/toolchain")
+
   for idx, nom in queue:
     let package = parseInfo(nom)
     let archive =
@@ -253,14 +256,14 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
     for (i, j) in env:
       putEnv(i, j)
 
-    let crossShell =
+    let shellBootstrap =
       &"""
       build={execCmdEx(coreRepo / "slibtool/files/config.guess").output.strip()}
       host=x86_64-glaucus-linux-musl
       target=x86_64-pc-linux-musl
 
-      cross={absolutePath("../../glaucus/cross")}
-      toolchain={absolutePath("../../glaucus/toolchain")}"""
+      cross={cross}
+      toolchain={toolchain}"""
 
     if dirExists(radTmp / nom):
       setCurrentDir(radTmp / nom)
@@ -269,7 +272,7 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
 
     let shell = execCmdEx(
       &"""sh -efu -c '
-        {(if bootstrap: crossShell else: ":")}
+        {(if bootstrap: shellBootstrap else: ":")}
 
         core={coreRepo}
         tmp={radTmp}
