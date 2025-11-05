@@ -16,7 +16,7 @@ const radLog = "/var/log/rad"
 const radTmp = "/var/tmp/rad"
 
 type Package = object
-  ver, url, sum, bld, run*, opt = "nil"
+  ver, url, sum, bld, run*, opt, lic = "nil"
 
 type Stages* = enum
   cross
@@ -64,6 +64,8 @@ proc parseInfo*(nom: string): Package =
       result.run = val
     of "opt":
       result.opt = val
+    of "lic":
+      result.lic = val
     else:
       abort(&"""{"nom":8}{&"\{key\} not found":48}""")
 

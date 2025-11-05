@@ -7,5 +7,3 @@ skipFiles = @["LICENSE", "README.md"]
 srcDir = "src"
 
 bin = @["rad"]
-
-requires "nim >= 2.3.1"
