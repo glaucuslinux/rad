@@ -58,7 +58,7 @@ proc prepareToolchain() =
 
 proc configureToolchain() =
   putEnv(
-    "PATH", absolutePath("../../glaucus/toolchain/usr/bin") & PathSep & getEnv("PATH")
+    "PATH", absolutePath("../../glaucus/toolchain/bin") & PathSep & getEnv("PATH")
   )
 
 proc bootstrapToolchain*() =

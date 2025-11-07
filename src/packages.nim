@@ -235,7 +235,7 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
         else:
           " "
       ) &
-      "-fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -mfpmath=sse -mabi=sysv -malign-data=cacheline -mtls-dialect=gnu2"
+      "-fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -malign-data=cacheline -mtls-dialect=gnu2"
 
     let env = [
       ("ARCH", "x86-64"),
