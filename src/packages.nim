@@ -229,7 +229,7 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
         putEnv(i, j)
 
     let cflags =
-      "-pipe -O2 -fgraphite-identity -floop-nest-optimize" & (
+      "-pipe -O2" & (
         if "no-lto" notin package.opt:
           " -flto=auto -flto-compression-level=3 -fuse-linker-plugin "
         else:
