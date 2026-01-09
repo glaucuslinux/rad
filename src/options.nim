@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MPL-2.0
 
-# Copyright © 2018-2025 Firas Khana
+# Copyright © 2018-2026 Firas Khana
 
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -44,7 +44,7 @@ COMMANDS:
 rad version 0.1.0
 
 Licensed under the Mozilla Public License Version 2.0 (MPL-2.0)
-Copyright © 2018-2025 Firas Khana"""
+Copyright © 2018-2026 Firas Khana"""
 
   if paramCount() < 1:
     quit(help, QuitFailure)
