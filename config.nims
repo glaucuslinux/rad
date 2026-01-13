@@ -6,9 +6,9 @@ switch("os", "linux")
 switch("cpu", "amd64")
 switch(
   "passC",
-  "-O2 -flto=auto -flto-compression-level=3 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -malign-data=cacheline -mtls-dialect=gnu2",
+  "-Os -flto=auto -flto-compression-level=3 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-ident -fno-plt -march=x86-64-v3 -malign-data=abi -mtls-dialect=gnu2",
 )
 switch(
   "passL",
-  "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu -Wno-stringop-overflow -O2 -flto=auto -flto-compression-level=3 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -malign-data=cacheline -mtls-dialect=gnu2",
+  "-Wl,-O1,--rosegment,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,separate-code,-z,x86-64-v3,--as-needed,--no-keep-memory,--relax,--sort-common,--enable-new-dtags,--hash-style=gnu,--reduce-memory-overheads,--build-id=none -Wno-stringop-overflow -Os -flto=auto -flto-compression-level=3 -fuse-linker-plugin -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-ident -fno-plt -march=x86-64-v3 -malign-data=abi -mtls-dialect=gnu2",
 )
