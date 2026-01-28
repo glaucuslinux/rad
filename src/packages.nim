@@ -229,13 +229,13 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
         putEnv(i, j)
 
     let cflags =
-      "-pipe -O2" & (
+      "-pipe -Os -foptimize-strlen -fgcse-las -flive-range-shrinkage" & (
         if "no-lto" notin package.opt:
           " -flto=auto -flto-compression-level=3 -fuse-linker-plugin "
         else:
           " "
       ) &
-      "-fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-plt -march=x86-64-v3 -malign-data=cacheline -mtls-dialect=gnu2"
+      "-ffunction-sections -fdata-sections -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-ident -fno-plt -march=x86-64-v3 -malign-data=abi -mtls-dialect=gnu2"
 
     let env = [
       ("ARCH", "x86-64"),
@@ -243,7 +243,7 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
       ("CXXFLAGS", cflags),
       (
         "LDFLAGS",
-        "-Wl,-O1,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,x86-64-v3,--as-needed,--gc-sections,--sort-common,--hash-style=gnu" &
+        "-Wl,-O1,--rosegment,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,separate-code,-z,start-stop-gc,-z,x86-64-v3,--as-needed,--gc-sections,--no-keep-memory,--relax,--sort-common,--enable-new-dtags,--hash-style=gnu,--reduce-memory-overheads,--build-id=none" &
         (
           if "no-lto" notin package.opt:
             " " & cflags
@@ -287,7 +287,7 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
         . {coreRepo / nom / (if stage == native: "build" else: "build" & '-' & $stage)}
 
         for i in prepare configure build; do
-          if command -v $i >/dev/null 2>&1; then
+          if command -v $i > /dev/null 2>&1; then
             $i
           fi
         done
