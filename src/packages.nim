@@ -229,13 +229,13 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
         putEnv(i, j)
 
     let cflags =
-      "-pipe -Os -foptimize-strlen -fgcse-las -flive-range-shrinkage" & (
+      "-pipe -Os -fgcse-las" & (
         if "no-lto" notin package.opt:
-          " -flto=auto -flto-compression-level=3 -fuse-linker-plugin "
+          " -flto=auto -fuse-linker-plugin "
         else:
           " "
       ) &
-      "-ffunction-sections -fdata-sections -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-ident -fno-plt -march=x86-64-v3 -malign-data=abi -mtls-dialect=gnu2"
+      "-ffunction-sections -fdata-sections -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-ident -fno-plt -march=x86-64-v3 -mtls-dialect=gnu2"
 
     let env = [
       ("ARCH", "x86-64"),
@@ -243,7 +243,7 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
       ("CXXFLAGS", cflags),
       (
         "LDFLAGS",
-        "-Wl,-O1,--rosegment,-s,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,separate-code,-z,start-stop-gc,-z,x86-64-v3,--as-needed,--gc-sections,--no-keep-memory,--relax,--sort-common,--enable-new-dtags,--hash-style=gnu,--reduce-memory-overheads,--build-id=none" &
+        "-Wl,-O1,-s,-z,defs,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,separate-code,-z,text,--as-needed,--gc-sections,--no-keep-memory,--relax,--sort-common,--enable-new-dtags,--hash-style=gnu,--build-id=none" &
         (
           if "no-lto" notin package.opt:
             " " & cflags
