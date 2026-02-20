@@ -251,12 +251,14 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
             ""
         ),
       ),
-      ("MAKEFLAGS", if "no-parallel" notin package.opt: "-j 5 -O" else: "-j 1"),
-      ("PRETTY_NAME", "glaucus s6 x86-64-v3 " & now().format("YYYYMMdd")),
     ]
 
-    for (i, j) in env:
-      putEnv(i, j)
+    putEnv("MAKEFLAGS", if "no-parallel" notin package.opt: "-j 5 -O" else: "-j 1")
+    putEnv("PRETTY_NAME", "glaucus s6 x86-64-v3 " & now().format("YYYYMMdd"))
+
+    if stage != Stages.toolchain:
+      for (i, j) in env:
+        putEnv(i, j)
 
     let shellBootstrap =
       &"""

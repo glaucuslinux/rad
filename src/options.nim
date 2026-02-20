@@ -85,7 +85,7 @@ Copyright © 2018-2026 Firas Khana"""
           echo ""
           echo "stage 2 (cross) complete"
         of "3", "stage3", "native":
-          buildPackages(parseInfo("native").run.split(), true)
+          buildPackages(parseInfo($native).run.split(), true)
 
           echo ""
           echo "stage 3 (native) complete"
