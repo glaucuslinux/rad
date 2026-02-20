@@ -33,11 +33,11 @@ USAGE:
   rad bootstrap [ COMMAND ]
 
 COMMANDS:
-  clean      Clean bootstrap cache
-  help       Show help message
-  1, stage1  Bootstrap stage 1 (toolchain)
-  2, stage2  Bootstrap stage 2 (cross)
-  3, stage3  Bootstrap stage 3 (native)"""
+  clean         Clean bootstrap cache
+  help          Show help message
+  1, toolchain  Bootstrap stage 1 (toolchain)
+  2, cross      Bootstrap stage 2 (cross)
+  3, native     Bootstrap stage 3 (native)"""
 
   const version =
     """
@@ -74,17 +74,17 @@ Copyright © 2018-2026 Firas Khana"""
           echo "clean complete"
         of "help", "--help":
           echo helpBootstrap
-        of "1", "stage1", "toolchain":
+        of "1", "toolchain":
           bootstrapToolchain()
 
           echo ""
           echo "stage 1 (toolchain) complete"
-        of "2", "stage2", "cross":
+        of "2", "cross":
           bootstrapCross()
 
           echo ""
           echo "stage 2 (cross) complete"
-        of "3", "stage3", "native":
+        of "3", "native":
           buildPackages(parseInfo($native).run.split(), true)
 
           echo ""
