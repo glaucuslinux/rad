@@ -203,6 +203,26 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
 
     printContent(idx, nom, package.ver, "build")
 
+    const envExes = [
+      ("AR", "llvm-ar"),
+      ("AS", "llvm-mc"),
+      ("CC", "clang"),
+      ("CPP", "clang -E"),
+      ("CXX", "clang++"),
+      ("CXXCPP", "clang++ -E"),
+      ("HOSTCC", "gcc"),
+      ("NM", "llvm-nm"),
+      ("OBJCOPY", "llvm-objcopy"),
+      ("OBJDUMP", "llvm-objdump"),
+      ("RANLIB", "llvm-ranlib"),
+      ("READELF", "llvm-readelf"),
+      ("SIZE", "llvm-size"),
+      ("STRIP", "llvm-strip"),
+    ]
+
+    for (i, j) in envExes:
+      putEnv(i, j)
+
     if stage == native:
       # Skip package if archive exists
       if fileExists(archive):
@@ -211,17 +231,10 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
       createDir(pkgCache / nom / "dir")
 
       const envExes = [
-        ("AR", "gcc-ar"),
         ("AWK", "mawk"),
-        ("CC", "gcc"),
-        ("CPP", "gcc -E"),
-        ("CXX", "g++"),
-        ("CXXCPP", "g++ -E"),
-        ("LEX", "reflex"),
+        ("LEX", "flex"),
         ("LIBTOOL", "slibtool"),
-        ("NM", "gcc-nm"),
         ("PKG_CONFIG", "u-config"),
-        ("RANLIB", "gcc-ranlib"),
         ("YACC", "byacc"),
       ]
 
@@ -229,13 +242,14 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
         putEnv(i, j)
 
     let cflags =
-      "-pipe -Os -fgcse-las" & (
-        if "no-lto" notin package.opt:
-          " -flto=auto -fuse-linker-plugin "
-        else:
-          " "
-      ) &
-      "-ffunction-sections -fdata-sections -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-ident -fno-plt -march=x86-64-v3 -mtls-dialect=gnu2"
+      # "-pipe -Os -fgcse-las" & (
+      #   if "no-lto" notin package.opt:
+      #     " -flto=auto -fuse-linker-plugin "
+      #   else:
+      #     " "
+      # ) &
+      # "-ffunction-sections -fdata-sections -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-ident -fno-plt -march=x86-64-v3 -mtls-dialect=gnu2"
+      "-pipe -Os --target=x86_64-glaucus-linux-musl --sysroot=/home/firasuke/Git/glaucus/cross -rtlib=compiler-rt -unwindlib=libunwind -stdlib=libc++"
 
     let env = [
       ("ARCH", "x86-64"),
@@ -243,13 +257,14 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
       ("CXXFLAGS", cflags),
       (
         "LDFLAGS",
-        "-Wl,-O1,-s,-z,defs,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,separate-code,-z,text,--as-needed,--gc-sections,--no-keep-memory,--relax,--sort-common,--enable-new-dtags,--hash-style=gnu,--build-id=none" &
-        (
-          if "no-lto" notin package.opt:
-            " " & cflags
-          else:
-            ""
-        ),
+        # "-Wl,-O1,-s,-z,defs,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,separate-code,-z,text,--as-needed,--gc-sections,--no-keep-memory,--relax,--sort-common,--enable-new-dtags,--hash-style=gnu,--build-id=none" &
+        # (
+        #   if "no-lto" notin package.opt:
+        #     " " & cflags
+        #   else:
+        #     ""
+        # ),
+        "--target=x86_64-glaucus-linux-musl --sysroot=/home/firasuke/Git/glaucus/cross -rtlib=compiler-rt -unwindlib=libunwind -stdlib=libc++"
       ),
     ]
 
