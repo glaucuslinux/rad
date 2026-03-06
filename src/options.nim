@@ -15,6 +15,7 @@ USAGE:
 OPTIONS:
   -h, --help         Show help message
   -n, --no-parallel  Disable parallel build
+  -jN, --jobs=N      Specify the number of make jobs
   -v, --verbose      Enable verbose build
   -V, --version      Show rad version
 
@@ -38,9 +39,6 @@ var verboseRequested = false
 var noParallelRequested = false
 var jobs = 0
 var unknownFlags: seq[string] = @[]
-
-var p = initOptParser()
-p.next()
 
 for kind, key, val in getopt():
   case kind
