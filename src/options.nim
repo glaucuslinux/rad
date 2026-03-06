@@ -33,10 +33,10 @@ rad version 0.1.0
 Licensed under the Mozilla Public License Version 2.0 (MPL-2.0)
 Copyright © 2018-2026 Firas Khana"""
 
-var args: seq[string] = @[]
+var args: seq[string]
 var verboseRequested = false
 var noParallelRequested = false
-var unknownFlags: seq[string] = @[]
+var unknownFlags: seq[string]
 
 for kind, key, val in getopt():
   case kind
@@ -59,7 +59,7 @@ for kind, key, val in getopt():
 
 if unknownFlags.len() > 0:
   let msg =
-    if unknownFlags.len == 1:
+    if unknownFlags.len() == 1:
       "invalid option: " & unknownFlags[0]
     else:
       "invalid options: " & unknownFlags.join(", ")
@@ -70,11 +70,9 @@ if verboseRequested:
 if noParallelRequested:
   echo "do something else"
 
-# No arguments?
-if args.len == 0:
+if args.len() == 0:
   quit(help, QuitFailure)
 
-# First argument is the subcommand
 let cmd = args[0]
 let cmdArgs = args[1..^1]
 
