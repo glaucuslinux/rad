@@ -6,117 +6,76 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import std/[os, parseopt, strutils]
-import bootstrap, packages, utils
+import std/[os, parseopt, strformat, strutils]
 
-proc options*() =
-  const help =
-    """
+const help = """
 USAGE:
-  rad [ COMMAND ]
+  rad [OPTIONS] COMMAND [ARGUMENTS]
+
+OPTIONS:
+  -h, --help     Show help message
+  -V, --version  Show rad version
 
 COMMANDS:
-  bootstrap  Bootstrap glaucus
-  build      Build packages
-  clean      Clean build cache
-  contents   List package contents
-  help       Show help message
-  info       Show package information
-  list       List built packages
-  search     Search for packages
-  update     Update repositories
-  version    Show rad version"""
+  build          Build packages
+  clean          Clean build cache
+  contents       List package contents
+  info           Show package information
+  list           List built packages
+  search         Search for packages
+  update         Update repositories"""
 
-  const helpBootstrap =
-    """
-USAGE:
-  rad bootstrap [ COMMAND ]
-
-COMMANDS:
-  clean         Clean bootstrap cache
-  help          Show help message
-  1, toolchain  Bootstrap stage 1 (toolchain)
-  2, cross      Bootstrap stage 2 (cross)
-  3, native     Bootstrap stage 3 (native)"""
-
-  const version =
-    """
+const version = """
 rad version 0.1.0
 
 Licensed under the Mozilla Public License Version 2.0 (MPL-2.0)
 Copyright © 2018-2026 Firas Khana"""
 
-  if paramCount() < 1:
-    quit(help, QuitFailure)
+var p = initOptParser()
+p.next()
 
-  var p = initOptParser()
-
-  p.next()
-
-  case p.kind
-  of cmdEnd:
-    quit(help, QuitFailure)
+case p.kind
+of cmdEnd:
+  quit(help, QuitFailure)
+of cmdLongOption, cmdShortOption:
+  case p.key
+  of "h", "help":
+    quit(help, QuitSuccess)
+  of "V", "version":
+    quit(version, QuitSuccess)
   else:
-    lock()
-
-    case p.key
-    of "bootstrap":
-      p.next()
-
-      case p.kind
-      of cmdEnd:
-        exit(helpBootstrap, QuitFailure)
-      else:
-        case p.key
-        of "clean":
-          cleanBootstrap()
-
-          echo "clean complete"
-        of "help", "--help":
-          echo helpBootstrap
-        of "1", "toolchain":
-          bootstrapToolchain()
-
-          echo ""
-          echo "stage 1 (toolchain) complete"
-        of "2", "cross":
-          bootstrapCross()
-
-          echo ""
-          echo "stage 2 (cross) complete"
-        of "3", "native":
-          buildPackages(parseInfo($native).run.split(), true)
-
-          echo ""
-          echo "stage 3 (native) complete"
-        else:
-          exit(helpBootstrap, QuitFailure)
-    of "build":
-      cleanCache()
-      buildPackages(remainingArgs(p))
-
-      echo ""
-      echo "build complete"
-    of "clean":
-      cleanCache()
-
-      echo "clean complete"
-    of "contents":
-      listContents(remainingArgs(p))
-    of "help", "--help":
-      echo help
-    of "info":
-      showInfo(remainingArgs(p))
-    of "list":
-      listPackages()
-    of "search":
-      searchPackages(remainingArgs(p))
-    of "update":
-      echo ""
-      echo "update complete"
-    of "version", "--version":
-      echo version
-    else:
-      exit(help, QuitFailure)
-
-    exit()
+    quit(&"invalid option: {p.key}", QuitFailure)
+of cmdArgument:
+  case p.key
+  of "build":
+    # lock()
+    # cleanCache()
+    # buildPackages(remainingArgs(p))
+    echo ""
+    echo "build complete"
+  of "clean":
+    # lock()
+    # cleanCache()
+    echo "clean complete"
+  of "contents":
+    # listContents(remainingArgs(p))
+    echo "placeholder"
+  of "help":
+    echo help
+  of "info":
+    # showInfo(remainingArgs(p))
+    echo "placeholder"
+  of "list":
+    # listPackages()
+    echo "placeholder"
+  of "search":
+    # searchPackages(remainingArgs(p))
+    echo "placeholder"
+  of "update":
+    # lock()
+    echo ""
+    echo "update complete"
+  of "version":
+    echo version
+  else:
+    quit(&"invalid command: {p.key}", QuitFailure)
