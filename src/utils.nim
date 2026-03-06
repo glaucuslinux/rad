@@ -8,33 +8,31 @@
 
 import std/[os, osproc, strformat, strutils]
 
-proc requireCmd(cmd: string) =
+proc requireCmd(cmd: string) {.inline.} =
   if findExe(cmd).isEmptyOrWhitespace():
     raise newException(OSError, &"{cmd}: no such command")
 
-proc requireDir(dir: string) =
+proc requireDir(dir: string) {.inline.} =
   if not dirExists(dir):
     raise newException(IOError, &"{dir}: no such directory")
 
-proc requireFile(file: string) =
+proc requireFile(file: string) {.inline.} =
   if not fileExists(file):
     raise newException(IOError, &"{file}: no such file")
 
-proc requireParentDir(path: string) =
+proc requireParentDir(path: string) {.inline.} =
   let parent = path.parentDir()
   if parent.len() > 0 and not dirExists(parent):
     raise newException(IOError, &"{parent}: no such directory")
 
-template checkResult(exitCode: int, output: string, dsc: string) =
+proc checkResult(exitCode: int, output: string, dsc: string) {.inline.} =
   if exitCode != QuitSuccess:
     let details =
       if output.strip().len() > 0:
         output.strip()
       else:
         "no additional output"
-    raise newException(OSError, dsc & ":\n" & details)
-    # This does not work... weird...
-    # raise newException(OSError, &"{dsc}:\n{details}")
+    raise newException(OSError, &"{dsc}:\n{details}")
 
 proc createTar*(archive: string, dir: string) =
   requireCmd("tar")
@@ -58,7 +56,7 @@ proc downloadFile*(url: string, dir: string) =
   requireDir(dir)
 
   let (output, exitCode) = execCmdEx(
-    &"curl -fL --output-dir {quoteShellPosix(dir)} -OSs {quoteShellPosix(url)}",
+    &"curl -fL --output-dir {quoteShellPosix(dir)} -O --retry 3 -Ss {quoteShellPosix(url)}",
     options = {poStdErrToStdOut, poUsePath},
   )
 
@@ -88,39 +86,39 @@ proc gitCheckoutRepo*(dir: string, cmt: string) =
   requireCmd("git")
   requireDir(dir)
 
-  var (output, exitCode) = execCmdEx(
+  let (output, exitCode) = execCmdEx(
     &"git -C {quoteShellPosix(dir)} rev-parse --git-dir",
     options = {poStdErrToStdOut, poUsePath},
   )
 
   checkResult(exitCode, output, &"fatal: {dir} is not a git repository")
 
-  (output, exitCode) = execCmdEx(
+  let (output2, exitCode2) = execCmdEx(
     &"git -C {quoteShellPosix(dir)} checkout {quoteShellPosix(cmt)} -q",
     options = {poStdErrToStdOut, poUsePath},
   )
 
   checkResult(
-    exitCode,
-    output,
-    &"git checkout failed with exit code {exitCode} for commit {cmt} in {dir}",
+    exitCode2,
+    output2,
+    &"git checkout failed with exit code {exitCode2} for commit {cmt} in {dir}",
   )
 
-proc gitCloneRepo*(url: string, dir: string) =
+proc gitCloneRepo*(url: string, path: string) =
   requireCmd("git")
 
-  if dirExists(dir):
-    raise newException(IOError, &"fatal: destination path {dir} already exists")
+  if dirExists(path) or fileExists(path):
+    raise newException(IOError, &"fatal: destination path {path} already exists")
 
-  requireParentDir(dir)
+  requireParentDir(path)
 
   let (output, exitCode) = execCmdEx(
-    &"git clone {quoteShellPosix(url)} {quoteShellPosix(dir)} -q",
+    &"git clone {quoteShellPosix(url)} {quoteShellPosix(path)} -q",
     options = {poStdErrToStdOut, poUsePath},
   )
 
   checkResult(
-    exitCode, output, &"git clone failed with exit code {exitCode} for {url} to {dir}"
+    exitCode, output, &"git clone failed with exit code {exitCode} for {url} to {path}"
   )
 
 proc verifyFile*(file: string, sum: string): bool =
