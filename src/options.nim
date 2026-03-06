@@ -15,7 +15,6 @@ USAGE:
 OPTIONS:
   -h, --help         Show help message
   -n, --no-parallel  Disable parallel build
-  -jN, --jobs=N      Specify the number of make jobs
   -v, --verbose      Enable verbose build
   -V, --version      Show rad version
 
@@ -37,7 +36,6 @@ Copyright © 2018-2026 Firas Khana"""
 var args: seq[string] = @[]
 var verboseRequested = false
 var noParallelRequested = false
-var jobs = 0
 var unknownFlags: seq[string] = @[]
 
 for kind, key, val in getopt():
@@ -54,15 +52,6 @@ for kind, key, val in getopt():
       verboseRequested = true
     of "n", "no-parallel", "noparallel":
       noParallelRequested = true
-    of "j", "jobs":
-      if val == "":
-        quit("-j/--jobs requires a value (e.g., -j5 or --jobs=5)", QuitFailure)
-      try:
-        jobs = parseInt(val)
-        if jobs <= 0:
-          quit(&"invalid value: {jobs}", QuitFailure)
-      except ValueError:
-        quit(&"invalid value: {jobs}", QuitFailure)
     else:
       unknownFlags.add(key)
   of cmdArgument:
