@@ -10,11 +10,11 @@ import std/[parseopt, strformat, strutils, sequtils, parseutils]
 
 const help = """
 USAGE:
-  rad [OPTIONS] COMMAND [ARGUMENTS]
+  rad [OPTIONS] COMMAND [PACKAGES]
 
 OPTIONS:
   -h, --help         Show help message
-  -n, --no-parallel  Disable parallel build
+  -p, --no-parallel  Disable parallel build
   -v, --verbose      Enable verbose build
   -V, --version      Show rad version
 
@@ -34,8 +34,8 @@ Licensed under the Mozilla Public License Version 2.0 (MPL-2.0)
 Copyright © 2018-2026 Firas Khana"""
 
 var args: seq[string]
-var verboseRequested = false
-var noParallelRequested = false
+var verboseRequested: bool
+var noParallelRequested: bool
 var unknownFlags: seq[string]
 
 for kind, key, val in getopt():
@@ -46,12 +46,12 @@ for kind, key, val in getopt():
     case key
     of "h", "help":
       quit(help, QuitSuccess)
-    of "V", "version":
-      quit(version, QuitSuccess)
+    of "p", "no-parallel", "noparallel":
+      noParallelRequested = true
     of "v", "verbose":
       verboseRequested = true
-    of "n", "no-parallel", "noparallel":
-      noParallelRequested = true
+    of "V", "version":
+      quit(version, QuitSuccess)
     else:
       unknownFlags.add(key)
   of cmdArgument:
