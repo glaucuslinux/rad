@@ -6,9 +6,9 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-when isMainModule:
-  import std/[parseopt, strformat, strutils]
+import std/[parseopt, strformat, strutils]
 
+proc options() =
   const help = """
 USAGE:
   rad [OPTIONS] COMMAND [PACKAGES]
@@ -110,3 +110,12 @@ Copyright © 2018-2026 Firas Khana"""
     echo version
   else:
     quit(&"invalid command: {cmd}", QuitFailure)
+
+proc main() =
+  try:
+    options()
+  except:
+    quit(QuitFailure)
+
+when isMainModule:
+  main()
