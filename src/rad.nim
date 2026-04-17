@@ -7,6 +7,7 @@
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import std/[parseopt, strformat, strutils]
+import packagesnew
 
 proc options() =
   const help = """
@@ -20,13 +21,13 @@ OPTIONS:
   -V, --version      Show rad version
 
 COMMANDS:
-  build          Build packages
-  clean          Clean build cache
-  contents       List package contents
-  info           Show package information
-  list           List built packages
-  search         Search for packages
-  update         Update repositories"""
+  build              Build packages
+  clean              Clean build cache
+  contents           List package contents
+  info               Show package information
+  list               List built packages
+  search             Search for packages
+  update             Update repositories"""
 
   const version = """
 rad version 0.1.0
@@ -79,14 +80,30 @@ Copyright © 2018-2026 Firas Khana"""
 
   case cmd
   of "build":
-    # lock()
-    # cleanCache()
-    # buildPackages(remainingArgs(cmdArgs))
+    # try:
+    #   cleanCache()
+    # except OSError:
+    #   echo "unable to clean cache"
+
+    var myOpts: BuildOptions
+    myOpts.jobs = 5
+    myOpts.makeJobs = 2
+    myOpts.stage = stageToolchain
+    myOpts.sysroot = "/home/firasuke/Git/toolchain"
+    myOpts.srcDir = "/home/firasuke/Git/glaucus/src"
+    myOpts.tmpDir = "/home/firasuke/Git/glaucus/tmp"
+    echo "hi"
+
+    buildPackages(cmdArgs, myOpts)
+    echo "hi"
     echo ""
     echo "build complete"
   of "clean":
-    # lock()
-    # cleanCache()
+    var preserveSrc = true
+    for arg in cmdArgs:
+      if arg == "--src":
+        preserveSrc = false
+    cleanCache(preserveSrc)
     echo "clean complete"
   of "contents":
     # listContents(remainingArgs(cmdArgs))
