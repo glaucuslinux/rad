@@ -26,7 +26,7 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
         continue
 
       const envExes = [
-        ("AWK", "mawk"),
+        ("AWK", "wak"),
         ("LEX", "flex"),
         ("LIBTOOL", "slibtool"),
         ("PKG_CONFIG", "u-config"),
@@ -34,14 +34,14 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
       ]
 
     let cflags =
-      # "-pipe -Os -fgcse-las" & (
+      # "-O2" & (
       #   if "no-lto" notin package.opt:
-      #     " -flto=auto -fuse-linker-plugin "
+      #     " -flto=thin "
       #   else:
       #     " "
       # ) &
-      # "-ffunction-sections -fdata-sections -fstack-protector-strong -fstack-clash-protection -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-ident -fno-plt -march=x86-64-v3 -mtls-dialect=gnu2"
-      "-pipe -Os -target=x86_64-glaucus-linux-musl --sysroot=/home/firasuke/Git/glaucus/cross --rtlib=compiler-rt -unwindlib=libunwind --stdlib=libc++"
+      # "-march=x86-64-v3 -mtls-dialect=gnu2 -fdata-sections -ffunction-sections -fno-plt -fstack-clash-protection -fstack-protector-strong -fno-asynchronous-unwind-tables -fno-unwind-tables -fno-ident"
+      "-O2 -target=x86_64-glaucus-linux-musl --sysroot=/home/firasuke/Git/glaucus/cross --rtlib=compiler-rt -unwindlib=libunwind --stdlib=libc++"
 
     let env = [
       ("ARCH", "x86-64"),
@@ -49,7 +49,7 @@ proc buildPackages*(packages: openArray[string], bootstrap = false, stage = nati
       ("CXXFLAGS", cflags),
       (
         "LDFLAGS",
-        # "-Wl,-O1,-s,-z,defs,-z,noexecstack,-z,now,-z,pack-relative-relocs,-z,relro,-z,separate-code,-z,text,--as-needed,--gc-sections,--no-keep-memory,--relax,--sort-common,--enable-new-dtags,--hash-style=gnu,--build-id=none" &
+        # "-Wl,-O2,--as-needed,--gc-sections,--icf=safe,-z,defs,-z,now,-z,separate-code,--build-id=none,--hash-style=gnu,--pack-dyn-relocs=relr,--strip-all" &
         # (
         #   if "no-lto" notin package.opt:
         #     " " & cflags
